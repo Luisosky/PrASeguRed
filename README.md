@@ -13,14 +13,14 @@ Hola muachos, esto es solo que tienen que hacer por si se nos olvida en algun mo
 ### Clonar el repositorio
 Clonarlo en la maquina local:
 ```bash
-git clone https://github.com/Luisosky/PASeguRed.git
+git clone https://github.com/Luisosky/PrASeguRed.git
 ```
 
 
 ### Environment Config
 - Verificar que `application.properties` este en `src/main/resources` Sobre todo debe estar esta linea:
   ```properties
-  spring.data.mongodb.uri=mongodb://localhost:27017/PASeguRed
+  spring.data.mongodb.uri=mongodb://localhost:27017/PrASeguRed
   ```
 - Lo podemos cambiar en cualquier momento creo xd
 
