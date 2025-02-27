@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="co.edu.uniquindio.prasegured.repository.UserRepositoryTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-02-27T14:33:16" hostname="BIFISB07" time="0.399">
+  <properties/>
+  <testcase name="testSaveAndFindUser()" classname="co.edu.uniquindio.prasegured.repository.UserRepositoryTest" time="0.399"/>
+  <system-out><![CDATA[09:33:15.230 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [co.edu.uniquindio.prasegured.repository.UserRepositoryTest]: UserRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+09:33:15.309 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration co.edu.uniquindio.prasegured.PrASeguRedApplication for test class co.edu.uniquindio.prasegured.repository.UserRepositoryTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.4.3)
+
+2025-02-27T09:33:15.600-05:00  INFO 4848 --- [PrASeguRed] [    Test worker] c.e.u.p.repository.UserRepositoryTest    : Starting UserRepositoryTest using Java 21.0.6 with PID 4848 (started by Admin in C:\Users\Admin\IdeaProjects\PrASeguRed\PrASeguRed)
+2025-02-27T09:33:15.600-05:00  INFO 4848 --- [PrASeguRed] [    Test worker] c.e.u.p.repository.UserRepositoryTest    : No active profile set, falling back to 1 default profile: "default"
+2025-02-27T09:33:15.801-05:00  INFO 4848 --- [PrASeguRed] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+2025-02-27T09:33:15.836-05:00  INFO 4848 --- [PrASeguRed] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 29 ms. Found 1 MongoDB repository interface.
+2025-02-27T09:33:16.057-05:00  INFO 4848 --- [PrASeguRed] [    Test worker] org.mongodb.driver.client                : MongoClient with metadata {"driver": {"name": "mongo-java-driver|sync|spring-boot", "version": "5.2.1"}, "os": {"type": "Windows", "name": "Windows 10", "architecture": "amd64", "version": "10.0"}, "platform": "Java/Amazon.com Inc./21.0.6+7-LTS"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=null, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=null, transportSettings=null, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, CollectionCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.client.model.mql.ExpressionCodecProvider@4ceff87d, com.mongodb.Jep395RecordCodecProvider@3238e2aa, com.mongodb.KotlinCodecProvider@2c7db926]}, loggerSettings=LoggerSettings{maxDocumentLength=1000}, clusterSettings={hosts=[localhost:27017], srvServiceName=mongodb, mode=SINGLE, requiredClusterType=UNKNOWN, requiredReplicaSetName='null', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='15 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverMonitoringMode=AUTO, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=false, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, dnsClient=null, inetAddressResolver=null, contextProvider=null, timeoutMS=null}
+2025-02-27T09:33:16.072-05:00  INFO 4848 --- [PrASeguRed] [localhost:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, cryptd=false, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=25, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=15743000, minRoundTripTimeNanos=0}
+2025-02-27T09:33:16.239-05:00  INFO 4848 --- [PrASeguRed] [    Test worker] c.e.u.p.repository.UserRepositoryTest    : Started UserRepositoryTest in 0.87 seconds (process running for 1.594)
+User{id=67c0765957593147c58d138a, name='John Doe', email='john.doe@example.com'}
+User{id=67c077ac9a4c265e2a8b7759, name='John Doe', email='john.doe@example.com'}
+]]></system-out>
+  <system-err><![CDATA[Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build what is described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html#0.3
+WARNING: A Java agent has been loaded dynamically (C:\Users\Admin\.gradle\caches\modules-2\files-2.1\net.bytebuddy\byte-buddy-agent\1.15.11\a38b16385e867f59a641330f0362ebe742788ed8\byte-buddy-agent-1.15.11.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+]]></system-err>
+</testsuite>
