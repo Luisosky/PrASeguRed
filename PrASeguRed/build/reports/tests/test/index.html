@@ -20,13 +20,13 @@
 <tr>
 <td>
 <div class="infoBox" id="tests">
-<div class="counter">1</div>
+<div class="counter">12</div>
 <p>tests</p>
 </div>
 </td>
 <td>
 <div class="infoBox" id="failures">
-<div class="counter">0</div>
+<div class="counter">12</div>
 <p>failures</p>
 </div>
 </td>
@@ -38,7 +38,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.399s</div>
+<div class="counter">4.678s</div>
 <p>duration</p>
 </div>
 </td>
@@ -47,8 +47,8 @@
 </div>
 </td>
 <td>
-<div class="infoBox success" id="successRate">
-<div class="percent">100%</div>
+<div class="infoBox failures" id="successRate">
+<div class="percent">0%</div>
 <p>successful</p>
 </div>
 </td>
@@ -58,13 +58,69 @@
 <div id="tabs">
 <ul class="tabLinks">
 <li>
-<a href="#tab0">Packages</a>
+<a href="#tab0">Failed tests</a>
 </li>
 <li>
-<a href="#tab1">Classes</a>
+<a href="#tab1">Packages</a>
+</li>
+<li>
+<a href="#tab2">Classes</a>
 </li>
 </ul>
 <div id="tab0" class="tab">
+<h2>Failed tests</h2>
+<ul class="linkList">
+<li>
+<a href="classes/co.edu.uniquindio.prasegured.controller.UserControllerTest.html">UserControllerTest</a>.
+<a href="classes/co.edu.uniquindio.prasegured.controller.UserControllerTest.html#deleteUser_NotFound_Returns404()">deleteUser_NotFound_Returns404()</a>
+</li>
+<li>
+<a href="classes/co.edu.uniquindio.prasegured.controller.UserControllerTest.html">UserControllerTest</a>.
+<a href="classes/co.edu.uniquindio.prasegured.controller.UserControllerTest.html#deleteUser_Success()">deleteUser_Success()</a>
+</li>
+<li>
+<a href="classes/co.edu.uniquindio.prasegured.controller.UserControllerTest.html">UserControllerTest</a>.
+<a href="classes/co.edu.uniquindio.prasegured.controller.UserControllerTest.html#getAllUsers_Success()">getAllUsers_Success()</a>
+</li>
+<li>
+<a href="classes/co.edu.uniquindio.prasegured.controller.UserControllerTest.html">UserControllerTest</a>.
+<a href="classes/co.edu.uniquindio.prasegured.controller.UserControllerTest.html#getPagedUsers_Success()">getPagedUsers_Success()</a>
+</li>
+<li>
+<a href="classes/co.edu.uniquindio.prasegured.controller.UserControllerTest.html">UserControllerTest</a>.
+<a href="classes/co.edu.uniquindio.prasegured.controller.UserControllerTest.html#getUserById_NotFound_Returns404()">getUserById_NotFound_Returns404()</a>
+</li>
+<li>
+<a href="classes/co.edu.uniquindio.prasegured.controller.UserControllerTest.html">UserControllerTest</a>.
+<a href="classes/co.edu.uniquindio.prasegured.controller.UserControllerTest.html#getUserById_Success()">getUserById_Success()</a>
+</li>
+<li>
+<a href="classes/co.edu.uniquindio.prasegured.controller.UserControllerTest.html">UserControllerTest</a>.
+<a href="classes/co.edu.uniquindio.prasegured.controller.UserControllerTest.html#registerUser_EmailExists_Returns409()">registerUser_EmailExists_Returns409()</a>
+</li>
+<li>
+<a href="classes/co.edu.uniquindio.prasegured.controller.UserControllerTest.html">UserControllerTest</a>.
+<a href="classes/co.edu.uniquindio.prasegured.controller.UserControllerTest.html#registerUser_InvalidRequest_Returns400()">registerUser_InvalidRequest_Returns400()</a>
+</li>
+<li>
+<a href="classes/co.edu.uniquindio.prasegured.controller.UserControllerTest.html">UserControllerTest</a>.
+<a href="classes/co.edu.uniquindio.prasegured.controller.UserControllerTest.html#registerUser_Success()">registerUser_Success()</a>
+</li>
+<li>
+<a href="classes/co.edu.uniquindio.prasegured.controller.UserControllerTest.html">UserControllerTest</a>.
+<a href="classes/co.edu.uniquindio.prasegured.controller.UserControllerTest.html#serverError_Returns500()">serverError_Returns500()</a>
+</li>
+<li>
+<a href="classes/co.edu.uniquindio.prasegured.controller.UserControllerTest.html">UserControllerTest</a>.
+<a href="classes/co.edu.uniquindio.prasegured.controller.UserControllerTest.html#updateUser_EmailConflict_Returns409()">updateUser_EmailConflict_Returns409()</a>
+</li>
+<li>
+<a href="classes/co.edu.uniquindio.prasegured.controller.UserControllerTest.html">UserControllerTest</a>.
+<a href="classes/co.edu.uniquindio.prasegured.controller.UserControllerTest.html#updateUser_Success()">updateUser_Success()</a>
+</li>
+</ul>
+</div>
+<div id="tab1" class="tab">
 <h2>Packages</h2>
 <table>
 <thead>
@@ -79,19 +135,19 @@
 </thead>
 <tbody>
 <tr>
-<td class="success">
-<a href="packages/co.edu.uniquindio.prasegured.repository.html">co.edu.uniquindio.prasegured.repository</a>
+<td class="failures">
+<a href="packages/co.edu.uniquindio.prasegured.controller.html">co.edu.uniquindio.prasegured.controller</a>
 </td>
-<td>1</td>
+<td>12</td>
+<td>12</td>
 <td>0</td>
-<td>0</td>
-<td>0.399s</td>
-<td class="success">100%</td>
+<td>4.678s</td>
+<td class="failures">0%</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div id="tab1" class="tab">
+<div id="tab2" class="tab">
 <h2>Classes</h2>
 <table>
 <thead>
@@ -106,14 +162,14 @@
 </thead>
 <tbody>
 <tr>
-<td class="success">
-<a href="classes/co.edu.uniquindio.prasegured.repository.UserRepositoryTest.html">co.edu.uniquindio.prasegured.repository.UserRepositoryTest</a>
+<td class="failures">
+<a href="classes/co.edu.uniquindio.prasegured.controller.UserControllerTest.html">co.edu.uniquindio.prasegured.controller.UserControllerTest</a>
 </td>
-<td>1</td>
+<td>12</td>
+<td>12</td>
 <td>0</td>
-<td>0</td>
-<td>0.399s</td>
-<td class="success">100%</td>
+<td>4.678s</td>
+<td class="failures">0%</td>
 </tr>
 </tbody>
 </table>
@@ -126,7 +182,7 @@
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 8.12.1</a> at 27/02/2025, 9:33:16 a. m.</p>
+<a href="http://www.gradle.org">Gradle 8.12.1</a> at 3/03/2025, 1:31:01 p. m.</p>
 </div>
 </div>
 </body>
