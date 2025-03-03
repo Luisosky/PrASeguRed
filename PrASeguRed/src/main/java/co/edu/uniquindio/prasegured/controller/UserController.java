@@ -2,6 +2,7 @@ package co.edu.uniquindio.prasegured.controller;
 
 import co.edu.uniquindio.prasegured.model.User;
 import co.edu.uniquindio.prasegured.repository.UserRepository;
+import co.edu.uniquindio.prasegured.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,14 +12,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
+    private final UserService userService;
+    private final UserRepository userRepository;
+
     @Autowired
-    private UserRepository userRepository;
+    public UserController(UserService userService, UserRepository userRepository) {
+        this.userService = userService;
+        this.userRepository = userRepository;
+    }
 
     // GET todos los usuarios
     @GetMapping
@@ -38,9 +44,8 @@ public class UserController {
     // GET user por ID
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable String id) {
-        Optional<User> user = userRepository.findById(id);
-        return user.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        User user = userService.getUserById(id);
+        return ResponseEntity.ok(user);
     }
 
     // POST nuevo usuario
@@ -53,26 +58,14 @@ public class UserController {
     // PUT para actualizar usuario
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User userDetails) {
-        Optional<User> optionalUser = userRepository.findById(id);
-
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            user.setName(userDetails.getName());
-            user.setEmail(userDetails.getEmail());
-            return ResponseEntity.ok(userRepository.save(user));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        User updatedUser = userService.updateUser(id, userDetails);
+        return ResponseEntity.ok(updatedUser);
     }
 
     // DELETE user
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable String id) {
-        if (userRepository.existsById(id)) {
-            userRepository.deleteById(id);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 }
