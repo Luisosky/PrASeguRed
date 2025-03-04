@@ -17,11 +17,11 @@ public class PrASeguRedApplication {
     @Bean
     public CommandLineRunner run(UserRepository userRepository) {
         return args -> {
-            // Save a new user
+            // Guarda un nuevo usuario
             User user = new User(null, "John Doe", "john.doe@example.com");
             userRepository.save(user);
 
-            // List all users
+            // Lista todos los usuarios
             userRepository.findAll().forEach(System.out::println);
         };
     }
