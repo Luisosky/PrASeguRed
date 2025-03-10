@@ -4,6 +4,8 @@ info:
   description: API para el registro, autenticación, gestión de cuentas y reportes
   version: 1.0.0
 servers:
+  - url: /
+  - url: https://localhost:8080
   - url: https://api.ejemplo.com/v1
 
 paths:
@@ -153,7 +155,7 @@ paths:
           description: Datos actualizados correctamente.
 
   /cuenta/eliminar:
-    patch:
+    delete:
       summary: Eliminación de cuenta
       description: Permite al usuario eliminar su cuenta de manera definitiva
       operationId: eliminarCuenta
@@ -247,7 +249,7 @@ paths:
           description: Reporte actualizado.
 
   /reportes/{id}/eliminar:
-    patch:
+    delete:
       summary: Eliminación de reporte
       description: Permite eliminar un reporte
       operationId: eliminarReporte
