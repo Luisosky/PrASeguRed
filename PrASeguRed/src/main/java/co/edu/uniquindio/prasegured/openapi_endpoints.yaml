@@ -38,7 +38,7 @@ paths:
                   type: string
                 estado:
                   type: string
-                  enum: [En espera, Activada, Eliminada]
+                  enum: [Verificado, Rechazado, Resuelto]
                 correo:
                   type: string
                   format: email
