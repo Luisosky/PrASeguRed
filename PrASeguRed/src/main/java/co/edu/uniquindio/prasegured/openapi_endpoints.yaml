@@ -1,0 +1,301 @@
+openapi: 3.0.0
+info:
+  title: API de Gestión de Usuarios y Reportes
+  description: API para el registro, autenticación, gestión de cuentas y reportes
+  version: 1.0.0
+servers:
+  - url: https://api.ejemplo.com/v1
+
+paths:
+  /registro:
+    post:
+      summary: Registro de usuario
+      description: Registra un nuevo usuario en el sistema
+      operationId: registrarUsuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tpDocumento:
+                  type: string
+                documento:
+                  type: string
+                nombreCom:
+                  type: string
+                fechaNacimiento:
+                  type: string
+                  format: date
+                ciudadResidencia:
+                  type: string
+                direccion:
+                  type: string
+                telefono:
+                  type: string
+                cargo:
+                  type: string
+                estado:
+                  type: string
+                  enum: [En espera, Activada, Eliminada]
+                correo:
+                  type: string
+                  format: email
+                preferencias:
+                  type: string
+                contraseña:
+                  type: string
+      responses:
+        "201":
+          description: Registro exitoso, se enviará un código de verificación.
+
+  /email/enviar:
+    post:
+      summary: Enviar código de verificación
+      description: Envía un correo con el código de verificación al usuario registrado
+      operationId: enviarCodigoVerificacion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                codigoVerificacion:
+                  type: string
+      responses:
+        "200":
+          description: Código enviado correctamente.
+
+  /email/validar:
+    get:
+      summary: Validar código de verificación
+      description: Verifica si el código ingresado es válido y activa la cuenta
+      operationId: validarCodigo
+      parameters:
+        - name: codigoVerificacion
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Código válido, cuenta activada.
+        "400":
+          description: Código inválido.
+
+  /auth/login:
+    post:
+      summary: Inicio de sesión
+      description: Autentica a un usuario con correo y contraseña
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                correo:
+                  type: string
+                  format: email
+                contraseña:
+                  type: string
+      responses:
+        "200":
+          description: Inicio de sesión exitoso.
+        "401":
+          description: Credenciales incorrectas.
+
+  /auth/validar:
+    get:
+      summary: Validar credenciales
+      description: Verifica si el correo y la contraseña ingresados son correctos
+      operationId: validarCredenciales
+      parameters:
+        - name: correo
+          in: query
+          required: true
+          schema:
+            type: string
+            format: email
+        - name: contraseña
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Credenciales válidas.
+        "401":
+          description: Credenciales incorrectas.
+
+  /cuenta/actualizar:
+    patch:
+      summary: Actualización de datos
+      description: Permite modificar algunos datos personales
+      operationId: actualizarCuenta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                correo:
+                  type: string
+                  format: email
+                telefono:
+                  type: string
+      responses:
+        "200":
+          description: Datos actualizados correctamente.
+
+  /cuenta/eliminar:
+    patch:
+      summary: Eliminación de cuenta
+      description: Permite al usuario eliminar su cuenta de manera definitiva
+      operationId: eliminarCuenta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                confirmacion:
+                  type: boolean
+      responses:
+        "200":
+          description: Cuenta eliminada.
+
+  /reportes:
+    post:
+      summary: Creación de reporte
+      description: Crea un nuevo reporte en el sistema
+      operationId: crearReporte
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                titulo:
+                  type: string
+                limiteEdad:
+                  type: integer
+                descripcion:
+                  type: string
+                ubicacion:
+                  type: string
+                importante:
+                  type: boolean
+                resuelto:
+                  type: boolean
+                imagenes:
+                  type: array
+                  items:
+                    type: string
+                    format: uri
+                categoria:
+                  type: string
+      responses:
+        "201":
+          description: Reporte creado exitosamente.
+
+  /reportes/{id}:
+    patch:
+      summary: Actualización de reporte
+      description: Permite modificar un reporte existente
+      operationId: actualizarReporte
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                titulo:
+                  type: string
+                limiteEdad:
+                  type: integer
+                descripcion:
+                  type: string
+                ubicacion:
+                  type: string
+                importante:
+                  type: boolean
+                resuelto:
+                  type: boolean
+                imagenes:
+                  type: array
+                  items:
+                    type: string
+                    format: uri
+                categoria:
+                  type: string
+      responses:
+        "200":
+          description: Reporte actualizado.
+
+  /reportes/{id}/eliminar:
+    patch:
+      summary: Eliminación de reporte
+      description: Permite eliminar un reporte
+      operationId: eliminarReporte
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                confirmacion:
+                  type: boolean
+      responses:
+        "200":
+          description: Reporte eliminado correctamente.
+
+  /reportes/{id}/priorizar:
+    patch:
+      summary: Priorización de reporte
+      description: Permite marcar un reporte como importante
+      operationId: priorizarReporte
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Reporte priorizado.
+
+  /reportes/{id}/resolver:
+    patch:
+      summary: Resolución de reporte
+      description: Permite cambiar el estado de un reporte a resuelto
+      operationId: resolverReporte
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Reporte resuelto correctamente.
