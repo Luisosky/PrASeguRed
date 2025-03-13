@@ -36,5 +36,5 @@ public class ReportesController {
         return ResponseEntity.ok().build();
     }
 
-    // Añadir aquí el resto de endpoints de reportes
+
 }

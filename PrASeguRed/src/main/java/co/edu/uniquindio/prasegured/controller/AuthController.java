@@ -21,7 +21,6 @@ public class AuthController {
     @PostMapping("/auth/login")
     public ResponseEntity<Void> login(@RequestBody CredencialesDTO credenciales) {
         // Implementación de la autenticación
-        // Por ahora retornamos OK para probar que el endpoint responde
         return ResponseEntity.ok().build();
     }
 }
