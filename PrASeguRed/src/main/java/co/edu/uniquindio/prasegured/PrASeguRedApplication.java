@@ -7,6 +7,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.time.LocalDate; // Add this import if needed
+
 @SpringBootApplication
 public class PrASeguRedApplication {
 
@@ -17,13 +19,12 @@ public class PrASeguRedApplication {
     @Bean
     public CommandLineRunner run(UserRepository userRepository) {
         return args -> {
-            // Guarda un nuevo usuario
-            User user = new User(null, "John Doe", "john.doe@example.com");
+            // Guarda un nuevo usuario usando el constructor disponible
+            User user = new User("johndoe", "John Doe", "john.doe@example.com", LocalDate.now(), "password");
             userRepository.save(user);
 
             // Lista todos los usuarios
             userRepository.findAll().forEach(System.out::println);
         };
     }
-
 }
