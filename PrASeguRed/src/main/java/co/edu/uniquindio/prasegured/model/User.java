@@ -2,6 +2,7 @@ package co.edu.uniquindio.prasegured.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.time.LocalDate;
 
 @Document(collection = "users")
@@ -9,58 +10,80 @@ public class User {
 
     @Id
     private String id;
-    private String name;
     private String email;
     private String password;
+    private String name;
     private LocalDate dateBirth;
-    private Rol rol;
-    private String tpDocumento;
-    private String documento;
-    private String ciudadResidencia;
-    private String direccion;
-    private String telefono;
-    private String cargo;
-    private String estado;
-    private String preferencias;
-    private boolean verified;
-    private String verificationCode;
+    private String rol;
+    private boolean enabled = false;
 
-    // Constructores
-    public User() {}
 
-    public User(String id, String name, String email) {
-        this.id = id;
+    public User() {
+    }
+
+
+    public User(String email, String password, String name, LocalDate dateBirth, String rol) {
+        this.email = email;
+        this.password = password;
         this.name = name;
+        this.dateBirth = dateBirth;
+        this.rol = rol;
+    }
+
+    // Getters y Setters
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    public String getTpDocumento() { return tpDocumento; }
-    public void setTpDocumento(String tpDocumento) { this.tpDocumento = tpDocumento; }
+    public String getPassword() {
+        return password;
+    }
 
-    public String getDocumento() { return documento; }
-    public void setDocumento(String documento) { this.documento = documento; }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-    public String getCiudadResidencia() { return ciudadResidencia; }
-    public void setCiudadResidencia(String ciudadResidencia) { this.ciudadResidencia = ciudadResidencia; }
+    public String getName() {
+        return name;
+    }
 
-    public String getDireccion() { return direccion; }
-    public void setDireccion(String direccion) { this.direccion = direccion; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public String getTelefono() { return telefono; }
-    public void setTelefono(String telefono) { this.telefono = telefono; }
+    public LocalDate getDateBirth() {
+        return dateBirth;
+    }
 
-    public String getCargo() { return cargo; }
-    public void setCargo(String cargo) { this.cargo = cargo; }
+    public void setDateBirth(LocalDate dateBirth) {
+        this.dateBirth = dateBirth;
+    }
 
-    public String getEstado() { return estado; }
-    public void setEstado(String estado) { this.estado = estado; }
+    public String getRol() {
+        return rol;
+    }
 
-    public String getPreferencias() { return preferencias; }
-    public void setPreferencias(String preferencias) { this.preferencias = preferencias; }
+    public void setRol(String rol) {
+        this.rol = rol;
+    }
 
-    public boolean isVerified() { return verified; }
-    public void setVerified(boolean verified) { this.verified = verified; }
+    public boolean isEnabled() {
+        return enabled;
+    }
 
-    public String getVerificationCode() { return verificationCode; }
-    public void setVerificationCode(String verificationCode) { this.verificationCode = verificationCode; }
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 }

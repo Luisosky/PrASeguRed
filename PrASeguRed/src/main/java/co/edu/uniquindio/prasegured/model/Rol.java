@@ -1,6 +1,7 @@
-package co.edu.uniquindio.prasegured.model;
+    package co.edu.uniquindio.prasegured.model;
 
-public enum Rol {
-    USER,
-    ADMIN
-}
+    public enum Rol {
+        USER,
+        ADMIN;
+
+    }
