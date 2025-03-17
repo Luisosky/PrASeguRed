@@ -165,7 +165,7 @@ components:
           description: Fecha de creación de la notificación
 
 paths:
-  /registro:
+  /registro/usuario:
     post:
       summary: Registro usuario
       description: Registro de un nuevo usuario en el sistema
