@@ -1,10 +1,7 @@
 package co.edu.uniquindio.prasegured.controller;
 
-import co.edu.uniquindio.prasegured.dto.ErrorResponse;
-import co.edu.uniquindio.prasegured.dto.UserRegistrationRequest;
 import co.edu.uniquindio.prasegured.model.Rol;
 import co.edu.uniquindio.prasegured.model.User;
-import co.edu.uniquindio.prasegured.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

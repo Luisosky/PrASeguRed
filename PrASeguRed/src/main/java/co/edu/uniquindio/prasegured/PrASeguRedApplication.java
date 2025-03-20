@@ -7,7 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import java.time.LocalDate; // Add this import if needed
+import java.time.LocalDate;
 
 @SpringBootApplication
 public class PrASeguRedApplication {

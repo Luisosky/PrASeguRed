@@ -1,12 +1,10 @@
 package co.edu.uniquindio.prasegured.service;
 
-import co.edu.uniquindio.prasegured.dto.UserRegistrationRequest;
 import co.edu.uniquindio.prasegured.exception.BadRequestException;
 import co.edu.uniquindio.prasegured.exception.EmailExistException;
 import co.edu.uniquindio.prasegured.exception.ResourceNotFoundException;
 import co.edu.uniquindio.prasegured.model.Rol;
 import co.edu.uniquindio.prasegured.model.User;
-import co.edu.uniquindio.prasegured.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
