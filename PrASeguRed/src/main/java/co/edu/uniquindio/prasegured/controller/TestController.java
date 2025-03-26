@@ -32,14 +32,14 @@ public class TestController {
 
     @GetMapping("/email/{to}")
     public ResponseEntity<String> testSimpleEmail(@PathVariable String to) {
-        emailService.sendSimpleMessage(to, "Test Email", "This is a test email from PrASeguRed");
+        emailService.sendSimpleEmail(to, "Test Email", "This is a test email from PrASeguRed");
         return ResponseEntity.ok("Email sent to " + to);
     }
 
     @GetMapping("/html-email/{to}")
     public ResponseEntity<String> testHtmlEmail(@PathVariable String to) {
         String htmlContent = "<h1>Test HTML Email</h1><p>This is a test HTML email from PrASeguRed</p>";
-        emailService.sendHtmlMessage(to, "Test HTML Email", htmlContent);
+        emailService.sendSimpleEmail(to, "Test HTML Email", htmlContent);
         return ResponseEntity.ok("HTML Email sent to " + to);
     }
 
