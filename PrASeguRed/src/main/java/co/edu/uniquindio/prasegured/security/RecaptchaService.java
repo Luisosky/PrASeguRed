@@ -9,7 +9,7 @@ import java.util.Map;
 public class RecaptchaService {
 
     @Value("${google.recaptcha.secret}")
-    private String recaptchaSecret; // 🔑 Clave secreta
+    private String recaptchaSecret;
 
     private static final String RECAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify";
 
