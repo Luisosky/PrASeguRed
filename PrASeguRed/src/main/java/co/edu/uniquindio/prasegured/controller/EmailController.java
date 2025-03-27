@@ -2,19 +2,38 @@ package co.edu.uniquindio.prasegured.controller;
 
 import co.edu.uniquindio.prasegured.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
+@RequestMapping("/suscripcion")
 public class EmailController {
 
-    @Autowired
-    private EmailService emailService;
+    private final EmailService emailService;
 
-    @GetMapping("/sendEmail")
-    public String sendEmail(@RequestParam String to, @RequestParam String subject, @RequestParam String text) {
-        emailService.sendSimpleEmail(to, subject, text);
-        return "Email sent successfully";
+    @Autowired
+    public EmailController(EmailService emailService) {
+        this.emailService = emailService;
+    }
+
+    @PostMapping("/noticias")
+    public ResponseEntity<Map<String, String>> sendEmail(@RequestBody Map<String, String> request) {
+        String correo = request.get("correo"); // Asegurar que coincida con OpenAPI
+
+        if (correo == null || correo.isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "El correo es requerido"));
+        }
+
+        try {
+            String subject = "Suscripción a Noticias";
+            String text = "Gracias por suscribirte a nuestras noticias.";
+            emailService.sendSimpleEmail(correo, subject, text);
+
+            return ResponseEntity.ok(Map.of("message", "Suscripción realizada con éxito"));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", "Error al enviar el correo"));
+        }
     }
 }
