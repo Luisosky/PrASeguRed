@@ -1,19 +1,21 @@
 package co.edu.uniquindio.prasegured.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
-public class EmailRequest {
+public record EmailRequest(
+        @NotBlank(message = "El nombre es requerido")
+        String name,
 
-    @JsonProperty("correo") // Mapea "correo" en JSON a "email" en Java
-    private String email;
+        @NotBlank(message = "El correo es requerido")
+        @Email(message = "Debe ser un email válido")
+        @JsonProperty("correo") // Ahora sí se mapea correctamente
+        String email,
 
-    public EmailRequest() {}
+        @NotBlank(message = "El asunto es requerido")
+        String subject,
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-}
+        @NotBlank(message = "El mensaje es requerido")
+        String message
+) {}
