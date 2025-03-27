@@ -14,13 +14,10 @@ public class CorsConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
 
-        // Permitir peticiones desde el frontend
-        config.addAllowedOrigin("http://localhost:4200"); // URL de desarrollo de Angular
-        // config.addAllowedOrigin("https://tu-url-de-produccion.com");
-
+        config.addAllowedOrigin("*");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
-        config.setAllowCredentials(true);
+
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
