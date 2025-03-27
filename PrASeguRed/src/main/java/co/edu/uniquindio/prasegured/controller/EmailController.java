@@ -27,9 +27,7 @@ public class EmailController {
         }
 
         try {
-            String subject = "Suscripción a Noticias";
-            String text = "Gracias por suscribirte a nuestras noticias.";
-            emailService.sendSimpleEmail(correo, subject, text);
+            emailService.sendSubscriptionConfirmation(correo);
 
             return ResponseEntity.ok(Map.of("message", "Suscripción realizada con éxito"));
         } catch (Exception e) {
