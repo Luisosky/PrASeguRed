@@ -595,3 +595,50 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Notificacion'
+  /suscripcion/noticias:
+    post:
+      summary: Suscripción a noticias
+      description: Permite a un usuario suscribirse a las noticias de Segured proporcionando su correo electrónico.
+      operationId: suscripcionNoticias
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                correo:
+                  type: string
+                  format: email
+                  description: Correo electrónico del usuario que desea suscribirse
+      responses:
+        "200":
+          description: Suscripción exitosa.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Suscripción realizada con éxito.
+        "400":
+          description: Solicitud incorrecta (por ejemplo, formato de correo inválido).
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Formato de correo inválido.
+        "409":
+          description: El correo ya está suscrito.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: El correo ya está suscrito.
