@@ -2,6 +2,8 @@ package co.edu.uniquindio.prasegured.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import java.util.List;
+
 @Document(collection = "usuarios")
 public class Usuario {
     @Id
@@ -18,6 +20,7 @@ public class Usuario {
     private String correo;
     private String preferencias;
     private String contraseña;
+    private List<Location> locations;
 
     public String getId() {
         return id;
@@ -121,5 +124,14 @@ public class Usuario {
 
     public void setContraseña(String contraseña) {
         this.contraseña = contraseña;
+    }
+
+
+    public List<Location> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(List<Location> locations) {
+        this.locations = locations;
     }
 }

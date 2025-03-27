@@ -33,6 +33,7 @@ dependencies {
     implementation 'jakarta.mail:jakarta.mail-api:2.1.2'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.security:spring-security-crypto'
+    implementation 'io.github.cdimascio:java-dotenv:5.2.2'
 
 }
 
