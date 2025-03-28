@@ -14,6 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin("*") // Permite peticiones desde el front
@@ -41,19 +44,28 @@ public class AuthController {
     }
 
     @PostMapping("/enviar-codigo")
-    public ResponseEntity<String> enviarCodigo(@RequestBody VerificationRequest request) {
+    public ResponseEntity<Map<String, String>> enviarCodigo(@RequestBody VerificationRequest request) {
+        Map<String, String> response = new HashMap<>();
         try {
             authService.sendVerificationCode(request.getEmail());
-            return ResponseEntity.ok("Código enviado correctamente");
+            response.put("message", "Código enviado correctamente");
+            return ResponseEntity.ok(response);
         } catch (MessagingException e) {
-            return ResponseEntity.status(500).body("Error al enviar el código");
+            response.put("error", "Error al enviar el código");
+            return ResponseEntity.status(500).body(response);
         }
     }
 
     @PostMapping("/verificar-codigo")
-    public ResponseEntity<String> verificarCodigo(@RequestBody VerificationRequest request) {
+    public ResponseEntity<Map<String, String>> verificarCodigo(@RequestBody VerificationRequest request) {
+        Map<String, String> response = new HashMap<>();
         boolean valido = authService.verifyCode(request.getEmail(), request.getCode());
-        return valido ? ResponseEntity.ok("Código verificado correctamente") :
-                ResponseEntity.status(400).body("Código incorrecto o expirado");
+        if (valido) {
+            response.put("message", "Código verificado correctamente");
+            return ResponseEntity.ok(response);
+        } else {
+            response.put("error", "Código incorrecto o expirado");
+            return ResponseEntity.status(400).body(response);
+        }
     }
 }
