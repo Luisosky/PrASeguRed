@@ -18,6 +18,21 @@ public class EmailService {
     @Autowired
     private TemplateEngine templateEngine;
 
+    public void sendVerificationCode(String email, String code) throws MessagingException {
+        // Crear contexto para Thymeleaf
+        Context context = new Context();
+        context.setVariable("code", code);
+
+        // Verificar dónde está buscando la plantilla
+        String templateLocation = "verificationcode";
+
+        // Procesar la plantilla Thymeleaf
+        String htmlContent = templateEngine.process(templateLocation, context);
+
+        // Enviar el correo
+        sendEmail(email, "Código de Verificación", htmlContent);
+    }
+
     public void sendSubscriptionConfirmation(String email) throws MessagingException {
         // Crear contexto para Thymeleaf
         Context context = new Context();
@@ -30,10 +45,10 @@ public class EmailService {
         String htmlContent = templateEngine.process(templateLocation, context);
 
         // Enviar el correo
-        sendHtmlEmail(email, "Confirmación de suscripción", htmlContent);
+        sendEmail(email, "Confirmación de suscripción", htmlContent);
     }
 
-    public void sendHtmlEmail(String to, String subject, String htmlContent) throws MessagingException {
+    public void sendEmail(String to, String subject, String htmlContent) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
         helper.setTo(to);

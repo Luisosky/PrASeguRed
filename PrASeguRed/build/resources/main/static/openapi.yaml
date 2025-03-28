@@ -164,6 +164,17 @@ components:
           format: date-time
           description: Fecha de creación de la notificación
 
+    VerificationRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: "usuario@ejemplo.com"
+        code:
+          type: string
+          example: "123456"
+
 paths:
   /registro/usuario:
     post:
@@ -642,3 +653,80 @@ paths:
                   error:
                     type: string
                     example: Error al enviar el correo.
+
+  /api/auth/enviar-codigo:
+    post:
+      summary: Enviar código de verificación
+      description: Envía un código de verificación de 6 dígitos al correo proporcionado.
+      operationId: enviarCodigo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerificationRequest'
+      responses:
+        "200":
+          description: Código enviado correctamente
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Código enviado correctamente"
+        "500":
+          description: Error al enviar el código
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Error al enviar el código"
+
+  /api/auth/verificar-codigo:
+    post:
+      summary: Verificar código de verificación
+      description: Verifica si el código ingresado es correcto y no ha expirado.
+      operationId: verificarCodigo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerificationRequest'
+      responses:
+        "200":
+          description: Código verificado correctamente
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Código verificado correctamente"
+        "400":
+          description: Código incorrecto o expirado
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Código incorrecto o expirado"
+
+x-tests:
+  - name: Registro usuario
+    request:
+      method: POST
+      path: /registro/usuario
+      body:
+        tpDocumento: "CC"
+        documento: "123456789"
+        nombreCom: "Juan Perez"
+        fechaNacimiento: "1990-01-01"
+        ciudadResidencia: "Bogotá"
+        direccion: "Calle 123 #45-67"
+        telefono: "3001234567"
+        cargo: "Analista"
+        estado: "Verificado"
+        correo: "juan.perez@example.com"
+        preferencias: "Ninguna"
+        contraseña: "password123"
+    response:
+      status: 201
+      body:
+        message: "Registro exitoso y envío de código de verificación."
