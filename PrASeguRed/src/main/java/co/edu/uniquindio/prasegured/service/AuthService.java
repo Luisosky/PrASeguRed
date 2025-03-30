@@ -5,6 +5,7 @@ import co.edu.uniquindio.prasegured.repository.VerificationCodeRepository;
 import jakarta.mail.MessagingException;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -38,8 +39,13 @@ public class AuthService {
     }
 
     public boolean verifyCode(String email, String code) {
-        return verificationCodeRepository.findByEmailAndCode(email, code)
-                .filter(vc -> vc.getExpirationTime().isAfter(LocalDateTime.now()))
-                .isPresent();
+        Optional<AuthCode> optionalAuthCode = verificationCodeRepository.findByEmailAndCode(email, code);
+        if (optionalAuthCode.isPresent()) {
+            AuthCode authCode = optionalAuthCode.get();
+
+            return authCode.getExpirationTime().isAfter(LocalDateTime.now());
+        }
+
+        return false;
     }
 }

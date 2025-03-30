@@ -664,22 +664,33 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/VerificationRequest'
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: "usuario@ejemplo.com"
       responses:
         "200":
           description: Código enviado correctamente
           content:
             application/json:
               schema:
-                type: string
-                example: "Código enviado correctamente"
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Código enviado correctamente
         "500":
           description: Error al enviar el código
           content:
             application/json:
               schema:
-                type: string
-                example: "Error al enviar el código"
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Error al enviar el código
 
   /api/auth/verificar-codigo:
     post:
@@ -707,26 +718,3 @@ paths:
               schema:
                 type: string
                 example: "Código incorrecto o expirado"
-
-x-tests:
-  - name: Registro usuario
-    request:
-      method: POST
-      path: /registro/usuario
-      body:
-        tpDocumento: "CC"
-        documento: "123456789"
-        nombreCom: "Juan Perez"
-        fechaNacimiento: "1990-01-01"
-        ciudadResidencia: "Bogotá"
-        direccion: "Calle 123 #45-67"
-        telefono: "3001234567"
-        cargo: "Analista"
-        estado: "Verificado"
-        correo: "juan.perez@example.com"
-        preferencias: "Ninguna"
-        contraseña: "password123"
-    response:
-      status: 201
-      body:
-        message: "Registro exitoso y envío de código de verificación."

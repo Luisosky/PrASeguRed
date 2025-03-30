@@ -5,9 +5,6 @@ import co.edu.uniquindio.prasegured.dto.VerificationRequest;
 import co.edu.uniquindio.prasegured.model.Usuario;
 import co.edu.uniquindio.prasegured.repository.UsuarioRepository;
 import co.edu.uniquindio.prasegured.service.AuthService;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
