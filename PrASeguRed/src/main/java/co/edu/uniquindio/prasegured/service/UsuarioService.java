@@ -50,6 +50,7 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
+    // Método para obtener usuarios por estado, lista
     public List<Usuario> getUsuariosByEstado(String estado) {
         return usuarioRepository.findByEstado(estado);
     }
@@ -69,4 +70,22 @@ public class UsuarioService {
     public List<Usuario> getUsuariosEnEspera() {
         return usuarioRepository.findUsuariosEnEspera();
     }
+
+    // Método para obtener usuarios por estado y ID/ estado y correo, objeto usuario
+    public Usuario getUsuarioByIdAndEstado(String id, String estado) {
+        return usuarioRepository.findByIdAndEstado(id, estado);
+    }
+
+    public Usuario getUsuarioByCorreoAndEstado(String correo, String estado) {
+        return usuarioRepository.findByCorreoAndEstado(correo, estado);
+    }
+
+    public Usuario getUsuarioActivoById(String id) {
+        return usuarioRepository.findUsuarioActivoById(id);
+    }
+
+    public Usuario getUsuarioActivoByCorreo(String correo) {
+        return usuarioRepository.findUsuarioActivoByCorreo(correo);
+    }
+
 }
