@@ -2,6 +2,7 @@ package co.edu.uniquindio.prasegured.controller;
 
 import co.edu.uniquindio.prasegured.dto.CredencialesDTO;
 import co.edu.uniquindio.prasegured.dto.VerificationRequest;
+import co.edu.uniquindio.prasegured.model.ESTADOS;
 import co.edu.uniquindio.prasegured.model.Usuario;
 import co.edu.uniquindio.prasegured.repository.UsuarioRepository;
 import co.edu.uniquindio.prasegured.service.AuthService;
@@ -58,8 +59,16 @@ public class AuthController {
         Map<String, String> response = new HashMap<>();
         boolean valido = authService.verifyCode(request.getEmail(), request.getCode());
         if (valido) {
-            response.put("message", "Código verificado correctamente");
-            return ResponseEntity.ok(response);
+            var usuario= usuarioRepository.findByCorreo(request.getEmail());
+            if (usuario != null) {
+                usuario.setEstado(ESTADOS.ACTIVO.toString());
+                usuarioRepository.save(usuario);
+                response.put("message", "Código verificado correctamente. Usuario activado.");
+                return ResponseEntity.ok(response);
+            } else {
+                response.put("error", "Usuario no encontrado");
+                return ResponseEntity.status(404).body(response);
+            }
         } else {
             response.put("error", "Código incorrecto o expirado");
             return ResponseEntity.status(400).body(response);

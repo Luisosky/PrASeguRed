@@ -27,4 +27,5 @@ public class UsuarioController {
         List<Usuario> usuarios = usuarioService.getAllUsuarios();
         return ResponseEntity.ok(usuarios);
     }
+
 }
