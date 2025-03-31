@@ -1,12 +1,19 @@
 package co.edu.uniquindio.prasegured.model;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Collection;
 import java.util.Date;
 
+@Getter
+@Setter
 @Document(collection = "Comentarios")
+
 public class Comentario {
+    @Id
     private String id;
     private String id_Reporte;
     private String id_usuario;
@@ -17,84 +24,4 @@ public class Comentario {
     private float calificacion;
     private  int numeroCalificaciones;
     private  EnumEstado estado;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId_Reporte() {
-        return id_Reporte;
-    }
-
-    public void setId_Reporte(String id_Reporte) {
-        this.id_Reporte = id_Reporte;
-    }
-
-    public String getId_usuario() {
-        return id_usuario;
-    }
-
-    public void setId_usuario(String id_usuario) {
-        this.id_usuario = id_usuario;
-    }
-
-    public Boolean getAnonimo() {
-        return anonimo;
-    }
-
-    public void setAnonimo(Boolean anonimo) {
-        this.anonimo = anonimo;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public Date getFechaPublicacion() {
-        return fechaPublicacion;
-    }
-
-    public void setFechaPublicacion(Date fechaPublicacion) {
-        this.fechaPublicacion = fechaPublicacion;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public float getCalificacion() {
-        return calificacion;
-    }
-
-    public void setCalificacion(float calificacion) {
-        this.calificacion = calificacion;
-    }
-
-    public int getNumeroCalificaciones() {
-        return numeroCalificaciones;
-    }
-
-    public void setNumeroCalificaciones(int numeroCalificaciones) {
-        this.numeroCalificaciones = numeroCalificaciones;
-    }
-
-    public EnumEstado getEstado() {
-        return estado;
-    }
-
-    public void setEstado(EnumEstado estado) {
-        this.estado = estado;
-    }
 }
