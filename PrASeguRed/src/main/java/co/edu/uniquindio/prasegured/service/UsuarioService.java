@@ -49,4 +49,24 @@ public class UsuarioService {
     public List<Usuario> getAllUsuarios() {
         return usuarioRepository.findAll();
     }
+
+    public List<Usuario> getUsuariosByEstado(String estado) {
+        return usuarioRepository.findByEstado(estado);
+    }
+
+    public List<Usuario> getUsuariosActivos() {
+        return usuarioRepository.findUsuariosActivos();
+    }
+
+    public List<Usuario> getUsuariosInactivos() {
+        return usuarioRepository.findUsuariosInactivos();
+    }
+
+    public List<Usuario> getUsuariosBloqueados() {
+        return usuarioRepository.findUsuariosBloqueados();
+    }
+
+    public List<Usuario> getUsuariosEnEspera() {
+        return usuarioRepository.findUsuariosEnEspera();
+    }
 }
