@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>API de Gestión de Usuarios y Reportes</title>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.11.0/swagger-ui.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f0f0f0;
+      color: #333;
+    }
+    #swagger-ui {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+<div id="swagger-ui"></div>
+<script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.11.0/swagger-ui-bundle.js"></script>
+<script>
+  window.onload = function() {
+    SwaggerUIBundle({
+      url: "openapi.yaml",
+      dom_id: '#swagger-ui',
+      deepLinking: true,
+      presets: [
+        SwaggerUIBundle.presets.apis,
+        SwaggerUIBundle.SwaggerUIStandalonePreset
+      ],
+      layout: "BaseLayout",
+      displayRequestDuration: true,
+      docExpansion: 'list',
+      filter: true,
+      syntaxHighlight: {
+        activated: true,
+        theme: "monokai"
+      },
+      logo: {
+        url: "https://raw.githubusercontent.com/Luisosky/images/main/maxwell.gif",
+        altText: "Logo de la API"
+      }
+    })
+  }
+</script>
+</body>
+</html>
