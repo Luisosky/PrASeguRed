@@ -16,6 +16,7 @@ public class Comentario {
     private String descripcion;
     private float calificacion;
     private  int numeroCalificaciones;
+    private  EnumEstado estado;
 
     public String getId() {
         return id;
@@ -89,5 +90,11 @@ public class Comentario {
         this.numeroCalificaciones = numeroCalificaciones;
     }
 
+    public EnumEstado getEstado() {
+        return estado;
+    }
 
+    public void setEstado(EnumEstado estado) {
+        this.estado = estado;
+    }
 }

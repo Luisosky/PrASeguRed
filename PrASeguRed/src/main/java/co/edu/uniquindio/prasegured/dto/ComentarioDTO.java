@@ -1,5 +1,7 @@
 package co.edu.uniquindio.prasegured.dto;
 
+import co.edu.uniquindio.prasegured.model.EnumEstado;
+
 import java.util.Date;
 
 public record ComentarioDTO(
@@ -11,5 +13,6 @@ public record ComentarioDTO(
         Date fechaPublicacion,
         String descripcion,
         float calificacion,
-        int numeroCalificaciones) {
+        int numeroCalificaciones,
+        EnumEstado estado) {
 }
