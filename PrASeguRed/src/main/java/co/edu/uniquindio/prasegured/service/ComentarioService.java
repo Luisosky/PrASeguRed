@@ -19,7 +19,7 @@ public class ComentarioService {
         return comentarioRepository.save(comentario);
     }
 
-    public List<Comentario> comentarios (String id_reporte) {
+    public List<Comentario> getAllComentarios () {
         // Aquí puedes agregar la lógica para obtener los comentarios de un reporte
         // Por ejemplo, consultar la base de datos y devolver la lista de comentarios
         return comentarioRepository.findAll();
