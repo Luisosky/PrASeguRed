@@ -75,5 +75,7 @@ Si hay otro error que no este descrito:
 - Vaya a [MongoDB Installation & Troubleshooting Guide](README-mongodb-installation.md).
 
 Vamoh a meterle duro
+
+Swagger: https://luisosky.github.io/PrASeguRed/
 ```
 ```
