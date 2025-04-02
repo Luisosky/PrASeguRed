@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 @CrossOrigin("*") // Permite peticiones desde el front
 public class AuthController {
 
@@ -29,7 +29,7 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    @PostMapping("/auth/login")
+    @PostMapping("/login")
     public ResponseEntity<Void> login(@RequestBody CredencialesDTO credenciales) {
         Usuario usuario = usuarioRepository.findByCorreo(credenciales.correo());
         if (usuario != null) {
@@ -41,7 +41,7 @@ public class AuthController {
         return ResponseEntity.status(401).build();
     }
 
-    @PostMapping("/enviar-codigo")
+    @PostMapping("/codigo-usuario")
     public ResponseEntity<Map<String, String>> enviarCodigo(@RequestBody VerificationRequest request) {
         Map<String, String> response = new HashMap<>();
         try {
@@ -54,7 +54,7 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/verificar-codigo")
+    @PostMapping("/token")
     public ResponseEntity<Map<String, String>> verificarCodigo(@RequestBody VerificationRequest request) {
         Map<String, String> response = new HashMap<>();
         boolean valido = authService.verifyCode(request.getEmail(), request.getCode());
