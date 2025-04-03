@@ -222,7 +222,7 @@ paths:
                     type: string
                     example: Código enviado correctamente.
 
-  /auth:
+  /auth/login:
     post:
       summary: Inicio sesión
       description: Autenticación de usuario por correo y contraseña
@@ -654,7 +654,7 @@ paths:
                     type: string
                     example: Error al enviar el correo.
 
-  /api/auth/enviar-codigo:
+  /auth/codigo-usuario:
     post:
       summary: Enviar código de verificación
       description: Envía un código de verificación de 6 dígitos al correo proporcionado.
@@ -692,7 +692,7 @@ paths:
                     type: string
                     example: Error al enviar el código
 
-  /api/auth/verificar-codigo:
+  /auth/token:
     post:
       summary: Verificar código de verificación
       description: Verifica si el código ingresado es correcto y no ha expirado.
