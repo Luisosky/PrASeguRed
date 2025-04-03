@@ -4,5 +4,6 @@ public enum EnumEstado {
     Espera,
     Denegado,
     Aceptado,
-    Eliminado
+    Eliminado,
+    Finalizado
 }

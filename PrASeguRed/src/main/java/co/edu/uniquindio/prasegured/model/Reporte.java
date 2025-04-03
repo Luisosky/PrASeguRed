@@ -22,6 +22,5 @@ public class Reporte {
     private String ubicacion;
     private int likes;
     private int dislikes;
-    private boolean resuelto;
     private List<Categoria> categoria;
 }
