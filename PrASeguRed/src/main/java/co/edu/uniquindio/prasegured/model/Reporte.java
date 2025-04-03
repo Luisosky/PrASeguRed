@@ -20,9 +20,8 @@ public class Reporte {
     private Date fechaPublicacion;
     private String descripcion;
     private String ubicacion;
-    private float calificacion;
-    private int numeroCalificaciones;
-    private boolean importante;
+    private int likes;
+    private int dislikes;
     private boolean resuelto;
     private List<Categoria> categoria;
 }

@@ -40,8 +40,8 @@ dependencies {
     implementation 'org.springframework.security:spring-security-crypto'
     implementation 'io.github.cdimascio:java-dotenv:5.2.2'
     //Getter and Setter
-    compileOnly 'org.projectlombok:lombok:1.18.24'
-    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    compileOnly 'org.projectlombok:lombok:1.18.26'
+    annotationProcessor 'org.projectlombok:lombok:1.18.26'
 }
 
 tasks.named('test') {

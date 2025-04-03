@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 @RequiredArgsConstructor
+@Service
 public class CategoriaServiceImple implements CategoriaService {
     private final CategoriaRepository categoriaRepository;
     private final CategoriaMapper categoriaMapper;
@@ -21,7 +21,7 @@ public class CategoriaServiceImple implements CategoriaService {
     @Override
     public CategoriaDTO save(CategoriaRequest categoria) {
         var newCategoria = categoriaMapper.parseOf(categoria);
-        validateCategoriaName(categoria.getName());
+        validateCategoriaName(categoria.name());
         return categoriaMapper.toCategoriaDTO(
                 categoriaRepository.save(newCategoria)
         );
@@ -30,11 +30,11 @@ public class CategoriaServiceImple implements CategoriaService {
     @Override
     public CategoriaDTO update(String id, CategoriaRequest categoria) {
         var updatedCategoria = findCategoriaById(id);
-        updatedCategoria.setName(categoria.getName());
-        if (!updatedCategoria.getName().equals(categoria.getName())) {
-            validateCategoriaName(categoria.getName());
+        updatedCategoria.setName(categoria.name());
+        if (!updatedCategoria.getName().equals(categoria.name())) {
+            validateCategoriaName(categoria.name());
         }
-        updatedCategoria.setDescripcion(categoria.getDescripcion());
+        updatedCategoria.setDescripcion(categoria.descripcion());
         return categoriaMapper.toCategoriaDTO(
                 categoriaRepository.save(updatedCategoria)
         );
