@@ -5,41 +5,38 @@ import co.edu.uniquindio.prasegured.dto.CategoriaRequest;
 import co.edu.uniquindio.prasegured.service.CategoriaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 @RequestMapping("/categoria")
 public class CategoriaController {
-    private final CategoriaService categoriaServices;
-
     @Autowired
-    public CategoriaController(CategoriaService categoriaServices) {
-        this.categoriaServices = categoriaServices;
-    }
+    private CategoriaService categoriaService;
 
     @PostMapping
-    public CategoriaDTO create(@Valid CategoriaRequest categoria) {
-        return categoriaServices.save(categoria);
+    public CategoriaDTO create(@Valid @RequestBody CategoriaRequest categoria) {
+        return categoriaService.save(categoria);
     }
 
     @GetMapping
     public List<CategoriaDTO> getAll() {
-        return categoriaServices.findAll();
+        return categoriaService.findAll();
     }
 
     @PutMapping("/{id}")
-    public CategoriaDTO update(@PathVariable("id") String id, @Valid CategoriaRequest categoria) {
-        return categoriaServices.update(id, categoria);
+    public CategoriaDTO update(@PathVariable("id") String id, @Valid @RequestBody CategoriaRequest categoria) {
+        return categoriaService.update(id, categoria);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") String id) {
-        categoriaServices.deleteById(id);
+        categoriaService.deleteById(id);
     }
 
     @GetMapping("/{id}")
     public CategoriaDTO findById(@PathVariable("id") String id) {
-        return categoriaServices.findById(id);
+        return categoriaService.findById(id);
     }
 }

@@ -17,7 +17,15 @@ public class ReporteService {
         return reporteRepository.save(reporte);
     }
 
+    public Reporte actualizarReporte(String id, Reporte reporte) {
+        // Implementa la lógica para actualizar un reporte
+    }
+
     public List<Reporte> getAllReportes() {
         return reporteRepository.findAll();
+    }
+
+    public void eliminarReporte(String id) {
+        // Implementa la lógica para eliminar un reporte
     }
 }
