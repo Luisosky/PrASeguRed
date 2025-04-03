@@ -1,23 +1,13 @@
 package co.edu.uniquindio.prasegured.service;
 
-import co.edu.uniquindio.prasegured.model.Categoria;
-import co.edu.uniquindio.prasegured.repository.CategoriaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import co.edu.uniquindio.prasegured.dto.CategoriaDTO;
+import co.edu.uniquindio.prasegured.dto.CategoriaRequest;
 import java.util.List;
 
-@Service
-public class CategoriaService {
-    @Autowired
-    private CategoriaRepository categoriaRepository;
-
-    public Categoria registrarCategoria(Categoria categoria) {
-
-        return categoriaRepository.save(categoria);
-    }
-
-    public List<Categoria> getAllCategorias() {
-        return categoriaRepository.findAll();
-    }
+public interface CategoriaService {
+    CategoriaDTO save(CategoriaRequest categoria);
+    CategoriaDTO update(String id, CategoriaRequest categoria);
+    List<CategoriaDTO> findAll();
+    CategoriaDTO findById(String id);
+    void deleteById(String id);
 }

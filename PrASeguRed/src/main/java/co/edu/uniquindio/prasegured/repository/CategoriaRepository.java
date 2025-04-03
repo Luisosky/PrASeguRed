@@ -1,7 +1,10 @@
 package co.edu.uniquindio.prasegured.repository;
 
-import co.edu.uniquindio.prasegured.model.Reporte;
+import co.edu.uniquindio.prasegured.model.Categoria;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface CategoriaRepository {
-    Reporte findByReporte(Reporte reporte);
+import java.util.Optional;
+
+public interface CategoriaRepository extends MongoRepository<Categoria, String> {
+    Optional<Categoria> findByName(String name);
 }
