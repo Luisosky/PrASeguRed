@@ -2,7 +2,9 @@ package co.edu.uniquindio.prasegured.service;
 
 import co.edu.uniquindio.prasegured.dto.ReporteDTO;
 import co.edu.uniquindio.prasegured.dto.ReporteRequest;
+import co.edu.uniquindio.prasegured.exception.ResourceNotFoundException;
 import co.edu.uniquindio.prasegured.mapper.ReporteMapper;
+import co.edu.uniquindio.prasegured.model.EnumEstado;
 import co.edu.uniquindio.prasegured.repository.ReporteRepository;
 import co.edu.uniquindio.prasegured.exception.ValueConflictException;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +21,7 @@ public class ReporteServiceImple implements ReporteService {
     @Override
     public ReporteDTO save(ReporteRequest reporte) {
         var newReporte = reporteMapper.parseOf(reporte);
-        reporteRepository(reporte.id());
+        validateReporteid(reporte.id()); // Llamar al método validateReporteid
         return reporteMapper.toReporteDTO(
                 reporteRepository.save(newReporte)
         );
@@ -32,17 +34,25 @@ public class ReporteServiceImple implements ReporteService {
 
     @Override
     public List<ReporteDTO> findAll() {
-        return List.of();
+        return reporteRepository.findAll()
+                .stream()
+                .map(reporteMapper::toReporteDTO)
+                .toList();
     }
 
     @Override
     public ReporteDTO findById(String id) {
-        return null;
+        var storedReporte = reporteRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
+        return reporteMapper.toReporteDTO(storedReporte); // Mapear Reporte a ReporteDTO
     }
 
     @Override
     public void deleteById(String id) {
-
+        var storedReporte = reporteRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
+        storedReporte.setEstado(EnumEstado.ELIMINADO);
+        reporteRepository.save(storedReporte);
     }
     private void validateReporteid(String id) {
         if (reporteRepository.findById(id).isPresent()) {
