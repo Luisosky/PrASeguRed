@@ -13,5 +13,5 @@ public interface ReporteMapper {
     @Mapping(target = "id", expression = "java(java.util.UUID.randomUUID().toString())")
     @Mapping(target = "status", constant = "ACTIVE")
     Reporte parseOf(ReporteRequest reporteRequest);
-    ReporteDTO parseOf(Reporte reporte);
+    ReporteDTO toReporteDTO(Reporte reporte);
 }

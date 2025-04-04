@@ -6,6 +6,7 @@ import co.edu.uniquindio.prasegured.model.Reporte;
 import co.edu.uniquindio.prasegured.service.ReporteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class ReportesController {
     @Autowired
     private ReporteService reporteService;
     @PostMapping
-    public ReporteDTO create(@RequestBody Reporte reporte) {
+    public ReporteDTO create(@Valid @RequestBody ReporteRequest reporte) {
         return reporteService.save(reporte);
     }
 
@@ -35,13 +36,13 @@ public class ReportesController {
     }
 
     @PutMapping("/{id}")
-    public ReporteDTO update(@PathVariable("id") String id, @RequestBody ReporteRequest reporte) {
+    public ReporteDTO update(@PathVariable("id") String id,@Valid @RequestBody ReporteRequest reporte) {
         return reporteService.update(id, reporte);
     }
 
     @DeleteMapping("/{id}")
-    public ReporteDTO delete(@PathVariable("id") String id) {
-        return reporteService.deleteById(id);
+    public void delete(@PathVariable("id") String id) {
+        reporteService.deleteById(id);
     }
 
 }

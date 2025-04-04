@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 public record ReporteRequest(
+        String id,
          String titulo,
          Date fechaPublicacion,
          String descripcion,
