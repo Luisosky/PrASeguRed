@@ -29,7 +29,12 @@ public class ReporteServiceImple implements ReporteService {
 
     @Override
     public ReporteDTO update(String id, ReporteRequest reporte) {
-        return null;
+        var updatedReporte = findReporteById(id);
+        updatedReporte.setTitulo(reporte.titulo());
+        if (!updatedReporte.getTitulo().equals(reporte.titulo())) {
+            validateReporteid(reporte.id());
+        }
+        return reporteMapper.toReporteDTO(reporteRepository.save(updatedReporte));
     }
 
     @Override
