@@ -5,16 +5,15 @@ import java.util.Date;
 import java.util.List;
 
 public record ReporteDTO(
-         String id,
-         EnumEstado estado,
-         String creadorAnuncio,
-         String titulo,
-         Date fechaPublicacion,
-         String descripcion,
-         String ubicacion,
-         float calificacion,
-         int numeroCalificaciones,
-         boolean importante,
-         boolean resuelto,
-         List<Categoria> categoria
+        String id,
+        String idUsuario,
+        EnumEstado estado,
+        String creadorAnuncio,
+        String titulo,
+        Date fechaPublicacion,
+        String descripcion,
+        String ubicacion,
+        int likes,
+        int dislikes,
+        List<Categoria> categoria
 ) {}

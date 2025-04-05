@@ -7,10 +7,9 @@ import java.util.List;
 
 public record ReporteRequest(
         String id,
-         String titulo,
-         Date fechaPublicacion,
-         String descripcion,
-         String ubicacion,
-         List<Categoria>categoria
+        String titulo,
+        String descripcion,
+        String ubicacion,
+        List<Categoria> categoria
 ) {
 }

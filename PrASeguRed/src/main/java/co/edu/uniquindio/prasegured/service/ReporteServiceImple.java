@@ -29,11 +29,16 @@ public class ReporteServiceImple implements ReporteService {
 
     @Override
     public ReporteDTO update(String id, ReporteRequest reporte) {
-        var updatedReporte = findReporteById(id);
+        var updatedReporte = reporteRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
         updatedReporte.setTitulo(reporte.titulo());
         if (!updatedReporte.getTitulo().equals(reporte.titulo())) {
             validateReporteid(reporte.id());
         }
+        updatedReporte.setTitulo(reporte.titulo());
+        updatedReporte.setDescripcion(reporte.descripcion());
+        updatedReporte.setUbicacion(reporte.ubicacion());
+        updatedReporte.setCategoria(reporte.categoria());
         return reporteMapper.toReporteDTO(reporteRepository.save(updatedReporte));
     }
 
@@ -56,9 +61,26 @@ public class ReporteServiceImple implements ReporteService {
     public void deleteById(String id) {
         var storedReporte = reporteRepository.findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
-        storedReporte.setEstado(EnumEstado.ELIMINADO);
+        storedReporte.setEstado(EnumEstado.Eliminado);
         reporteRepository.save(storedReporte);
     }
+
+    @Override
+    public void reporteCompleto(String id) {
+        var storedReporte = reporteRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
+        storedReporte.setEstado(EnumEstado.Completado);
+        reporteRepository.save(storedReporte);
+    }
+
+    @Override
+    public void estadoDenegado(String id) {
+        var storedReporte = reporteRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
+        storedReporte.setEstado(EnumEstado.Denegado);
+        reporteRepository.save(storedReporte);
+    }
+
     private void validateReporteid(String id) {
         if (reporteRepository.findById(id).isPresent()) {
             throw new ValueConflictException("El reporte ya existe");

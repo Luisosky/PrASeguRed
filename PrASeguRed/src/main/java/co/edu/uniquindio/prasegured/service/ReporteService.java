@@ -13,4 +13,6 @@ public interface ReporteService {
     List<ReporteDTO> findAll();
     ReporteDTO findById(String id);
     void deleteById(String id);
+    void reporteCompleto(String id);
+    void estadoDenegado(String id);
 }

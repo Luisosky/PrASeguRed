@@ -14,6 +14,7 @@ import java.util.List;
 public class Reporte {
     @Id
     private String id;
+    private String idUsuario;
     private EnumEstado estado;
     private String creadorAnuncio;
     private String titulo;
