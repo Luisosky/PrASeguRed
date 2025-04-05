@@ -11,7 +11,6 @@ import java.util.Date;
 @Getter
 @Setter
 @Document(collection = "Comentarios")
-
 public class Comentario {
     @Id
     private String id;
@@ -22,6 +21,7 @@ public class Comentario {
     private Date fechaPublicacion;
     private String descripcion;
     private float calificacion;
-    private  int numeroCalificaciones;
-    private  EnumEstado estado;
+    private int numeroCalificaciones;
+    private EnumEstado estado;
 }
+

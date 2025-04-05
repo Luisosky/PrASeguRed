@@ -14,5 +14,5 @@ public record ComentarioDTO(
         String descripcion,
         float calificacion,
         int numeroCalificaciones,
-        EnumEstado estado) {
-}
+        EnumEstado estado
+) {}
