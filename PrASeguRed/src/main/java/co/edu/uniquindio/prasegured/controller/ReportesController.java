@@ -45,4 +45,16 @@ public class ReportesController {
         reporteService.deleteById(id);
     }
 
+    @PutMapping("/completo/{id}")
+    public ResponseEntity<Void> reporteCompleto(@PathVariable("id") String id) {
+        reporteService.reporteCompleto(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PutMapping("/denegado/{id}")
+    public ResponseEntity<Void> estadoDenegado(@PathVariable("id") String id) {
+        reporteService.estadoDenegado(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
 }

@@ -11,11 +11,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class ImagenReporte {
+public class Imagen {
     @Id
     @EqualsAndHashCode.Include
     private String id;
     private String reporteId;
-    private String url;
+    private String usuarioId;
+    private String nombre;
+    private byte[] content;
     private EnumEstado estado;
 }
