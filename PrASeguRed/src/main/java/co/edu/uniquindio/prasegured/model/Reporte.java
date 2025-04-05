@@ -19,9 +19,11 @@ public class Reporte {
     private String creadorAnuncio;
     private String titulo;
     private Date fechaPublicacion;
+    private Date fechaActualizacion;
     private String descripcion;
     private String ubicacion;
     private int likes;
     private int dislikes;
     private List<Categoria> categoria;
+    private List<Location> locations;
 }

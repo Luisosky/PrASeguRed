@@ -12,8 +12,8 @@ public interface ImagenMapper {
     ImagenMapper INSTANCE = Mappers.getMapper(ImagenMapper.class);
 
     @Mapping(target = "id", expression = "java(java.util.UUID.randomUUID().toString())")
-    @Mapping(target = "status", constant = "ACTIVE")
+    @Mapping(target = "estado", constant = "ACTIVO")
     Imagen parseOf(ImagenRequest imagenRequest);
-    ImagenDTO toImagenDTO(Imagen imagen);
 
+    ImagenDTO toImagenDTO(Imagen imagen);
 }

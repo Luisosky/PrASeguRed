@@ -10,6 +10,9 @@ import co.edu.uniquindio.prasegured.exception.ValueConflictException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -17,6 +20,7 @@ import java.util.List;
 public class ReporteServiceImple implements ReporteService {
     private final ReporteRepository reporteRepository;
     private final ReporteMapper reporteMapper;
+
 
     @Override
     public ReporteDTO save(ReporteRequest reporte) {
@@ -39,6 +43,8 @@ public class ReporteServiceImple implements ReporteService {
         updatedReporte.setDescripcion(reporte.descripcion());
         updatedReporte.setUbicacion(reporte.ubicacion());
         updatedReporte.setCategoria(reporte.categoria());
+        updatedReporte.setLocations(reporte.locations());
+        updatedReporte.setFechaActualizacion(new Date());
         return reporteMapper.toReporteDTO(reporteRepository.save(updatedReporte));
     }
 
@@ -62,6 +68,7 @@ public class ReporteServiceImple implements ReporteService {
         var storedReporte = reporteRepository.findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
         storedReporte.setEstado(EnumEstado.Eliminado);
+        storedReporte.setFechaActualizacion(new Date());
         reporteRepository.save(storedReporte);
     }
 
@@ -70,6 +77,7 @@ public class ReporteServiceImple implements ReporteService {
         var storedReporte = reporteRepository.findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
         storedReporte.setEstado(EnumEstado.Completado);
+        storedReporte.setFechaActualizacion(new Date());
         reporteRepository.save(storedReporte);
     }
 
@@ -78,6 +86,7 @@ public class ReporteServiceImple implements ReporteService {
         var storedReporte = reporteRepository.findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
         storedReporte.setEstado(EnumEstado.Denegado);
+        storedReporte.setFechaActualizacion(new Date());
         reporteRepository.save(storedReporte);
     }
 

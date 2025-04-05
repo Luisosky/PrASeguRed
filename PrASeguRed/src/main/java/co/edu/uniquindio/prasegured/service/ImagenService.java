@@ -10,10 +10,15 @@ import java.util.List;
 
 @Service
 public interface ImagenService {
-    ImagenDTO saveImagen(MultipartFile file) throws IOException;
+    ImagenDTO saveImagen(MultipartFile file, String reporteId, String usuarioId) throws IOException;
+
     void deleteImagen(String id) throws IOException;
+
     ImagenDTO updateImagen(String id, MultipartFile file) throws IOException;
-    Void estadoDenegado(String id) throws IOException;
-    List<Imagen> getImagenReporte(String reporteId) throws IOException;
-    List<Imagen> getImagenesUsuario(String usuarioId) throws IOException;
+
+    void estadoDenegado(String id) throws IOException;
+
+    List<Imagen> findAllByReporteId(String reporteId);
+
+    List<Imagen> findAllByUsuarioId(String usuarioId);
 }

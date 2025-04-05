@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface ReporteRepository extends MongoRepository<Reporte, String> {
     Optional<Reporte> findById(String id);
+    Optional<Reporte> findByUsuarioId(String usuarioId);
 }
