@@ -10,13 +10,6 @@ import static org.mockito.Mockito.mock;
 
 public class CategoriaServiceTest {
 
-    private final CategoriaService categoriaService;
-    private final CategoriaRepository categoriaRepository;
 
-    @BeforeEach
-    void setUp() {
-        categoriaRepository = mock(CategoriaRepository.class);
-        categoriaService = new CategoriaServiceImple(categoriaRepository);
-    }
 
 }
