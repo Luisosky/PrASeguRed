@@ -14,8 +14,8 @@ import java.util.Date;
 public class Comentario {
     @Id
     private String id;
-    private String id_Reporte;
-    private String id_usuario;
+    private String idReporte;
+    private String idUsuario;
     private Boolean anonimo;
     private String nombre;
     private Date fechaPublicacion;

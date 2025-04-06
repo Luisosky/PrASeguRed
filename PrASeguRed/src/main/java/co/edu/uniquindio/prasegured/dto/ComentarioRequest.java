@@ -1,8 +1,8 @@
 package co.edu.uniquindio.prasegured.dto;
 
 public record ComentarioRequest(
-        String id_Reporte,
-        String id_usuario,
+        String idReporte,
+        String idUsuario,
         Boolean anonimo,
         String nombre,
         String descripcion,

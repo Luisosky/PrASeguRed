@@ -6,8 +6,8 @@ import java.util.Date;
 
 public record ComentarioDTO(
         String id,
-        String id_Reporte,
-        String id_usuario,
+        String idReporte,
+        String idUsuario,
         Boolean anonimo,
         String nombre,
         Date fechaPublicacion,

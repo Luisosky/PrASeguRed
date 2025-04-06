@@ -9,10 +9,9 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface ImagenMapper {
-    ImagenMapper INSTANCE = Mappers.getMapper(ImagenMapper.class);
 
     @Mapping(target = "id", expression = "java(java.util.UUID.randomUUID().toString())")
-    @Mapping(target = "estado", constant = "ACTIVO")
+    @Mapping(target = "estado", expression = "java(EnumEstado.Espera)")
     Imagen parseOf(ImagenRequest imagenRequest);
 
     ImagenDTO toImagenDTO(Imagen imagen);

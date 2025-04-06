@@ -16,8 +16,9 @@ public class Categoria {
     @EqualsAndHashCode.Include
     private String id;
     @Indexed(unique = true)
+    private String status;
     private String name;
     private String descripcion;
-    private EnumEstado tipoCategoria;
-    private String status;
+    private String tipoCategoria;
+
 }

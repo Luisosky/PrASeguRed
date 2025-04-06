@@ -27,8 +27,8 @@ public class ComentarioTest {
     void guardarComentario_enMongoDB() {
         Comentario comentario = new Comentario();
         comentario.setId("c01");
-        comentario.setId_Reporte("rep01");
-        comentario.setId_usuario("user01");
+        comentario.setIdReporte("rep01");
+        comentario.setIdUsuario("user01");
         comentario.setAnonimo(false);
         comentario.setNombre("Juan");
         comentario.setDescripcion("Muy buen servicio");

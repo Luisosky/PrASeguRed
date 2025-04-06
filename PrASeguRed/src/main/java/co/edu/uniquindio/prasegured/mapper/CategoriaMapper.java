@@ -9,14 +9,6 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface CategoriaMapper {
-
-    @Mapping(target = "id", expression = "java(java.util.UUID.randomUUID().toString())")
-    @Mapping(target = "status", constant = "ACTIVE")
-    @Mapping(source = "name", target = "nombre")
     Categoria parseOf(CategoriaRequest categoryRequest);
-
-    @Mapping(source = "id", target = "id")
-    @Mapping(source = "nombre", target = "name")
-    @Mapping(source = "descripcion", target = "descripcion")
     CategoriaDTO toCategoriaDTO(Categoria categoria);
 }
