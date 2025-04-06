@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface ComentarioRepository extends MongoRepository<Comentario, String> {
-    List<Comentario> findAllByReporte_Id(String idReporte);
-    List<Comentario> findAllByUsuario_Id(String idUsuario);
+    List<Comentario> findAllByIdReporte(String idReporte);
+    List<Comentario> findAllByIdUsuario(String idUsuario);
 }

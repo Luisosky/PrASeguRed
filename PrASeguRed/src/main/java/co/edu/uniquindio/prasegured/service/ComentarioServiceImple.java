@@ -28,7 +28,7 @@ public class ComentarioServiceImple implements ComentarioService {
 
     @Override
     public List<ComentarioDTO> obtenerComentariosPorReporte(String idReporte) {
-        return comentarioRepository.findAllByReporte_Id(idReporte)
+        return comentarioRepository.findAllByIdReporte(idReporte)
                 .stream()
                 .map(comentarioMapper::toComentarioDTO)
                 .toList();
@@ -36,7 +36,7 @@ public class ComentarioServiceImple implements ComentarioService {
 
     @Override
     public List<ComentarioDTO> obtenerComentariosPorUsuario(String idUsuario) {
-        return comentarioRepository.findAllByUsuario_Id(idUsuario)
+        return comentarioRepository.findAllByIdUsuario(idUsuario)
                 .stream()
                 .map(comentarioMapper::toComentarioDTO)
                 .toList();

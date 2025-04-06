@@ -7,9 +7,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 
-@Configuration
-@Profile("!test")
-@Service
+//@Configuration
+//@Profile("!test")
+//@Service
 public class RecaptchaService {
 
 //    private final String recaptchaSecret;

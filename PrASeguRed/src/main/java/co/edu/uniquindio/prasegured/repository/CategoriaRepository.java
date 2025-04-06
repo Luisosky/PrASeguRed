@@ -12,5 +12,5 @@ import java.util.Optional;
 @Repository
 public interface CategoriaRepository extends MongoRepository<Categoria, String> {
     Optional<Categoria> findByName(String name);
-    List<Categoria> findByStatusNot(EnumEstado status);
+    List<Categoria> findByStatusNot(String status);
 }
