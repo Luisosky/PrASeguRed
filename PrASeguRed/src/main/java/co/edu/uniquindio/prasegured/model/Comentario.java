@@ -20,8 +20,8 @@ public class Comentario {
     private String nombre;
     private Date fechaPublicacion;
     private String descripcion;
-    private float calificacion;
-    private int numeroCalificaciones;
+    private int likes;
+    private int dislikes;
     private EnumEstado estado;
 }
 

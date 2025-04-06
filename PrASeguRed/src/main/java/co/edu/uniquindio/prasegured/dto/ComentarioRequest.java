@@ -6,6 +6,7 @@ public record ComentarioRequest(
         Boolean anonimo,
         String nombre,
         String descripcion,
-        float calificacion
+        int likes,
+        int dislikes
 ) {}
 

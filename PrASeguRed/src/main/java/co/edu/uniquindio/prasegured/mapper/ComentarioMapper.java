@@ -13,13 +13,8 @@ public interface ComentarioMapper {
     @Mapping(target = "id", expression = "java(java.util.UUID.randomUUID().toString())")
     @Mapping(target = "fechaPublicacion", expression = "java(new java.util.Date())")
     @Mapping(target = "estado", expression = "java(EnumEstado.Espera)")
-    @Mapping(target = "numeroCalificaciones", constant = "1")
-    @Mapping(source = "idReporte", target = "idReporte")
-    @Mapping(source = "idUsuario", target = "idUsuario")
     Comentario toComentario(ComentarioRequest request);
 
-    @Mapping(source = "id", target = "id")
-    @Mapping(source = "idReporte", target = "idReporte")
-    @Mapping(source = "idUsuario", target = "idUsuario")
     ComentarioDTO toComentarioDTO(Comentario comentario);
 }
+

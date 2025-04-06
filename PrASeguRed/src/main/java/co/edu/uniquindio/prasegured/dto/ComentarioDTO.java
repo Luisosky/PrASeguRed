@@ -12,7 +12,7 @@ public record ComentarioDTO(
         String nombre,
         Date fechaPublicacion,
         String descripcion,
-        float calificacion,
-        int numeroCalificaciones,
+        int likes,
+        int dislikes,
         EnumEstado estado
 ) {}

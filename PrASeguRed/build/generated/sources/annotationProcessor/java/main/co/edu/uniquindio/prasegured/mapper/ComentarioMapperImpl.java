@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-04-06T14:11:21-0500",
+    date = "2025-04-06T16:38:26-0500",
     comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.12.1.jar, environment: Java 21.0.6 (Amazon.com Inc.)"
 )
 @Component
@@ -29,12 +29,12 @@ public class ComentarioMapperImpl implements ComentarioMapper {
         comentario.setAnonimo( request.anonimo() );
         comentario.setNombre( request.nombre() );
         comentario.setDescripcion( request.descripcion() );
-        comentario.setCalificacion( request.calificacion() );
+        comentario.setLikes( request.likes() );
+        comentario.setDislikes( request.dislikes() );
 
         comentario.setId( java.util.UUID.randomUUID().toString() );
         comentario.setFechaPublicacion( new java.util.Date() );
         comentario.setEstado( EnumEstado.Espera );
-        comentario.setNumeroCalificaciones( 1 );
 
         return comentario;
     }
@@ -52,8 +52,8 @@ public class ComentarioMapperImpl implements ComentarioMapper {
         String nombre = null;
         Date fechaPublicacion = null;
         String descripcion = null;
-        float calificacion = 0.0f;
-        int numeroCalificaciones = 0;
+        int likes = 0;
+        int dislikes = 0;
         EnumEstado estado = null;
 
         id = comentario.getId();
@@ -63,11 +63,11 @@ public class ComentarioMapperImpl implements ComentarioMapper {
         nombre = comentario.getNombre();
         fechaPublicacion = comentario.getFechaPublicacion();
         descripcion = comentario.getDescripcion();
-        calificacion = comentario.getCalificacion();
-        numeroCalificaciones = comentario.getNumeroCalificaciones();
+        likes = comentario.getLikes();
+        dislikes = comentario.getDislikes();
         estado = comentario.getEstado();
 
-        ComentarioDTO comentarioDTO = new ComentarioDTO( id, idReporte, idUsuario, anonimo, nombre, fechaPublicacion, descripcion, calificacion, numeroCalificaciones, estado );
+        ComentarioDTO comentarioDTO = new ComentarioDTO( id, idReporte, idUsuario, anonimo, nombre, fechaPublicacion, descripcion, likes, dislikes, estado );
 
         return comentarioDTO;
     }

@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.692s</div>
+<div class="counter">0.718s</div>
 <p>duration</p>
 </div>
 </td>
@@ -81,8 +81,8 @@
 </tr>
 </thead>
 <tr>
-<td class="success">guardarComentario_enMongoDB()</td>
-<td class="success">0.692s</td>
+<td class="success">eliminarComentario_enMongoDB()</td>
+<td class="success">0.718s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -90,8 +90,8 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>14:12:03.546 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [co.edu.uniquindio.prasegured.model.ComentarioTest]: ComentarioTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-14:12:03.635 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration co.edu.uniquindio.prasegured.PrASeguRedApplication for test class co.edu.uniquindio.prasegured.model.ComentarioTest
+<pre>16:46:51.572 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [co.edu.uniquindio.prasegured.model.ComentarioTest]: ComentarioTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+16:46:51.659 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration co.edu.uniquindio.prasegured.PrASeguRedApplication for test class co.edu.uniquindio.prasegured.model.ComentarioTest
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -101,20 +101,20 @@
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v3.1.5)
 
-2025-04-06T14:12:03.974-05:00  INFO 8912 --- [    Test worker] c.e.u.prasegured.model.ComentarioTest    : Starting ComentarioTest using Java 21.0.6 with PID 8912 (started by finia in C:\Users\finia\OneDrive\Escritorio\Avansada\PrASeguRed\PrASeguRed)
-2025-04-06T14:12:03.975-05:00  INFO 8912 --- [    Test worker] c.e.u.prasegured.model.ComentarioTest    : No active profile set, falling back to 1 default profile: &quot;default&quot;
-2025-04-06T14:12:04.597-05:00  INFO 8912 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
-2025-04-06T14:12:04.655-05:00  INFO 8912 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 55 ms. Found 5 MongoDB repository interfaces.
-2025-04-06T14:12:05.052-05:00  INFO 8912 --- [    Test worker] org.mongodb.driver.client                : MongoClient with metadata {&quot;driver&quot;: {&quot;name&quot;: &quot;mongo-java-driver|sync|spring-boot&quot;, &quot;version&quot;: &quot;4.9.1&quot;}, &quot;os&quot;: {&quot;type&quot;: &quot;Windows&quot;, &quot;name&quot;: &quot;Windows 11&quot;, &quot;architecture&quot;: &quot;amd64&quot;, &quot;version&quot;: &quot;10.0&quot;}, &quot;platform&quot;: &quot;Java/Amazon.com Inc./21.0.6+7-LTS&quot;} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=null, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=null, streamFactoryFactory=null, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, CollectionCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.client.model.mql.ExpressionCodecProvider@395f52ed, com.mongodb.Jep395RecordCodecProvider@7a84788f]}, loggerSettings=LoggerSettings{maxDocumentLength=1000}, clusterSettings={hosts=[localhost:27017], srvServiceName=mongodb, mode=SINGLE, requiredClusterType=UNKNOWN, requiredReplicaSetName='null', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='30000 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, sendBufferSize=0}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, sendBufferSize=0}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=false, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, contextProvider=null}
-2025-04-06T14:12:05.071-05:00  INFO 8912 --- [localhost:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=25, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=22646899}
-2025-04-06T14:12:05.660-05:00  WARN 8912 --- [    Test worker] .s.s.UserDetailsServiceAutoConfiguration : 
+2025-04-06T16:46:51.981-05:00  INFO 18888 --- [    Test worker] c.e.u.prasegured.model.ComentarioTest    : Starting ComentarioTest using Java 21.0.6 with PID 18888 (started by finia in C:\Users\finia\OneDrive\Escritorio\Avansada\PrASeguRed\PrASeguRed)
+2025-04-06T16:46:51.982-05:00  INFO 18888 --- [    Test worker] c.e.u.prasegured.model.ComentarioTest    : No active profile set, falling back to 1 default profile: &quot;default&quot;
+2025-04-06T16:46:52.607-05:00  INFO 18888 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+2025-04-06T16:46:52.664-05:00  INFO 18888 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 53 ms. Found 5 MongoDB repository interfaces.
+2025-04-06T16:46:53.062-05:00  INFO 18888 --- [    Test worker] org.mongodb.driver.client                : MongoClient with metadata {&quot;driver&quot;: {&quot;name&quot;: &quot;mongo-java-driver|sync|spring-boot&quot;, &quot;version&quot;: &quot;4.9.1&quot;}, &quot;os&quot;: {&quot;type&quot;: &quot;Windows&quot;, &quot;name&quot;: &quot;Windows 11&quot;, &quot;architecture&quot;: &quot;amd64&quot;, &quot;version&quot;: &quot;10.0&quot;}, &quot;platform&quot;: &quot;Java/Amazon.com Inc./21.0.6+7-LTS&quot;} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=null, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=null, streamFactoryFactory=null, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, CollectionCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.client.model.mql.ExpressionCodecProvider@dbed7fd, com.mongodb.Jep395RecordCodecProvider@250d440]}, loggerSettings=LoggerSettings{maxDocumentLength=1000}, clusterSettings={hosts=[localhost:27017], srvServiceName=mongodb, mode=SINGLE, requiredClusterType=UNKNOWN, requiredReplicaSetName='null', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='30000 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, sendBufferSize=0}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, sendBufferSize=0}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=false, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, contextProvider=null}
+2025-04-06T16:46:53.083-05:00  INFO 18888 --- [localhost:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=25, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=24109200}
+2025-04-06T16:46:53.597-05:00  WARN 18888 --- [    Test worker] .s.s.UserDetailsServiceAutoConfiguration : 
 
-Using generated security password: 9e7a8e67-c72e-4626-bb98-746c443f62ba
+Using generated security password: 2af1976c-b5cf-4abb-b0fd-bc9ea18c3e8f
 
 This generated password is for development use only. Your security configuration must be updated before running your application in production.
 
-2025-04-06T14:12:05.750-05:00  INFO 8912 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@39a3984c, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4404a6b, org.springframework.security.web.context.SecurityContextHolderFilter@250a946, org.springframework.security.web.header.HeaderWriterFilter@79d49790, org.springframework.security.web.authentication.logout.LogoutFilter@24fc2c80, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2ffb0d10, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@38dbeb39, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@671da0f9, org.springframework.security.web.access.ExceptionTranslationFilter@6f6c8d45, org.springframework.security.web.access.intercept.AuthorizationFilter@b86cb18]
-2025-04-06T14:12:06.181-05:00  INFO 8912 --- [    Test worker] c.e.u.prasegured.model.ComentarioTest    : Started ComentarioTest in 2.394 seconds (process running for 3.414)
+2025-04-06T16:46:53.696-05:00  INFO 18888 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@61ad30f6, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@312f3050, org.springframework.security.web.context.SecurityContextHolderFilter@fd4459b, org.springframework.security.web.header.HeaderWriterFilter@5529522f, org.springframework.security.web.authentication.logout.LogoutFilter@5be7b749, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@517a46f3, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@182e4365, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@615bad16, org.springframework.security.web.access.ExceptionTranslationFilter@126a9a3d, org.springframework.security.web.access.intercept.AuthorizationFilter@5560b64d]
+2025-04-06T16:46:54.141-05:00  INFO 18888 --- [    Test worker] c.e.u.prasegured.model.ComentarioTest    : Started ComentarioTest in 2.346 seconds (process running for 3.315)
 </pre>
 </span>
 </div>
@@ -136,7 +136,7 @@ WARNING: Dynamic loading of agents will be disallowed by default in a future rel
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 8.12.1</a> at 6/04/2025, 2:12:06 p. m.</p>
+<a href="http://www.gradle.org">Gradle 8.12.1</a> at 6/04/2025, 4:46:54 p. m.</p>
 </div>
 </div>
 </body>

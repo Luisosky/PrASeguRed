@@ -34,8 +34,8 @@ public class ComentarioTest {
         comentario.setDescripcion("Muy buen servicio");
         comentario.setFechaPublicacion(new Date());
         comentario.setEstado(EnumEstado.Espera);
-        comentario.setCalificacion(4.5f);
-        comentario.setNumeroCalificaciones(1);
+        comentario.setLikes(4);
+        comentario.setDislikes(1);
 
         Comentario guardado = comentarioRepository.save(comentario);
 
@@ -43,4 +43,28 @@ public class ComentarioTest {
         assertTrue(buscado.isPresent());
         assertEquals("Muy buen servicio", buscado.get().getDescripcion());
     }
+
+    @Test
+    void eliminarComentario_enMongoDB() {
+        // Primero se crea un comentario a eliminar
+        Comentario comentario = new Comentario();
+        comentario.setId("c02");
+        comentario.setIdReporte("rep02");
+        comentario.setIdUsuario("user02");
+        comentario.setAnonimo(true);
+        comentario.setNombre("Anónimo");
+        comentario.setDescripcion("No me gustó el trato.");
+        comentario.setFechaPublicacion(new Date());
+        comentario.setEstado(EnumEstado.Espera);
+        comentario.setLikes(0);
+        comentario.setDislikes(5);
+        comentarioRepository.save(comentario);
+        Optional<Comentario> buscado = comentarioRepository.findById("c02");
+        assertTrue(buscado.isPresent());
+        comentarioRepository.delete(buscado.get());
+        Optional<Comentario> eliminado = comentarioRepository.findById("c02");
+        assertTrue(eliminado.isEmpty());
+    }
+
+
 }
