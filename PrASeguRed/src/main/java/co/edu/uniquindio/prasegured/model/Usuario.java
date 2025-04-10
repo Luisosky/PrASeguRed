@@ -15,8 +15,8 @@ public class Usuario {
     private String ciudadResidencia;
     private String direccion;
     private String telefono;
-    private String cargo;
-    private String estado;
+    private ROL rol;
+    private ESTADOS estado;
     private String correo;
     private String preferencias;
     private String contraseña;
@@ -86,12 +86,10 @@ public class Usuario {
         this.telefono = telefono;
     }
 
-    public String getCargo() {
-        return cargo;
-    }
+    public String getRol() { return rol.toString(); }
 
-    public void setCargo(String cargo) {
-        this.cargo = cargo;
+    public void setRol(String rol) {
+        this.rol = ROL.valueOf(rol);
     }
 
     public String getCorreo() {
@@ -103,12 +101,10 @@ public class Usuario {
     }
 
     public String getEstado() {
-        return estado;
+        return estado.toString();
     }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
+    public void setEstado(String estado) { this.estado = ESTADOS.valueOf(estado); }
 
     public String getPreferencias() {
         return preferencias;

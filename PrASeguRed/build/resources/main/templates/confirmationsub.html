@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Confirmación de Suscripción</title>
+    <title>Verificación de Código</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,7 +13,7 @@
             padding: 20px;
         }
         .header {
-            background-color: #4a90e2;
+            background-color: #14d724;
             padding: 20px;
             text-align: center;
             color: white;
@@ -35,14 +35,13 @@
 </head>
 <body>
 <div class="header">
-    <h1>¡Gracias por suscribirte!</h1>
+    <h1>Código de Verificación</h1>
 </div>
 <div class="content">
     <p>Hola,</p>
-    <p>Gracias por suscribirte al boletín de noticias de SeguRed. Te mantendremos actualizado con las últimas novedades y actualizaciones de nuestra plataforma.</p>
-    <p>Has registrado la siguiente dirección de correo electrónico: <strong th:text="${email}">usuario@example.com</strong></p>
-    <p>Si no has solicitado esta suscripción, puedes ignorar este mensaje.</p>
-    <p>¡Saludos del equipo de PrASeguRed!</p>
+    <p>Tu código de verificación es: <strong th:text="${code}">XXXXXX</strong></p>
+    <p>Este código expirará en 15 minutos.</p>
+    <p>¡Gracias del equipo de PrASeguRed!</p>
 </div>
 <div class="footer">
     <p>© 2025 PrASeguRed Ltd. Todos los derechos reservados.</p>

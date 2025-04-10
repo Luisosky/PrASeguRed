@@ -164,6 +164,17 @@ components:
           format: date-time
           description: Fecha de creación de la notificación
 
+    VerificationRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: "usuario@ejemplo.com"
+        code:
+          type: string
+          example: "123456"
+
 paths:
   /registro/usuario:
     post:
@@ -211,7 +222,7 @@ paths:
                     type: string
                     example: Código enviado correctamente.
 
-  /auth:
+  /auth/login:
     post:
       summary: Inicio sesión
       description: Autenticación de usuario por correo y contraseña
@@ -642,3 +653,68 @@ paths:
                   error:
                     type: string
                     example: Error al enviar el correo.
+
+  /auth/codigo-usuario:
+    post:
+      summary: Enviar código de verificación
+      description: Envía un código de verificación de 6 dígitos al correo proporcionado.
+      operationId: enviarCodigo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: "usuario@ejemplo.com"
+      responses:
+        "200":
+          description: Código enviado correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Código enviado correctamente
+        "500":
+          description: Error al enviar el código
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Error al enviar el código
+
+  /auth/token:
+    post:
+      summary: Verificar código de verificación
+      description: Verifica si el código ingresado es correcto y no ha expirado.
+      operationId: verificarCodigo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerificationRequest'
+      responses:
+        "200":
+          description: Código verificado correctamente
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Código verificado correctamente"
+        "400":
+          description: Código incorrecto o expirado
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Código incorrecto o expirado"
