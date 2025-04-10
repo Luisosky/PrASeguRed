@@ -1,40 +1,60 @@
 package co.edu.uniquindio.prasegured.controller;
 
 import co.edu.uniquindio.prasegured.dto.ReporteDTO;
+import co.edu.uniquindio.prasegured.dto.ReporteRequest;
+import co.edu.uniquindio.prasegured.model.Reporte;
+import co.edu.uniquindio.prasegured.service.ReporteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
+@RequestMapping("/reportes")
 public class ReportesController {
 
-    @Operation(
-            summary = "Creación de reporte",
-            description = "Crea un nuevo reporte en el sistema",
-            operationId = "crearReporte"
-    )
-    @ApiResponse(responseCode = "201", description = "Reporte creado exitosamente.")
-    @PostMapping("/reportes")
-    public ResponseEntity<Void> crearReporte(@RequestBody ReporteDTO reporte) {
-        // Implementación de creación de reporte
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    @Autowired
+    private ReporteService reporteService;
+    @PostMapping
+    public ReporteDTO create(@Valid @RequestBody ReporteRequest reporte) {
+        return reporteService.save(reporte);
     }
 
-    @Operation(
-            summary = "Actualización de reporte",
-            description = "Permite modificar un reporte existente",
-            operationId = "actualizarReporte"
-    )
-    @ApiResponse(responseCode = "200", description = "Reporte actualizado.")
-    @PatchMapping("/reportes/{id}")
-    public ResponseEntity<Void> actualizarReporte(
-            @PathVariable String id,
-            @RequestBody ReporteDTO reporte) {
-        // Implementación para actualizar reporte
-        return ResponseEntity.ok().build();
+    @GetMapping
+    public List<ReporteDTO> findAll() {
+        return reporteService.findAll();
+    }
+    @GetMapping("/{id}")
+    public ReporteDTO findById(@PathVariable("id") String id) {
+        return reporteService.findById(id);
     }
 
-    // Añadir aquí el resto de endpoints de reportes
+    @PutMapping("/{id}")
+    public ReporteDTO update(@PathVariable("id") String id,@Valid @RequestBody ReporteRequest reporte) {
+        return reporteService.update(id, reporte);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable("id") String id) {
+        reporteService.deleteById(id);
+    }
+
+    @PutMapping("/completo/{id}")
+    public ResponseEntity<Void> reporteCompleto(@PathVariable("id") String id) {
+        reporteService.reporteCompleto(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PutMapping("/denegado/{id}")
+    public ResponseEntity<Void> estadoDenegado(@PathVariable("id") String id) {
+        reporteService.estadoDenegado(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
 }
