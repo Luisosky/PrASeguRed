@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
 import java.util.List;
 
-@Document(collection = "Reportes")
+@Document(collection = "reportes")
 @Getter
 @Setter
 public class Reporte {
@@ -26,4 +26,5 @@ public class Reporte {
     private int dislikes;
     private List<Categoria> categoria;
     private List<Location> locations;
+
 }

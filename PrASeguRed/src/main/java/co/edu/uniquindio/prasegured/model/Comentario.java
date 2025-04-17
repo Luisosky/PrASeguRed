@@ -10,7 +10,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-@Document(collection = "Comentarios")
+@Document(collection = "comentarios")
 public class Comentario {
     @Id
     private String id;
