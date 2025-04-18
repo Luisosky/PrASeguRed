@@ -15,6 +15,8 @@ public class TestDataLoaderComentarios {
     public static Map<String, Comentario> loadTestData(ComentarioRepository comentarioRepository, MongoTemplate mongoTemplate) {
         Comentario comentario1 = new Comentario();
         comentario1.setId("01");
+        comentario1.setIdReporte("04");
+        comentario1.setIdUsuario("29");
         comentario1.setDescripcion("Este es un comentario de prueba.");
         comentario1.setEstado(EnumEstado.Publicado);
         comentario1.setFechaPublicacion(new Date());
@@ -25,6 +27,8 @@ public class TestDataLoaderComentarios {
 
         Comentario comentario2 = new Comentario();
         comentario2.setId("02");
+        comentario2.setIdReporte("04");
+        comentario2.setIdUsuario("29");
         comentario2.setDescripcion("no le crean a esa *****.");
         comentario2.setEstado(EnumEstado.Eliminado);
         comentario1.setFechaPublicacion(new Date());

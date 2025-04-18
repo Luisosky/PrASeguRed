@@ -2,6 +2,7 @@ package co.edu.uniquindio.prasegured.services.integration;
 
 import co.edu.uniquindio.prasegured.data.TestDataLoaderReportes;
 import co.edu.uniquindio.prasegured.dto.ReporteRequest;
+import co.edu.uniquindio.prasegured.exception.ResourceNotFoundException;
 import co.edu.uniquindio.prasegured.model.EnumEstado;
 import co.edu.uniquindio.prasegured.model.Reporte;
 import co.edu.uniquindio.prasegured.repository.ReporteRepository;
@@ -90,10 +91,10 @@ public class ReporteServiceTest {
     void testUpdateReporte() {
         // Arrange: Se obtiene aleatoriamente uno de los reportes registrado para pruebas.
         var reporteStore = reportes.values().stream().findAny().orElseThrow();
-        // Se crean los datos del reporte a ser registrado
-        var reporte = new ReporteRequest(reporteStore.getId(), "07", "Se perdió perrito",
-                new Date(), "Última vez visto en el parque central. Responde al nombre de Max.",
-                "Parque Central", null, null);
+        // Cambiar la ubicación a un valor diferente
+        var nuevaUbicacion = "Casa azul";
+        var reporte = new ReporteRequest(reporteStore.getId(), "07", reporteStore.getTitulo(),
+                new Date(), reporteStore.getDescripcion(), nuevaUbicacion, null, null);
         // Act: Ejecute la acción de actualizar el reporte basado en su Id.
         var updatedReporte = reporteService.update(reporteStore.getId(), reporte);
         // Assert: Se verifica que los datos obtenidos correspondan a los del reporte almacenado.
@@ -102,8 +103,10 @@ public class ReporteServiceTest {
         assertEquals(reporteStore.getTitulo(), updatedReporte.titulo());
         assertEquals(reporteStore.getFechaPublicacion(), updatedReporte.fechaPublicacion());
         assertEquals(reporteStore.getDescripcion(), updatedReporte.descripcion());
-        assertEquals(reporteStore.getUbicacion(), updatedReporte.ubicacion());
+        // Verificar que la ubicación es diferente
+        assertEquals(nuevaUbicacion, updatedReporte.ubicacion());
     }
+
     @Test
     void testUpdateReporteThrowsValueConflictExceptionWhenIdExists() {
         // Arrange: Se crean los datos del reporte a ser registrado (Con el id de un reporte ya existente).
@@ -130,15 +133,10 @@ public class ReporteServiceTest {
     }
     @Test
     void testDeleteReporte() {
-        // Arrange: Se obtiene aleatoriamente uno de los reportes registrado para pruebas.
         var reporteStore = reportes.values().stream().findAny().orElseThrow();
-        // Act: Ejecute la acción de eliminar el reporte basado en su Id.
         reporteService.deleteById(reporteStore.getId());
-        // Assert: Se verifica que el reporte ya no exista en la base de datos.
-        var exception = assertThrows(Exception.class, () -> {
-            reporteService.findById(reporteStore.getId());
-        });
-        assertEquals("El reporte no existe", exception.getMessage());
+        var updatedReporte = reporteService.findById(reporteStore.getId());
+        assertEquals(EnumEstado.Eliminado, updatedReporte.estado());
     }
     @Test
     void testGetAllReportes() {
@@ -153,13 +151,12 @@ public class ReporteServiceTest {
 
     @Test
     void testGetReporteNotFound() {
-        // Arrange: Se crean los datos del reporte a ser registrado (Con el id de un reporte ya existente).
+        // Arrange: Usar un ID que no existe en la base de datos
         var id = "nonexistentId";
-        // Act: Ejecute la acción de obtener reporte basado en su Id.
-        var exception = assertThrows(Exception.class, () -> {
+        // Act & Assert: Verificar que se lanza una excepción al intentar obtener un reporte que no existe
+        var exception = assertThrows(ResourceNotFoundException.class, () -> {
             reporteService.findById(id);
         });
-        // Assert: Se verifica que se haya lanzado la excepción esperada
-        assertEquals("El reporte no existe", exception.getMessage());
+        assertEquals("Resource not found", exception.getMessage());
     }
 }
