@@ -6,6 +6,7 @@ import co.edu.uniquindio.prasegured.repository.ImagenRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
@@ -14,7 +15,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@DataJpaTest
+@DataMongoTest
 public class ImagenRepositoryTest {
     @Autowired
     private ImagenRepository imagenRepository;
