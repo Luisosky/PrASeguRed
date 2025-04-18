@@ -68,7 +68,7 @@ public class ReporteServiceTest {
             reporteService.save(reporte);
         });
         // Assert: Se verifica que se haya lanzado la excepción esperada
-        assertEquals("El id ya existe", exception.getMessage());
+        assertEquals("El reporte ya existe", exception.getMessage());
     }
 
     @Test
@@ -116,7 +116,7 @@ public class ReporteServiceTest {
             reporteService.update(reporteStore.getId(), reporte);
         });
         // Assert: Se verifica que se haya lanzado la excepción esperada
-        assertEquals("El id ya existe", exception.getMessage());
+        assertEquals("El reporte ya existe", exception.getMessage());
     }
     @Test
     void testEstadoDenegado(){

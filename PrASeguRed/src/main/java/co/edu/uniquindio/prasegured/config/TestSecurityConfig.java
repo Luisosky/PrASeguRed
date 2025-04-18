@@ -7,14 +7,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@Profile("test") // Solo se aplica al perfil de prueba
+@Profile("test")
 public class TestSecurityConfig {
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    @Bean(name = "testSecurityFilterChain")
+    public SecurityFilterChain testSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
                 .csrf(csrf -> csrf.disable());
+
         return http.build();
     }
 }
