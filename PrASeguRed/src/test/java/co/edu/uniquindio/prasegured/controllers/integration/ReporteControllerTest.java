@@ -48,10 +48,10 @@ public class ReporteControllerTest {
     void testCrearReporte() throws Exception {
         // Sección de Arrange: Configuración inicial del reporte a enviar
         var reporte = new Reporte();
-        reporte.setId("01");
-        reporte.setIdUsuario("02");
+        reporte.setId("11");
+        reporte.setIdUsuario("03");
         reporte.setEstado(EnumEstado.Espera);
-        reporte.setCreadorAnuncio("Carlos");
+        reporte.setCreadorAnuncio("maria");
         reporte.setTitulo("Se regalan gatos");
         reporte.setFechaPublicacion(new Date());
         reporte.setFechaActualizacion(null);

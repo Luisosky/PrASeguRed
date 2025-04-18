@@ -8,6 +8,7 @@ import java.util.List;
 
 public record ReporteRequest(
         String id,
+        String idUsuario,
         String titulo,
         Date fechaPublicacion,
         String descripcion,

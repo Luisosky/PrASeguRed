@@ -25,7 +25,7 @@ public class ReporteServiceImple implements ReporteService {
     @Override
     public ReporteDTO save(ReporteRequest reporte) {
         var newReporte = reporteMapper.parseOf(reporte);
-        validateReporteid(reporte.id()); // Llamar al método validateReporteid
+        validateReporteid(reporte.id());
         return reporteMapper.toReporteDTO(
                 reporteRepository.save(newReporte)
         );
