@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class TestDataLoader {
+public class TestDataLoaderReportes {
     public static Map<String, Reporte> loadTestData(ReporteRepository reporteRepository, MongoTemplate mongoTemplate) {
         Reporte reporte = new Reporte();
         reporte.setId("01");

@@ -4,11 +4,12 @@ import co.edu.uniquindio.prasegured.model.Imagen;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface ImagenRepository extends MongoRepository<Imagen, String> {
     Optional<Imagen> findById(String id);
-    Optional<Imagen> findByReporteId(String reporteId);
-    Optional<Imagen> findByUsuarioId(String usuarioId);
+    List<Imagen> findByReporteId(String reporteId);
+    List<Imagen> findByUsuarioId(String usuarioId);
 }

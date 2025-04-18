@@ -18,7 +18,7 @@ public interface ImagenService {
 
     void estadoDenegado(String id) throws IOException;
 
-    List<Imagen> findAllByReporteId(String reporteId);
+    List<ImagenDTO> findAllByReporteId(String reporteId);
 
-    List<Imagen> findAllByUsuarioId(String usuarioId);
+    List<ImagenDTO> findAllByUsuarioId(String usuarioId);
 }

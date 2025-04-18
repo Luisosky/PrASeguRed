@@ -1,6 +1,6 @@
 package co.edu.uniquindio.prasegured.controllers.integration;
 
-import co.edu.uniquindio.prasegured.data.TestDataLoader;
+import co.edu.uniquindio.prasegured.data.TestDataLoaderReportes;
 import co.edu.uniquindio.prasegured.model.EnumEstado;
 import co.edu.uniquindio.prasegured.model.Reporte;
 import co.edu.uniquindio.prasegured.repository.ReporteRepository;
@@ -41,7 +41,7 @@ public class ReporteControllerTest {
 
     @BeforeEach
     void setUp() {
-        reportes = TestDataLoader.loadTestData(reporteRepository, mongoTemplate);
+        reportes = TestDataLoaderReportes.loadTestData(reporteRepository, mongoTemplate);
     }
 
     @Test

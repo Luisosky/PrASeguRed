@@ -1,6 +1,6 @@
 package co.edu.uniquindio.prasegured.repositories;
 
-import co.edu.uniquindio.prasegured.data.TestDataLoader;
+import co.edu.uniquindio.prasegured.data.TestDataLoaderReportes;
 import co.edu.uniquindio.prasegured.model.Reporte;
 import co.edu.uniquindio.prasegured.repository.ReporteRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +26,7 @@ public class ReporteRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        reportes = TestDataLoader.loadTestData(reporteRepository, mongoTemplate);
+        reportes = TestDataLoaderReportes.loadTestData(reporteRepository, mongoTemplate);
     }
 
     @Test

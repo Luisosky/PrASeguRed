@@ -66,17 +66,19 @@ public class ImagenServicesImple implements ImagenService {
     }
 
     @Override
-    public List<Imagen> findAllByReporteId(String reporteId) {
-        return imagenRepository.findByReporteId(reporteId)
-                .map(List::of)
-                .orElse(List.of());
+    public List<ImagenDTO> findAllByReporteId(String reporteId) {
+        List<Imagen> imagenes = imagenRepository.findByReporteId(reporteId);
+        return imagenes.stream()
+                .map(imagenMapper::toImagenDTO)
+                .toList(); // Convierte las entidades a DTOs
     }
 
     @Override
-    public List<Imagen> findAllByUsuarioId(String usuarioId) {
-        return imagenRepository.findByUsuarioId(usuarioId)
-                .map(List::of)
-                .orElse(List.of());
+    public List<ImagenDTO> findAllByUsuarioId(String usuarioId) {
+        List<Imagen> imagenes = imagenRepository.findByUsuarioId(usuarioId);
+        return imagenes.stream()
+                .map(imagenMapper::toImagenDTO)
+                .toList(); // Convierte las entidades a DTOs
     }
 
     private void validarImagenId(String id) {
