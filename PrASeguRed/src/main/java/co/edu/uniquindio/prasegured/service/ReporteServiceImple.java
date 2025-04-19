@@ -35,17 +35,21 @@ public class ReporteServiceImple implements ReporteService {
     public ReporteDTO update(String id, ReporteRequest reporte) {
         // Buscar el reporte existente en la base de datos
         var existingReporte = reporteRepository.findById(id)
-                .orElseThrow(ResourceNotFoundException::new);
+                .orElseThrow(() -> new ResourceNotFoundException());
+        // Validar si es necesario
         if (!existingReporte.getTitulo().equals(reporte.titulo())) {
             validateReporteid(reporte.id());
         }
+        // Actualizar los campos del reporte existente
         existingReporte.setTitulo(reporte.titulo());
         existingReporte.setDescripcion(reporte.descripcion());
         existingReporte.setUbicacion(reporte.ubicacion());
         existingReporte.setCategoria(reporte.categoria());
         existingReporte.setLocations(reporte.locations());
         existingReporte.setFechaActualizacion(new Date()); // Actualizar la fecha de modificación
+        // Guardar el reporte actualizado
         var savedReporte = reporteRepository.save(existingReporte);
+        // Convertir a DTO y devolver
         return reporteMapper.toReporteDTO(savedReporte);
     }
 
