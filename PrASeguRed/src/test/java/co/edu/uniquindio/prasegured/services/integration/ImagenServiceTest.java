@@ -55,19 +55,14 @@ public class ImagenServiceTest {
         assertEquals("imagen.jpg", savedImagen.nombre());
         assertEquals("reporteId", savedImagen.reporteId());
         assertEquals("usuarioId", savedImagen.usuarioId());
-        assertEquals(EnumEstado.Espera.name(), savedImagen.estado());
+        assertEquals(EnumEstado.Espera, savedImagen.estado());
     }
 
     @Test
     void testDeleteImagen() throws IOException {
-        // Arrange
         var imagen = imagenes.values().stream().findAny().orElseThrow();
-
-        // Act
         imagenService.deleteImagen(imagen.getId());
         var deletedImagen = imagenRepository.findById(imagen.getId()).orElseThrow();
-
-        // Assert
         assertEquals(EnumEstado.Eliminado, deletedImagen.getEstado());
     }
 
@@ -117,10 +112,8 @@ public class ImagenServiceTest {
 
     @Test
     void testDeleteImagenThrowsException() {
-        // Arrange
-        String nonExistentId = "nonexistentId";
 
-        // Act & Assert
+        String nonExistentId = "nonexistentId";
         ValueConflictException exception = assertThrows(ValueConflictException.class, () -> {
             imagenService.deleteImagen(nonExistentId);
         });
