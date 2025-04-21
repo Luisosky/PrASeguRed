@@ -12,6 +12,7 @@ import java.util.Map;
 @Service
 public class RecaptchaService {
 
+
     private final String recaptchaSecret;
     private static final String RECAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify";
 

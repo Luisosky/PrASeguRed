@@ -16,7 +16,7 @@
       </configuration>
     </facet>
   </component>
-  <component name="NewModuleRootManager">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_21">
     <output url="file://$MODULE_DIR$/../../PrASeguRed/build/classes/java/main" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../PrASeguRed/build/generated/sources/annotationProcessor/java/main">

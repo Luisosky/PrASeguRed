@@ -5,6 +5,8 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/PrASeguRed.iml" filepath="$PROJECT_DIR$/.idea/modules/PrASeguRed.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/PrASeguRed.main.iml" filepath="$PROJECT_DIR$/.idea/modules/PrASeguRed.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/PrASeguRed.test.iml" filepath="$PROJECT_DIR$/.idea/modules/PrASeguRed.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/co.edu.uniquindio.PrASeguRed.iml" filepath="$PROJECT_DIR$/.idea/modules/co.edu.uniquindio.PrASeguRed.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/co.edu.uniquindio.PrASeguRed.test.iml" filepath="$PROJECT_DIR$/.idea/modules/co.edu.uniquindio.PrASeguRed.test.iml" />
     </modules>
   </component>
 </project>

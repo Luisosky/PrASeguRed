@@ -10,7 +10,7 @@ import java.util.Map;
 @Profile("!test")
 @RestController
 @RequestMapping("/api/recaptcha")
-@CrossOrigin(origins = "http://localhost:4200") // Ajusta el origen de tu frontend
+@CrossOrigin(origins = "https://segured.vercel.app/") // Ajusta el origen de tu frontend
 public class RecaptchaController {
 
     private final RecaptchaService recaptchaService;
