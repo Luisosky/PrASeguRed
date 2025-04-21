@@ -25,7 +25,7 @@ public class ReporteServiceImple implements ReporteService {
     @Override
     public ReporteDTO save(ReporteRequest reporte) {
         var newReporte = reporteMapper.parseOf(reporte);
-        validateReporteid(reporte.id()); // Llamar al método validateReporteid
+        validateReporteid(reporte.id());
         return reporteMapper.toReporteDTO(
                 reporteRepository.save(newReporte)
         );
@@ -33,19 +33,24 @@ public class ReporteServiceImple implements ReporteService {
 
     @Override
     public ReporteDTO update(String id, ReporteRequest reporte) {
-        var updatedReporte = reporteRepository.findById(id)
-                .orElseThrow(ResourceNotFoundException::new);
-        updatedReporte.setTitulo(reporte.titulo());
-        if (!updatedReporte.getTitulo().equals(reporte.titulo())) {
+        // Buscar el reporte existente en la base de datos
+        var existingReporte = reporteRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException());
+        // Validar si es necesario
+        if (!existingReporte.getTitulo().equals(reporte.titulo())) {
             validateReporteid(reporte.id());
         }
-        updatedReporte.setTitulo(reporte.titulo());
-        updatedReporte.setDescripcion(reporte.descripcion());
-        updatedReporte.setUbicacion(reporte.ubicacion());
-        updatedReporte.setCategoria(reporte.categoria());
-        updatedReporte.setLocations(reporte.locations());
-        updatedReporte.setFechaActualizacion(new Date());
-        return reporteMapper.toReporteDTO(reporteRepository.save(updatedReporte));
+        // Actualizar los campos del reporte existente
+        existingReporte.setTitulo(reporte.titulo());
+        existingReporte.setDescripcion(reporte.descripcion());
+        existingReporte.setUbicacion(reporte.ubicacion());
+        existingReporte.setCategoria(reporte.categoria());
+        existingReporte.setLocations(reporte.locations());
+        existingReporte.setFechaActualizacion(new Date()); // Actualizar la fecha de modificación
+        // Guardar el reporte actualizado
+        var savedReporte = reporteRepository.save(existingReporte);
+        // Convertir a DTO y devolver
+        return reporteMapper.toReporteDTO(savedReporte);
     }
 
     @Override

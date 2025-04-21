@@ -21,22 +21,28 @@ public class ReportesController {
 
     @Autowired
     private ReporteService reporteService;
+
     @PostMapping
-    public ReporteDTO create(@Valid @RequestBody ReporteRequest reporte) {
-        return reporteService.save(reporte);
+    public ResponseEntity<ReporteDTO> create(@Valid @RequestBody ReporteRequest reporte) {
+        // Lógica para guardar el reporte
+        ReporteDTO savedReporte = reporteService.save(reporte);
+
+        // Devolver el código de estado 201 Created junto con el reporte creado
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedReporte);
     }
 
     @GetMapping
     public List<ReporteDTO> findAll() {
         return reporteService.findAll();
     }
+
     @GetMapping("/{id}")
     public ReporteDTO findById(@PathVariable("id") String id) {
         return reporteService.findById(id);
     }
 
     @PutMapping("/{id}")
-    public ReporteDTO update(@PathVariable("id") String id,@Valid @RequestBody ReporteRequest reporte) {
+    public ReporteDTO update(@PathVariable("id") String id, @Valid @RequestBody ReporteRequest reporte) {
         return reporteService.update(id, reporte);
     }
 
@@ -56,5 +62,4 @@ public class ReportesController {
         reporteService.estadoDenegado(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
-
 }
