@@ -4,7 +4,7 @@ import co.edu.uniquindio.prasegured.dto.CategoriaDTO;
 import co.edu.uniquindio.prasegured.dto.CategoriaRequest;
 import co.edu.uniquindio.prasegured.mapper.CategoriaMapper;
 import co.edu.uniquindio.prasegured.model.Categoria;
-import co.edu.uniquindio.prasegured.model.EnumEstado;
+import co.edu.uniquindio.prasegured.model.ESTADOREPORTE;
 import co.edu.uniquindio.prasegured.repository.CategoriaRepository;
 import co.edu.uniquindio.prasegured.exception.ResourceNotFoundException;
 import co.edu.uniquindio.prasegured.exception.ValueConflictException;
@@ -57,7 +57,7 @@ public class CategoriaServiceImple implements CategoriaService {
     @Override
     public void deleteById(String id) {
         var categoriaStored = findCategoriaById(id);
-        categoriaStored.setStatus(""+EnumEstado.Eliminado);
+        categoriaStored.setStatus(""+ ESTADOREPORTE.Eliminado);
         categoriaRepository.save(categoriaStored);
     }
 

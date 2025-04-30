@@ -1,8 +1,6 @@
 package co.edu.uniquindio.prasegured.model;
 
 import co.edu.uniquindio.prasegured.repository.ReporteRepository;
-import co.edu.uniquindio.prasegured.service.ReporteService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +23,7 @@ public class ReporteServiceTest {
         Reporte reporte = new Reporte();
         reporte.setId("01");
         reporte.setIdUsuario("02");
-        reporte.setEstado(EnumEstado.Espera);
+        reporte.setEstado(ESTADOREPORTE.Espera);
         reporte.setCreadorAnuncio("Carlos");
         reporte.setTitulo("Se regalan gatos");
         reporte.setFechaPublicacion(new Date());
@@ -40,14 +38,14 @@ public class ReporteServiceTest {
         Reporte guardado = reporteRepository.save(reporte);
         Optional<Reporte> buscado = reporteRepository.findById("01");
         assertTrue(buscado.isPresent());
-        assertEquals(EnumEstado.Espera, buscado.get().getEstado());
+        assertEquals(ESTADOREPORTE.Espera, buscado.get().getEstado());
     }
     @Test
     void eliminarReporte(){
         Reporte reporte = new Reporte();
         reporte.setId("02");
         reporte.setIdUsuario("03");
-        reporte.setEstado(EnumEstado.Espera);
+        reporte.setEstado(ESTADOREPORTE.Espera);
         reporte.setCreadorAnuncio("Ana");
         reporte.setTitulo("Se regalan perros");
         reporte.setFechaPublicacion(new Date());

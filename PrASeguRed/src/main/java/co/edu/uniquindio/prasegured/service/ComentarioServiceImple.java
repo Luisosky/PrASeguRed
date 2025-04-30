@@ -5,7 +5,7 @@ import co.edu.uniquindio.prasegured.dto.ComentarioRequest;
 import co.edu.uniquindio.prasegured.exception.ValueConflictException;
 import co.edu.uniquindio.prasegured.mapper.ComentarioMapper;
 import co.edu.uniquindio.prasegured.model.Comentario;
-import co.edu.uniquindio.prasegured.model.EnumEstado;
+import co.edu.uniquindio.prasegured.model.ESTADOREPORTE;
 import co.edu.uniquindio.prasegured.repository.ComentarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -46,7 +46,7 @@ public class ComentarioServiceImple implements ComentarioService {
     public void eliminarComentario(String id) {
         Comentario comentario = comentarioRepository.findById(id)
                 .orElseThrow(() -> new ValueConflictException("No existe un comentario con id: " + id));
-        comentario.setEstado(EnumEstado.Eliminado);
+        comentario.setEstado(ESTADOREPORTE.Eliminado);
         comentarioRepository.save(comentario);
     }
 
@@ -54,7 +54,7 @@ public class ComentarioServiceImple implements ComentarioService {
     public void denegarComentario(String id) {
         Comentario comentario = comentarioRepository.findById(id)
                 .orElseThrow(() -> new ValueConflictException("No existe un comentario con id: " + id));
-        comentario.setEstado(EnumEstado.Denegado);
+        comentario.setEstado(ESTADOREPORTE.Denegado);
         comentarioRepository.save(comentario);
     }
 }

@@ -30,7 +30,7 @@ public class ImagenServiceTest {
         imagen.setReporteId("rep01");
         imagen.setUsuarioId("user01");
         imagen.setNombre("prueba.jpg");
-        imagen.setEstado(EnumEstado.Espera);
+        imagen.setEstado(ESTADOREPORTE.Espera);
         imagen.setContent("contenido de prueba".getBytes());
 
         Imagen guardada = imagenRepository.save(imagen);

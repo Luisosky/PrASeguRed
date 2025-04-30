@@ -1,10 +1,9 @@
 package co.edu.uniquindio.prasegured.service;
 
 import co.edu.uniquindio.prasegured.dto.ImagenDTO;
-import co.edu.uniquindio.prasegured.dto.ImagenRequest;
 import co.edu.uniquindio.prasegured.exception.ValueConflictException;
 import co.edu.uniquindio.prasegured.mapper.ImagenMapper;
-import co.edu.uniquindio.prasegured.model.EnumEstado;
+import co.edu.uniquindio.prasegured.model.ESTADOREPORTE;
 import co.edu.uniquindio.prasegured.model.Imagen;
 import co.edu.uniquindio.prasegured.repository.ImagenRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +29,7 @@ public class ImagenServicesImple implements ImagenService {
         imagen.setContent(file.getBytes());
         imagen.setReporteId(reporteId);
         imagen.setUsuarioId(usuarioId);
-        imagen.setEstado(EnumEstado.Espera);
+        imagen.setEstado(ESTADOREPORTE.Espera);
 
         Imagen saved = imagenRepository.save(imagen);
         return imagenMapper.toImagenDTO(saved);
@@ -41,7 +40,7 @@ public class ImagenServicesImple implements ImagenService {
     public void deleteImagen(String id) throws IOException {
         var StoredImagen = imagenRepository.findById(id)
                 .orElseThrow(() -> new ValueConflictException("No existe una imagen con el id: " + id));
-        StoredImagen.setEstado(EnumEstado.Eliminado);
+        StoredImagen.setEstado(ESTADOREPORTE.Eliminado);
         imagenRepository.save(StoredImagen);
     }
 
@@ -61,7 +60,7 @@ public class ImagenServicesImple implements ImagenService {
     public void estadoDenegado(String id) throws IOException {
         var StoredImagen = imagenRepository.findById(id)
                 .orElseThrow(() -> new ValueConflictException("No existe una imagen con el id: " + id));
-        StoredImagen.setEstado(EnumEstado.Denegado);
+        StoredImagen.setEstado(ESTADOREPORTE.Denegado);
         imagenRepository.save(StoredImagen);
     }
 

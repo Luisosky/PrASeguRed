@@ -1,7 +1,7 @@
 package co.edu.uniquindio.prasegured.controllers.integration;
 
 import co.edu.uniquindio.prasegured.data.TestDataLoaderReportes;
-import co.edu.uniquindio.prasegured.model.EnumEstado;
+import co.edu.uniquindio.prasegured.model.ESTADOREPORTE;
 import co.edu.uniquindio.prasegured.model.Reporte;
 import co.edu.uniquindio.prasegured.repository.ReporteRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,7 +50,7 @@ public class ReporteControllerTest {
         var reporte = new Reporte();
         reporte.setId("11");
         reporte.setIdUsuario("03");
-        reporte.setEstado(EnumEstado.Espera);
+        reporte.setEstado(ESTADOREPORTE.Espera);
         reporte.setCreadorAnuncio("maria");
         reporte.setTitulo("Se regalan gatos");
         reporte.setFechaPublicacion(new Date());

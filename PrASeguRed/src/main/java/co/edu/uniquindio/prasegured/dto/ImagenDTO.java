@@ -1,6 +1,6 @@
 package co.edu.uniquindio.prasegured.dto;
 
-import co.edu.uniquindio.prasegured.model.EnumEstado;
+import co.edu.uniquindio.prasegured.model.ESTADOREPORTE;
 
 public record ImagenDTO(
         String id,
@@ -8,5 +8,5 @@ public record ImagenDTO(
         String usuarioId,
         String nombre,
         byte[] content,
-        EnumEstado estado){
+        ESTADOREPORTE estado){
 }

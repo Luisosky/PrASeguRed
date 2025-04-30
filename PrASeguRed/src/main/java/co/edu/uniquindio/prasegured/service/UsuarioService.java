@@ -1,7 +1,6 @@
 package co.edu.uniquindio.prasegured.service;
 
-import co.edu.uniquindio.prasegured.model.ESTADOS;
-import co.edu.uniquindio.prasegured.model.Location;
+import co.edu.uniquindio.prasegured.model.ESTADOSUSUARIO;
 import co.edu.uniquindio.prasegured.model.ROL;
 import co.edu.uniquindio.prasegured.model.Usuario;
 import co.edu.uniquindio.prasegured.repository.UsuarioRepository;
@@ -11,9 +10,6 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static co.edu.uniquindio.prasegured.model.ESTADOS.ACTIVO;
 
 @Service
 public class UsuarioService {
@@ -26,14 +22,14 @@ public class UsuarioService {
         String encodedPassword = passwordEncoder.encode(rawPassword);
         usuario.setContraseña(encodedPassword);
         usuario.setRol(ROL.USUARIO.toString());
-        usuario.setEstado(ESTADOS.EN_ESPERA.toString());
+        usuario.setEstado(ESTADOSUSUARIO.EN_ESPERA.toString());
         return usuarioRepository.save(usuario);
     }
 
     public void deleteUsuarioByCorreo(String correo) {
         var usuario = usuarioRepository.findByCorreo(correo);
         if (usuario != null) {
-            usuario.setEstado(ESTADOS.INACTIVO.toString());
+            usuario.setEstado(ESTADOSUSUARIO.INACTIVO.toString());
         }
         usuarioRepository.save(usuario);
     }
@@ -41,7 +37,7 @@ public class UsuarioService {
     public void deleteUsuarioById(String id) {
         var user = usuarioRepository.getUsuarioById(id);
         if (user != null) {
-            user.setEstado(ESTADOS.INACTIVO.toString());
+            user.setEstado(ESTADOSUSUARIO.INACTIVO.toString());
         }
         usuarioRepository.save(user);
     }

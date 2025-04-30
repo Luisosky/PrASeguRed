@@ -5,7 +5,7 @@ import co.edu.uniquindio.prasegured.dto.ComentarioRequest;
 import co.edu.uniquindio.prasegured.exception.ValueConflictException;
 import co.edu.uniquindio.prasegured.mapper.ComentarioMapper;
 import co.edu.uniquindio.prasegured.model.Comentario;
-import co.edu.uniquindio.prasegured.model.EnumEstado;
+import co.edu.uniquindio.prasegured.model.ESTADOREPORTE;
 import co.edu.uniquindio.prasegured.repository.ComentarioRepository;
 import co.edu.uniquindio.prasegured.service.ComentarioServiceImple;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,7 +50,7 @@ public class ComentarioServiceTest {
         comentario.setDescripcion("Este es un comentario de prueba.");
         comentario.setLikes(10);
         comentario.setDislikes(2);
-        comentario.setEstado(EnumEstado.Espera);
+        comentario.setEstado(ESTADOREPORTE.Espera);
 
         comentarioDTO = new ComentarioDTO(
                 comentario.getId(),
@@ -129,7 +129,7 @@ public class ComentarioServiceTest {
 
         comentarioService.eliminarComentario(comentario.getId());
 
-        assertEquals(EnumEstado.Eliminado, comentario.getEstado());
+        assertEquals(ESTADOREPORTE.Eliminado, comentario.getEstado());
 
         verify(comentarioRepository).findById(comentario.getId());
         verify(comentarioRepository).save(comentario);
@@ -151,7 +151,7 @@ public class ComentarioServiceTest {
 
         comentarioService.denegarComentario(comentario.getId());
 
-        assertEquals(EnumEstado.Denegado, comentario.getEstado());
+        assertEquals(ESTADOREPORTE.Denegado, comentario.getEstado());
 
         verify(comentarioRepository).findById(comentario.getId());
         verify(comentarioRepository).save(comentario);

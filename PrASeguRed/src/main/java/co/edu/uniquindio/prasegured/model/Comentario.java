@@ -5,7 +5,6 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Collection;
 import java.util.Date;
 
 @Getter
@@ -22,6 +21,6 @@ public class Comentario {
     private String descripcion;
     private int likes;
     private int dislikes;
-    private EnumEstado estado;
+    private ESTADOREPORTE estado;
 }
 

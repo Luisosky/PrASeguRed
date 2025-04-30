@@ -15,7 +15,7 @@ public class Reporte {
     @Id
     private String id;
     private String idUsuario;
-    private EnumEstado estado;
+    private ESTADOREPORTE estado;
     private String creadorAnuncio;
     private String titulo;
     private Date fechaPublicacion;

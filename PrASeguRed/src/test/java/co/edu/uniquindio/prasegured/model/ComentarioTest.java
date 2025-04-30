@@ -33,7 +33,7 @@ public class ComentarioTest {
         comentario.setNombre("Juan");
         comentario.setDescripcion("Muy buen servicio");
         comentario.setFechaPublicacion(new Date());
-        comentario.setEstado(EnumEstado.Espera);
+        comentario.setEstado(ESTADOREPORTE.Espera);
         comentario.setLikes(4);
         comentario.setDislikes(1);
 
@@ -55,7 +55,7 @@ public class ComentarioTest {
         comentario.setNombre("Anónimo");
         comentario.setDescripcion("No me gustó el trato.");
         comentario.setFechaPublicacion(new Date());
-        comentario.setEstado(EnumEstado.Espera);
+        comentario.setEstado(ESTADOREPORTE.Espera);
         comentario.setLikes(0);
         comentario.setDislikes(5);
         comentarioRepository.save(comentario);

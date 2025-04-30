@@ -2,7 +2,7 @@ package co.edu.uniquindio.prasegured.mapper;
 
 import co.edu.uniquindio.prasegured.dto.ImagenDTO;
 import co.edu.uniquindio.prasegured.dto.ImagenRequest;
-import co.edu.uniquindio.prasegured.model.EnumEstado;
+import co.edu.uniquindio.prasegured.model.ESTADOREPORTE;
 import co.edu.uniquindio.prasegured.model.Imagen;
 import java.util.Arrays;
 import javax.annotation.processing.Generated;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-04-20T21:21:36-0500",
+    date = "2025-04-30T17:33:40-0500",
     comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.12.1.jar, environment: Java 21.0.4 (Amazon.com Inc.)"
 )
 @Component
@@ -33,7 +33,7 @@ public class ImagenMapperImpl implements ImagenMapper {
         }
 
         imagen.setId( java.util.UUID.randomUUID().toString() );
-        imagen.setEstado( EnumEstado.Espera );
+        imagen.setEstado( ESTADOREPORTE.Espera );
 
         return imagen;
     }
@@ -49,7 +49,7 @@ public class ImagenMapperImpl implements ImagenMapper {
         String usuarioId = null;
         String nombre = null;
         byte[] content = null;
-        EnumEstado estado = null;
+        ESTADOREPORTE estado = null;
 
         id = imagen.getId();
         reporteId = imagen.getReporteId();

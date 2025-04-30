@@ -4,7 +4,7 @@ import co.edu.uniquindio.prasegured.dto.ReporteDTO;
 import co.edu.uniquindio.prasegured.dto.ReporteRequest;
 import co.edu.uniquindio.prasegured.exception.ResourceNotFoundException;
 import co.edu.uniquindio.prasegured.mapper.ReporteMapper;
-import co.edu.uniquindio.prasegured.model.EnumEstado;
+import co.edu.uniquindio.prasegured.model.ESTADOREPORTE;
 import co.edu.uniquindio.prasegured.model.Reporte;
 import co.edu.uniquindio.prasegured.repository.ReporteRepository;
 import co.edu.uniquindio.prasegured.service.ReporteServiceImple;
@@ -43,7 +43,7 @@ public class ReporteServiceTest {
         reporte = new Reporte();
         reporte.setId("02");
         reporte.setIdUsuario("03");
-        reporte.setEstado(EnumEstado.Espera);
+        reporte.setEstado(ESTADOREPORTE.Espera);
         reporte.setCreadorAnuncio("Ana");
         reporte.setTitulo("Se regalan perros");
         reporte.setFechaPublicacion(new Date());
@@ -159,7 +159,7 @@ public class ReporteServiceTest {
         // Act: Llamar al método que se está probando
         reporteService.deleteById(reporteRequest.id());
         // Assert: Verificar que el estado fue actualizado a "Eliminado"
-        assertEquals(EnumEstado.Eliminado, reporte.getEstado()); // Verificar que el estado cambió
+        assertEquals(ESTADOREPORTE.Eliminado, reporte.getEstado()); // Verificar que el estado cambió
         verify(reporteRepository).save(reporte); // Verificar que se guardó el reporte actualizado
     }
     @Test

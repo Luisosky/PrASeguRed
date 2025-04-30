@@ -6,7 +6,7 @@ import co.edu.uniquindio.prasegured.dto.ReporteDTO;
 import co.edu.uniquindio.prasegured.dto.ReporteRequest;
 import co.edu.uniquindio.prasegured.exception.ResourceNotFoundException;
 import co.edu.uniquindio.prasegured.exception.ValueConflictException;
-import co.edu.uniquindio.prasegured.model.EnumEstado;
+import co.edu.uniquindio.prasegured.model.ESTADOREPORTE;
 import co.edu.uniquindio.prasegured.service.ReporteService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,7 +56,7 @@ public class ReporteControllerTest {
         reporteDTO = new ReporteDTO(
                 "1",
                 "user123",
-                EnumEstado.Espera,
+                ESTADOREPORTE.Espera,
                 "Juan",
                 "Reporte de prueba",
                 new Date(),

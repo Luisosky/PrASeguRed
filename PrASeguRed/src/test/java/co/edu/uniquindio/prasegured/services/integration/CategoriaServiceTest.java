@@ -4,10 +4,8 @@ import co.edu.uniquindio.prasegured.data.TestDataLoaderCategorias;
 import co.edu.uniquindio.prasegured.dto.CategoriaDTO;
 import co.edu.uniquindio.prasegured.dto.CategoriaRequest;
 import co.edu.uniquindio.prasegured.exception.ResourceNotFoundException;
-import co.edu.uniquindio.prasegured.exception.ValueConflictException;
 import co.edu.uniquindio.prasegured.model.Categoria;
-import co.edu.uniquindio.prasegured.model.ESTADOS;
-import co.edu.uniquindio.prasegured.model.EnumEstado;
+import co.edu.uniquindio.prasegured.model.ESTADOREPORTE;
 import co.edu.uniquindio.prasegured.repository.CategoriaRepository;
 import co.edu.uniquindio.prasegured.service.CategoriaService;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,11 +40,11 @@ public class CategoriaServiceTest {
 
     @Test
     void testSaveCategoria() {
-        var categoria = new CategoriaRequest("celulares","tecnologia", EnumEstado.Espera);
+        var categoria = new CategoriaRequest("celulares","tecnologia", ESTADOREPORTE.Espera);
         CategoriaDTO savedCategoria = categoriaService.save(categoria);
         assertNotNull(savedCategoria.id());
         assertEquals(categoria.descripcion(), savedCategoria.descripcion());
-        assertEquals(EnumEstado.Espera, savedCategoria.tipoCategoria());
+        assertEquals(ESTADOREPORTE.Espera, savedCategoria.tipoCategoria());
     }
 
     @Test
@@ -54,13 +52,13 @@ public class CategoriaServiceTest {
         var categoria = categorias.values().stream().findAny().orElseThrow();
         categoriaService.deleteById(categoria.getId());
         var deletedCategoria = categoriaRepository.findById(categoria.getId()).orElseThrow();
-        assertEquals(""+EnumEstado.Eliminado, deletedCategoria.getStatus());
+        assertEquals(""+ ESTADOREPORTE.Eliminado, deletedCategoria.getStatus());
     }
 
     @Test
     void testUpdateCategoria() {
         var categoria = categorias.values().stream().findAny().orElseThrow();
-        var categoriaActualizada = new CategoriaRequest("celulares","tecnologia", EnumEstado.Espera);
+        var categoriaActualizada = new CategoriaRequest("celulares","tecnologia", ESTADOREPORTE.Espera);
         CategoriaDTO updatedCategoria = categoriaService.update(categoria.getId(), categoriaActualizada);
         assertNotNull(updatedCategoria);
         assertEquals(categoriaActualizada.name(), updatedCategoria.name());

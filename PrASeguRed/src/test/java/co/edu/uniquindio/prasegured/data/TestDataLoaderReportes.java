@@ -1,6 +1,6 @@
 package co.edu.uniquindio.prasegured.data;
 
-import co.edu.uniquindio.prasegured.model.EnumEstado;
+import co.edu.uniquindio.prasegured.model.ESTADOREPORTE;
 import co.edu.uniquindio.prasegured.model.Reporte;
 import co.edu.uniquindio.prasegured.repository.ReporteRepository;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -13,7 +13,7 @@ public class TestDataLoaderReportes {
         Reporte reporte = new Reporte();
         reporte.setId("01");
         reporte.setIdUsuario("02");
-        reporte.setEstado(EnumEstado.Espera);
+        reporte.setEstado(ESTADOREPORTE.Espera);
         reporte.setCreadorAnuncio("Carlos");
         reporte.setTitulo("Se regalan gatos");
         reporte.setFechaPublicacion(new Date());
@@ -28,7 +28,7 @@ public class TestDataLoaderReportes {
         Reporte reportea = new Reporte();
         reportea.setId("02");
         reportea.setIdUsuario("03");
-        reportea.setEstado(EnumEstado.Espera);
+        reportea.setEstado(ESTADOREPORTE.Espera);
         reportea.setCreadorAnuncio("Ana");
         reportea.setTitulo("Se regalan perros");
         reportea.setFechaPublicacion(new Date());

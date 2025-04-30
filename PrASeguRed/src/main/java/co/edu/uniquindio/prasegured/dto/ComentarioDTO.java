@@ -1,6 +1,6 @@
 package co.edu.uniquindio.prasegured.dto;
 
-import co.edu.uniquindio.prasegured.model.EnumEstado;
+import co.edu.uniquindio.prasegured.model.ESTADOREPORTE;
 
 import java.util.Date;
 
@@ -14,5 +14,5 @@ public record ComentarioDTO(
         String descripcion,
         int likes,
         int dislikes,
-        EnumEstado estado
+        ESTADOREPORTE estado
 ) {}

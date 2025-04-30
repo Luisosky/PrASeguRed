@@ -3,7 +3,7 @@ package co.edu.uniquindio.prasegured.services.integration;
 import co.edu.uniquindio.prasegured.data.TestDataLoaderReportes;
 import co.edu.uniquindio.prasegured.dto.ReporteRequest;
 import co.edu.uniquindio.prasegured.exception.ResourceNotFoundException;
-import co.edu.uniquindio.prasegured.model.EnumEstado;
+import co.edu.uniquindio.prasegured.model.ESTADOREPORTE;
 import co.edu.uniquindio.prasegured.model.Reporte;
 import co.edu.uniquindio.prasegured.repository.ReporteRepository;
 import co.edu.uniquindio.prasegured.service.ReporteService;
@@ -129,14 +129,14 @@ public class ReporteServiceTest {
         reporteService.estadoDenegado(reporteStore.getId());
         var foundReporte = reporteService.findById(reporteStore.getId());
         // Assert: Se verifica que los datos obtenidos correspondan a los del reporte almacenado.
-        assertEquals(EnumEstado.Denegado, foundReporte.estado());
+        assertEquals(ESTADOREPORTE.Denegado, foundReporte.estado());
     }
     @Test
     void testDeleteReporte() {
         var reporteStore = reportes.values().stream().findAny().orElseThrow();
         reporteService.deleteById(reporteStore.getId());
         var updatedReporte = reporteService.findById(reporteStore.getId());
-        assertEquals(EnumEstado.Eliminado, updatedReporte.estado());
+        assertEquals(ESTADOREPORTE.Eliminado, updatedReporte.estado());
     }
     @Test
     void testGetAllReportes() {

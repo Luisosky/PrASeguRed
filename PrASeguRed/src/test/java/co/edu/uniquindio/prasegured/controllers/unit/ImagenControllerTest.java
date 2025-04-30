@@ -2,6 +2,7 @@ package co.edu.uniquindio.prasegured.controllers.unit;
 
 import co.edu.uniquindio.prasegured.controller.ImagenController;
 import co.edu.uniquindio.prasegured.dto.ImagenDTO;
+import co.edu.uniquindio.prasegured.model.ESTADOREPORTE;
 import co.edu.uniquindio.prasegured.service.ImagenService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -35,7 +35,7 @@ public class ImagenControllerTest {
                 "usuario123",
                 "imagen.jpg",
                 new byte[]{1, 2, 3},
-                co.edu.uniquindio.prasegured.model.EnumEstado.Espera
+                ESTADOREPORTE.Espera
         );
     }
 

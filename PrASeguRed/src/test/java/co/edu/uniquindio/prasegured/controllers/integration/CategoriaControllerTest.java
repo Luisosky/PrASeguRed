@@ -3,7 +3,7 @@ package co.edu.uniquindio.prasegured.controllers.integration;
 import co.edu.uniquindio.prasegured.data.TestDataLoaderCategorias;
 import co.edu.uniquindio.prasegured.dto.CategoriaRequest;
 import co.edu.uniquindio.prasegured.model.Categoria;
-import co.edu.uniquindio.prasegured.model.EnumEstado;
+import co.edu.uniquindio.prasegured.model.ESTADOREPORTE;
 import co.edu.uniquindio.prasegured.repository.CategoriaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,7 +49,7 @@ public class CategoriaControllerTest {
         var categoriaRequest = new CategoriaRequest(
                 "Categoria Nueva",
                 "Descripción de la categoría",
-                EnumEstado.Espera
+                ESTADOREPORTE.Espera
         );
 
         mockMvc.perform(post("/categoria")
@@ -58,7 +58,7 @@ public class CategoriaControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Categoria Nueva"))
                 .andExpect(jsonPath("$.descripcion").value("Descripción de la categoría"))
-                .andExpect(jsonPath("$.tipoCategoria").value(EnumEstado.Espera.toString()));
+                .andExpect(jsonPath("$.tipoCategoria").value(ESTADOREPORTE.Espera.toString()));
     }
 
     @Test
@@ -76,7 +76,7 @@ public class CategoriaControllerTest {
         var categoriaRequest = new CategoriaRequest(
                 "Categoria Actualizada",
                 "Nueva descripción de la categoría",
-                EnumEstado.Espera
+                ESTADOREPORTE.Espera
         );
 
         mockMvc.perform(put("/categoria/" + categoria.getId())
@@ -85,7 +85,7 @@ public class CategoriaControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Categoria Actualizada"))
                 .andExpect(jsonPath("$.descripcion").value("Nueva descripción de la categoría"))
-                .andExpect(jsonPath("$.tipoCategoria").value(EnumEstado.Espera.toString()));
+                .andExpect(jsonPath("$.tipoCategoria").value(ESTADOREPORTE.Espera.toString()));
     }
 
     @Test

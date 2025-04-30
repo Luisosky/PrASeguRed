@@ -3,7 +3,7 @@ package co.edu.uniquindio.prasegured.mapper;
 import co.edu.uniquindio.prasegured.dto.ReporteDTO;
 import co.edu.uniquindio.prasegured.dto.ReporteRequest;
 import co.edu.uniquindio.prasegured.model.Categoria;
-import co.edu.uniquindio.prasegured.model.EnumEstado;
+import co.edu.uniquindio.prasegured.model.ESTADOREPORTE;
 import co.edu.uniquindio.prasegured.model.Location;
 import co.edu.uniquindio.prasegured.model.Reporte;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-04-20T21:21:36-0500",
+    date = "2025-04-30T17:33:40-0500",
     comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.12.1.jar, environment: Java 21.0.4 (Amazon.com Inc.)"
 )
 @Component
@@ -28,6 +28,7 @@ public class ReporteMapperImpl implements ReporteMapper {
 
         Reporte reporte = new Reporte();
 
+        reporte.setIdUsuario( reporteRequest.idUsuario() );
         reporte.setTitulo( reporteRequest.titulo() );
         reporte.setDescripcion( reporteRequest.descripcion() );
         reporte.setUbicacion( reporteRequest.ubicacion() );
@@ -41,7 +42,7 @@ public class ReporteMapperImpl implements ReporteMapper {
         }
 
         reporte.setId( java.util.UUID.randomUUID().toString() );
-        reporte.setEstado( EnumEstado.Espera );
+        reporte.setEstado( ESTADOREPORTE.Espera );
         reporte.setFechaPublicacion( new java.util.Date() );
         reporte.setFechaActualizacion( new java.util.Date() );
         reporte.setLikes( 0 );
@@ -58,7 +59,7 @@ public class ReporteMapperImpl implements ReporteMapper {
 
         String id = null;
         String idUsuario = null;
-        EnumEstado estado = null;
+        ESTADOREPORTE estado = null;
         String creadorAnuncio = null;
         String titulo = null;
         Date fechaPublicacion = null;

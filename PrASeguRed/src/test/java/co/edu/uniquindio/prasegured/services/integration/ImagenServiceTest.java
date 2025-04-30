@@ -3,7 +3,7 @@ package co.edu.uniquindio.prasegured.services.integration;
 import co.edu.uniquindio.prasegured.data.TestDataLoaderImagenes;
 import co.edu.uniquindio.prasegured.dto.ImagenDTO;
 import co.edu.uniquindio.prasegured.exception.ValueConflictException;
-import co.edu.uniquindio.prasegured.model.EnumEstado;
+import co.edu.uniquindio.prasegured.model.ESTADOREPORTE;
 import co.edu.uniquindio.prasegured.model.Imagen;
 import co.edu.uniquindio.prasegured.repository.ImagenRepository;
 import co.edu.uniquindio.prasegured.service.ImagenService;
@@ -55,7 +55,7 @@ public class ImagenServiceTest {
         assertEquals("imagen.jpg", savedImagen.nombre());
         assertEquals("reporteId", savedImagen.reporteId());
         assertEquals("usuarioId", savedImagen.usuarioId());
-        assertEquals(EnumEstado.Espera, savedImagen.estado());
+        assertEquals(ESTADOREPORTE.Espera, savedImagen.estado());
     }
 
     @Test
@@ -63,7 +63,7 @@ public class ImagenServiceTest {
         var imagen = imagenes.values().stream().findAny().orElseThrow();
         imagenService.deleteImagen(imagen.getId());
         var deletedImagen = imagenRepository.findById(imagen.getId()).orElseThrow();
-        assertEquals(EnumEstado.Eliminado, deletedImagen.getEstado());
+        assertEquals(ESTADOREPORTE.Eliminado, deletedImagen.getEstado());
     }
 
     @Test

@@ -1,6 +1,6 @@
 package co.edu.uniquindio.prasegured.dto;
 import co.edu.uniquindio.prasegured.model.Categoria;
-import co.edu.uniquindio.prasegured.model.EnumEstado;
+import co.edu.uniquindio.prasegured.model.ESTADOREPORTE;
 import co.edu.uniquindio.prasegured.model.Location;
 
 import java.util.Date;
@@ -9,7 +9,7 @@ import java.util.List;
 public record ReporteDTO(
         String id,
         String idUsuario,
-        EnumEstado estado,
+        ESTADOREPORTE estado,
         String creadorAnuncio,
         String titulo,
         Date fechaPublicacion,

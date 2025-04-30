@@ -6,7 +6,7 @@ import co.edu.uniquindio.prasegured.exception.ResourceNotFoundException;
 import co.edu.uniquindio.prasegured.exception.ValueConflictException;
 import co.edu.uniquindio.prasegured.mapper.CategoriaMapper;
 import co.edu.uniquindio.prasegured.model.Categoria;
-import co.edu.uniquindio.prasegured.model.EnumEstado;
+import co.edu.uniquindio.prasegured.model.ESTADOREPORTE;
 import co.edu.uniquindio.prasegured.repository.CategoriaRepository;
 import co.edu.uniquindio.prasegured.service.CategoriaServiceImple;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,19 +44,19 @@ public class CategoriaServiceTest {
         categoria.setId("cat01");
         categoria.setName("Categoria 1");
         categoria.setDescripcion("Descripción de categoría 1");
-        categoria.setStatus(EnumEstado.Espera.toString());
+        categoria.setStatus(ESTADOREPORTE.Espera.toString());
 
         categoriaDTO = new CategoriaDTO(
                 categoria.getId(),
                 categoria.getName(),
                 categoria.getDescripcion(),
-                EnumEstado.Espera
+                ESTADOREPORTE.Espera
         );
 
         categoriaRequest = new CategoriaRequest(
                 "Categoria 1",
                 "Descripción de categoría 1",
-                EnumEstado.Espera
+                ESTADOREPORTE.Espera
         );
     }
 
@@ -120,7 +120,7 @@ public class CategoriaServiceTest {
 
         categoriaService.deleteById(categoria.getId());
 
-        assertEquals(EnumEstado.Eliminado.toString(), categoria.getStatus());
+        assertEquals(ESTADOREPORTE.Eliminado.toString(), categoria.getStatus());
 
         verify(categoriaRepository).findById(categoria.getId());
         verify(categoriaRepository).save(categoria);

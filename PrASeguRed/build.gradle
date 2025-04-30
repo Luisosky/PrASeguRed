@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'co.edu.uniquindio'
-version = '0.0.1-SNAPSHOT'
+version = '0.1.7-BETA'
 
 java {
     toolchain {
@@ -47,13 +47,21 @@ dependencies {
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
+    // JWT
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
     // DevTools
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
     // Testing
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test' // Core testing library
+    testImplementation 'org.mockito:mockito-core' // Mockito core
+    testImplementation 'org.mockito:mockito-junit-jupiter' // Mockito with JUnit 5
+    testImplementation 'org.springframework.security:spring-security-test' // Spring Security Test
+    testImplementation 'com.fasterxml.jackson.core:jackson-databind' // For JSON handling
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher' // JUnit Platform Launcher (only runtime)
 }
 
 tasks.named('test') {

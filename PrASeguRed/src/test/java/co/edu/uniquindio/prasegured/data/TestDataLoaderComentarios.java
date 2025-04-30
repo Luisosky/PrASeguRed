@@ -1,8 +1,7 @@
 package co.edu.uniquindio.prasegured.data;
 
 import co.edu.uniquindio.prasegured.model.Comentario;
-import co.edu.uniquindio.prasegured.model.ESTADOS;
-import co.edu.uniquindio.prasegured.model.EnumEstado;
+import co.edu.uniquindio.prasegured.model.ESTADOREPORTE;
 import co.edu.uniquindio.prasegured.repository.ComentarioRepository;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
@@ -18,7 +17,7 @@ public class TestDataLoaderComentarios {
         comentario1.setIdReporte("04");
         comentario1.setIdUsuario("29");
         comentario1.setDescripcion("Este es un comentario de prueba.");
-        comentario1.setEstado(EnumEstado.Publicado);
+        comentario1.setEstado(ESTADOREPORTE.Publicado);
         comentario1.setFechaPublicacion(new Date());
         comentario1.setAnonimo(false);
         comentario1.setLikes(8);
@@ -30,7 +29,7 @@ public class TestDataLoaderComentarios {
         comentario2.setIdReporte("04");
         comentario2.setIdUsuario("29");
         comentario2.setDescripcion("no le crean a esa *****.");
-        comentario2.setEstado(EnumEstado.Eliminado);
+        comentario2.setEstado(ESTADOREPORTE.Eliminado);
         comentario1.setFechaPublicacion(new Date());
         comentario1.setAnonimo(true);
         comentario1.setLikes(0);

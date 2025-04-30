@@ -3,7 +3,7 @@ package co.edu.uniquindio.prasegured.services.unit;
 import co.edu.uniquindio.prasegured.dto.ImagenDTO;
 import co.edu.uniquindio.prasegured.exception.ValueConflictException;
 import co.edu.uniquindio.prasegured.mapper.ImagenMapper;
-import co.edu.uniquindio.prasegured.model.EnumEstado;
+import co.edu.uniquindio.prasegured.model.ESTADOREPORTE;
 import co.edu.uniquindio.prasegured.model.Imagen;
 import co.edu.uniquindio.prasegured.repository.ImagenRepository;
 import co.edu.uniquindio.prasegured.service.ImagenServicesImple;
@@ -53,7 +53,7 @@ public class ImagenServiceTest {
         imagen.setReporteId("rep01");
         imagen.setUsuarioId("user01");
         imagen.setNombre("test.jpg");
-        imagen.setEstado(EnumEstado.Espera);
+        imagen.setEstado(ESTADOREPORTE.Espera);
         imagen.setContent("contenido de prueba".getBytes());
 
         imagenDTO = new ImagenDTO(
@@ -88,7 +88,7 @@ public class ImagenServiceTest {
 
         verify(imagenRepository).findById(imagen.getId());
         verify(imagenRepository).save(imagen);
-        assertEquals(EnumEstado.Eliminado, imagen.getEstado());
+        assertEquals(ESTADOREPORTE.Eliminado, imagen.getEstado());
     }
 
     @Test
@@ -135,7 +135,7 @@ public class ImagenServiceTest {
 
         verify(imagenRepository).findById(imagen.getId());
         verify(imagenRepository).save(imagen);
-        assertEquals(EnumEstado.Denegado, imagen.getEstado());
+        assertEquals(ESTADOREPORTE.Denegado, imagen.getEstado());
     }
 
     @Test

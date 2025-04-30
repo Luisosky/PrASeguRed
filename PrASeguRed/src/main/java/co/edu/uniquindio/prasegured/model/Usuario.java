@@ -16,7 +16,7 @@ public class Usuario {
     private String direccion;
     private String telefono;
     private ROL rol;
-    private ESTADOS estado;
+    private ESTADOSUSUARIO estado;
     private String correo;
     private String preferencias;
     private String contraseña;
@@ -104,7 +104,7 @@ public class Usuario {
         return estado.toString();
     }
 
-    public void setEstado(String estado) { this.estado = ESTADOS.valueOf(estado); }
+    public void setEstado(String estado) { this.estado = ESTADOSUSUARIO.valueOf(estado); }
 
     public String getPreferencias() {
         return preferencias;

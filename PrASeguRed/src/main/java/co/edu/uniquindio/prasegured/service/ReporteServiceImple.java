@@ -4,14 +4,12 @@ import co.edu.uniquindio.prasegured.dto.ReporteDTO;
 import co.edu.uniquindio.prasegured.dto.ReporteRequest;
 import co.edu.uniquindio.prasegured.exception.ResourceNotFoundException;
 import co.edu.uniquindio.prasegured.mapper.ReporteMapper;
-import co.edu.uniquindio.prasegured.model.EnumEstado;
+import co.edu.uniquindio.prasegured.model.ESTADOREPORTE;
 import co.edu.uniquindio.prasegured.repository.ReporteRepository;
 import co.edu.uniquindio.prasegured.exception.ValueConflictException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -72,7 +70,7 @@ public class ReporteServiceImple implements ReporteService {
     public void deleteById(String id) {
         var storedReporte = reporteRepository.findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
-        storedReporte.setEstado(EnumEstado.Eliminado);
+        storedReporte.setEstado(ESTADOREPORTE.Eliminado);
         storedReporte.setFechaActualizacion(new Date());
         reporteRepository.save(storedReporte);
     }
@@ -81,7 +79,7 @@ public class ReporteServiceImple implements ReporteService {
     public void reporteCompleto(String id) {
         var storedReporte = reporteRepository.findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
-        storedReporte.setEstado(EnumEstado.Completado);
+        storedReporte.setEstado(ESTADOREPORTE.Completado);
         storedReporte.setFechaActualizacion(new Date());
         reporteRepository.save(storedReporte);
     }
@@ -90,7 +88,7 @@ public class ReporteServiceImple implements ReporteService {
     public void estadoDenegado(String id) {
         var storedReporte = reporteRepository.findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
-        storedReporte.setEstado(EnumEstado.Denegado);
+        storedReporte.setEstado(ESTADOREPORTE.Denegado);
         storedReporte.setFechaActualizacion(new Date());
         reporteRepository.save(storedReporte);
     }

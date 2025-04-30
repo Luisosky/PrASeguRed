@@ -19,5 +19,5 @@ public class Imagen {
     private String usuarioId;
     private String nombre;
     private byte[] content;
-    private EnumEstado estado;
+    private ESTADOREPORTE estado;
 }

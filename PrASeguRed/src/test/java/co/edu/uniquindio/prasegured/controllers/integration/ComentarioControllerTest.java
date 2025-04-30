@@ -3,7 +3,7 @@ package co.edu.uniquindio.prasegured.controllers.integration;
 import co.edu.uniquindio.prasegured.data.TestDataLoaderComentarios;
 import co.edu.uniquindio.prasegured.dto.ComentarioRequest;
 import co.edu.uniquindio.prasegured.model.Comentario;
-import co.edu.uniquindio.prasegured.model.EnumEstado;
+import co.edu.uniquindio.prasegured.model.ESTADOREPORTE;
 import co.edu.uniquindio.prasegured.repository.ComentarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -116,6 +116,6 @@ public class ComentarioControllerTest {
 
         mockMvc.perform(get("/api/comentarios/por-reporte/" + comentario.getIdReporte())
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].estado").value(EnumEstado.Denegado.toString()));
+                .andExpect(jsonPath("$[0].estado").value(ESTADOREPORTE.Denegado.toString()));
     }
 }

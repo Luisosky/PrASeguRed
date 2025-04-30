@@ -19,6 +19,6 @@ public class Categoria {
     private String status;
     private String name;
     private String descripcion;
-    private CATEGORIAS tipoCategoria;
+    private String tipoCategoria;
 
 }
