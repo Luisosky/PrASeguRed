@@ -1,6 +1,6 @@
 package co.edu.uniquindio.prasegured.model;
 
-public enum EnumEstado {
+public enum ESTADOREPORTE {
     Espera,
     Denegado,
     Publicado,

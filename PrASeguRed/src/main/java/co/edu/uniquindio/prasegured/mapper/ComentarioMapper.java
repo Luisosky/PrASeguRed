@@ -12,7 +12,7 @@ public interface ComentarioMapper {
 
     @Mapping(target = "id", expression = "java(java.util.UUID.randomUUID().toString())")
     @Mapping(target = "fechaPublicacion", expression = "java(new java.util.Date())")
-    @Mapping(target = "estado", expression = "java(EnumEstado.Espera)")
+    @Mapping(target = "estado", expression = "java(ESTADOREPORTE.Espera)")
     Comentario toComentario(ComentarioRequest request);
 
     ComentarioDTO toComentarioDTO(Comentario comentario);

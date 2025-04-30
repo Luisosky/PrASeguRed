@@ -1,6 +1,6 @@
 package co.edu.uniquindio.prasegured.model;
 
-public enum ESTADOS {
+public enum ESTADOSUSUARIO {
     ACTIVO,
     INACTIVO,
     BLOQUEADO,

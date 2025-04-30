@@ -11,7 +11,7 @@ import org.mapstruct.factory.Mappers;
 public interface ImagenMapper {
 
     @Mapping(target = "id", expression = "java(java.util.UUID.randomUUID().toString())")
-    @Mapping(target = "estado", expression = "java(EnumEstado.Espera)")
+    @Mapping(target = "estado", expression = "java(ESTADOREPORTE.Espera)")
     Imagen parseOf(ImagenRequest imagenRequest);
 
     ImagenDTO toImagenDTO(Imagen imagen);

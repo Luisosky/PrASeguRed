@@ -11,7 +11,7 @@ import org.mapstruct.factory.Mappers;
 public interface ReporteMapper {
 
     @Mapping(target = "id", expression = "java(java.util.UUID.randomUUID().toString())")
-    @Mapping(target = "estado", expression = "java(EnumEstado.Espera)")
+    @Mapping(target = "estado", expression = "java(ESTADOREPORTE.Espera)")
     @Mapping(target = "fechaPublicacion", expression = "java(new java.util.Date())")
     @Mapping(target = "fechaActualizacion", expression = "java(new java.util.Date())")
     @Mapping(target = "likes", constant = "0")
