@@ -1,14 +1,18 @@
 package co.edu.uniquindio.prasegured.controller;
 
+import co.edu.uniquindio.prasegured.dto.AuthenticationResponse;
 import co.edu.uniquindio.prasegured.dto.CredencialesDTO;
 import co.edu.uniquindio.prasegured.dto.VerificationRequest;
 import co.edu.uniquindio.prasegured.model.ESTADOSUSUARIO;
 import co.edu.uniquindio.prasegured.model.Usuario;
 import co.edu.uniquindio.prasegured.repository.UsuarioRepository;
+import co.edu.uniquindio.prasegured.security.JwtService;
 import co.edu.uniquindio.prasegured.service.AuthService;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService; // Importa UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,16 +33,26 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    private JwtService jwtService; // Inyecta tu JwtService
+
+    @Autowired
+    private UserDetailsService userDetailsService; // Inyecta UserDetailsService
+
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody CredencialesDTO credenciales) {
+    public ResponseEntity<?> login(@RequestBody CredencialesDTO credenciales) {
         Usuario usuario = usuarioRepository.findByCorreo(credenciales.correo());
         if (usuario != null) {
             String rawPassword = credenciales.correo() + credenciales.contraseña();
             if (bCryptPasswordEncoder.matches(rawPassword, usuario.getContraseña())) {
-                return ResponseEntity.ok().build();
+                // Obtén el UserDetails desde tu UserDetailsService
+                UserDetails userDetails = userDetailsService.loadUserByUsername(credenciales.correo());
+                // Genera el token JWT utilizando tu JwtService, pasando el UserDetails
+                String jwtToken = jwtService.generateToken(userDetails);
+                return ResponseEntity.ok(new AuthenticationResponse(jwtToken));
             }
         }
-        return ResponseEntity.status(401).build();
+        return ResponseEntity.status(401).body(Map.of("error", "Credenciales inválidas"));
     }
 
     @PostMapping("/codigo-usuario")
