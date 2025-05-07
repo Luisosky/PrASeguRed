@@ -1,11 +1,10 @@
 package co.edu.uniquindio.prasegured.security;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +18,11 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    @Value("${jwt.secret}")
-    private String secretKeyString; // Ya no la decodificaremos directamente aquí
+    private final Dotenv dotenv;
 
-    @Value("${jwt.expiration}")
-    private long jwtExpirationMs;
+    public JwtService() {
+        this.dotenv = Dotenv.configure().load(); // Carga las variables de entorno
+    }
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -47,7 +46,7 @@ public class JwtService {
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
+                .setExpiration(new Date(System.currentTimeMillis() + getJwtExpiration()))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -75,9 +74,19 @@ public class JwtService {
     }
 
     private Key getSignInKey() {
-        String secret = "myverysecureandlongenoughsecretkey123!"; // mínimo 32 caracteres
+        String secret = dotenv.get("JWT_SECRET"); // Obtén la clave secreta desde el archivo .env
+        if (secret == null || secret.isBlank()) {
+            throw new IllegalArgumentException("JWT_SECRET no está configurada en el archivo .env");
+        }
         return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-
+    private long getJwtExpiration() {
+        String expiration = dotenv.get("JWT_EXPIRATION"); // Obtén la expiración del JWT desde el archivo .env
+        try {
+            return Long.parseLong(expiration);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("JWT_EXPIRATION no es un número válido en el archivo .env");
+        }
+    }
 }

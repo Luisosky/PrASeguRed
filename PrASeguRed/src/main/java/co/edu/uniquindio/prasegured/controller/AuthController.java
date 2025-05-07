@@ -88,4 +88,26 @@ public class AuthController {
             return ResponseEntity.status(400).body(response);
         }
     }
+    @PostMapping("/usuario-datos")
+    public ResponseEntity<?> obtenerDatosUsuario(@RequestHeader("Authorization") String token) {
+        try {
+            // Extraer el token sin el prefijo "Bearer "
+            String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
+
+            // Validar el token y extraer el correo electrónico del usuario
+            String correo = jwtService.extractUsername(jwtToken);
+
+            // Buscar el usuario por correo electrónico
+            Usuario usuario = usuarioRepository.findByCorreo(correo);
+
+            if (usuario != null) {
+                // Devolver todos los datos del usuario
+                return ResponseEntity.ok(usuario);
+            } else {
+                return ResponseEntity.status(404).body(Map.of("error", "Usuario no encontrado"));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body(Map.of("error", "Token inválido o expirado"));
+        }
+    }
 }
