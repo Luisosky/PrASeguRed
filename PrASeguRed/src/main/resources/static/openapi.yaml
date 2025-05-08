@@ -718,3 +718,46 @@ paths:
               schema:
                 type: string
                 example: "Código incorrecto o expirado"
+
+  /auth/usuario-datos:
+    post:
+      summary: Validar token JWT y obtener datos del usuario
+      description: Recibe un token JWT en el encabezado y devuelve los datos completos del usuario asociado al token.
+      operationId: obtenerDatosUsuario
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: header
+          name: Authorization
+          description: Token JWT con prefijo "Bearer "
+          required: true
+          schema:
+            type: string
+            example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+      responses:
+        "200":
+          description: Token válido, datos de usuario obtenidos correctamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        "401":
+          description: Token inválido o expirado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Token inválido o expirado"
+        "404":
+          description: Usuario no encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Usuario no encontrado"
