@@ -2,11 +2,13 @@ package co.edu.uniquindio.prasegured.data;
 
 import co.edu.uniquindio.prasegured.model.Categoria;
 import co.edu.uniquindio.prasegured.repository.CategoriaRepository;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Profile("test")
 public class TestDataLoaderCategorias {
     public static Map<String, Categoria> loadTestData(CategoriaRepository categoriaRepository, MongoTemplate mongoTemplate) {
         Categoria categoria1 = new Categoria();

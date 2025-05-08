@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.annotation.Profile;
 
 import java.util.Date;
 import java.util.Optional;
@@ -24,6 +25,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class) // Habilita Mockito en JUnit 5
+@Profile("test")
 public class ReporteServiceTest {
     @Mock
     private ReporteRepository reporteRepository;

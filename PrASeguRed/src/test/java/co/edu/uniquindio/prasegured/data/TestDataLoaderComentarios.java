@@ -3,6 +3,7 @@ package co.edu.uniquindio.prasegured.data;
 import co.edu.uniquindio.prasegured.model.Comentario;
 import co.edu.uniquindio.prasegured.model.ESTADOREPORTE;
 import co.edu.uniquindio.prasegured.repository.ComentarioRepository;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.util.Date;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Profile("test")
 public class TestDataLoaderComentarios {
     public static Map<String, Comentario> loadTestData(ComentarioRepository comentarioRepository, MongoTemplate mongoTemplate) {
         Comentario comentario1 = new Comentario();
