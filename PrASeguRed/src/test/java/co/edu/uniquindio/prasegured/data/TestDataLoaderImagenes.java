@@ -2,11 +2,13 @@ package co.edu.uniquindio.prasegured.data;
 
 import co.edu.uniquindio.prasegured.model.Imagen;
 import co.edu.uniquindio.prasegured.repository.ImagenRepository;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Profile("test")
 public class TestDataLoaderImagenes {
     public static Map<String, Imagen> loadTestData(ImagenRepository imagenRepository, MongoTemplate mongoTemplate) {
         Imagen imagen1 = new Imagen();

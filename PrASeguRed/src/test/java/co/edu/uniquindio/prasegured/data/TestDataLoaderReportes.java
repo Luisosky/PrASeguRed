@@ -3,11 +3,13 @@ package co.edu.uniquindio.prasegured.data;
 import co.edu.uniquindio.prasegured.model.ESTADOREPORTE;
 import co.edu.uniquindio.prasegured.model.Reporte;
 import co.edu.uniquindio.prasegured.repository.ReporteRepository;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Profile("test")
 public class TestDataLoaderReportes {
     public static Map<String, Reporte> loadTestData(ReporteRepository reporteRepository, MongoTemplate mongoTemplate) {
         Reporte reporte = new Reporte();
