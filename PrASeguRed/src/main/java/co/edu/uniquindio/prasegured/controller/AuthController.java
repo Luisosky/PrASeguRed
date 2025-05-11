@@ -2,6 +2,7 @@ package co.edu.uniquindio.prasegured.controller;
 
 import co.edu.uniquindio.prasegured.dto.AuthenticationResponse;
 import co.edu.uniquindio.prasegured.dto.CredencialesDTO;
+import co.edu.uniquindio.prasegured.dto.UsuarioDTO;
 import co.edu.uniquindio.prasegured.dto.VerificationRequest;
 import co.edu.uniquindio.prasegured.model.ESTADOSUSUARIO;
 import co.edu.uniquindio.prasegured.model.Usuario;
@@ -101,8 +102,18 @@ public class AuthController {
             Usuario usuario = usuarioRepository.findByCorreo(correo);
 
             if (usuario != null) {
-                // Devolver todos los datos del usuario
-                return ResponseEntity.ok(usuario);
+                // Crear el DTO con los datos necesarios
+                UsuarioDTO usuarioDTO = new UsuarioDTO(
+                        usuario.getNombreCom(),
+                        usuario.getTelefono(),
+                        usuario.getCiudadResidencia(),
+                        usuario.getDireccion(),
+                        usuario.getDocumento(),
+                        usuario.getFechaNacimiento()
+                );
+
+                // Retornar el DTO
+                return ResponseEntity.ok(usuarioDTO);
             } else {
                 return ResponseEntity.status(404).body(Map.of("error", "Usuario no encontrado"));
             }
