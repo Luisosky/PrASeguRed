@@ -7,15 +7,17 @@ public class UsuarioDTO {
     private String direccion;
     private String documento;
     private String fechaNacimiento;
+    private String correo; // Nuevo atributo
 
     // Constructor
-    public UsuarioDTO(String nombreCom, String telefono, String ciudadResidencia, String direccion, String documento, String fechaNacimiento) {
+    public UsuarioDTO(String nombreCom, String telefono, String ciudadResidencia, String direccion, String documento, String fechaNacimiento, String correo) {
         this.nombreCom = nombreCom;
         this.telefono = telefono;
         this.ciudadResidencia = ciudadResidencia;
         this.direccion = direccion;
         this.documento = documento;
         this.fechaNacimiento = fechaNacimiento;
+        this.correo = correo; // Inicializar el nuevo atributo
     }
 
     // Getters and Setters
@@ -65,5 +67,13 @@ public class UsuarioDTO {
 
     public void setFechaNacimiento(String fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public String getCorreo() { // Nuevo getter
+        return correo;
+    }
+
+    public void setCorreo(String correo) { // Nuevo setter
+        this.correo = correo;
     }
 }
