@@ -1,2 +1,11 @@
 src/main/resources/.env
 resources/application.properties
+*.class
+*.jar
+*.war
+*.ear
+*.bin
+*.lock
+*.gradle
+/bin
+/build
