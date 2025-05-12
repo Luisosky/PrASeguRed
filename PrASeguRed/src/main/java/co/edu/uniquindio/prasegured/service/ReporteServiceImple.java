@@ -19,16 +19,6 @@ public class ReporteServiceImple implements ReporteService {
     private final ReporteRepository reporteRepository;
     private final ReporteMapper reporteMapper;
 
-
-    @Override
-    public ReporteDTO save(ReporteRequest reporte) {
-        var newReporte = reporteMapper.parseOf(reporte);
-        validateReporteid(reporte.id());
-        return reporteMapper.toReporteDTO(
-                reporteRepository.save(newReporte)
-        );
-    }
-
     @Override
     public ReporteDTO update(String id, ReporteRequest reporte) {
         // Buscar el reporte existente en la base de datos
@@ -97,5 +87,22 @@ public class ReporteServiceImple implements ReporteService {
         if (reporteRepository.findById(id).isPresent()) {
             throw new ValueConflictException("El reporte ya existe");
         }
+    }
+
+    @Override
+    public ReporteDTO save(ReporteRequest reporte) {
+        var newReporte = reporteMapper.parseOf(reporte);
+        
+        // Aseguramos que el ID del usuario no se pueda falsificar 
+        // ya que viene verificado desde el controlador con el token JWT
+        
+        // Si el ID del reporte ya existe, validamos
+        if (reporte.id() != null && !reporte.id().isEmpty()) {
+            validateReporteid(reporte.id());
+        }
+        
+        return reporteMapper.toReporteDTO(
+                reporteRepository.save(newReporte)
+        );
     }
 }

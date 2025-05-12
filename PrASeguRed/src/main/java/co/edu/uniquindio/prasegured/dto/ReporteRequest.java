@@ -9,11 +9,10 @@ import java.util.List;
 public record ReporteRequest(
         String id,
         String idUsuario,
+        String creadorAnuncio,
         String titulo,
-        Date fechaPublicacion,
         String descripcion,
         String ubicacion,
         List<Categoria> categoria,
         List<Location> locations
-) {
-}
+) {}
