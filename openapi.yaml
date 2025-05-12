@@ -176,7 +176,7 @@ components:
           example: "123456"
 
 paths:
-  /usuarios:
+  /registro/usuario:
     post:
       summary: Registro usuario
       description: Registro de un nuevo usuario en el sistema
@@ -199,7 +199,7 @@ paths:
                     type: string
                     example: Registro exitoso y envío de código de verificación.
 
-  /verificaciones:
+  /email:
     post:
       summary: Código verificación - envío
       description: Envío de correo con el código de verificación al usuario registrado
@@ -255,18 +255,11 @@ paths:
                     type: string
                     example: Credenciales incorrectas.
 
-  /cuentas/{idCuenta}:
+  /cuenta:
     patch:
       summary: Actualización cuenta
       description: Modificación de datos personales
       operationId: cuentaActualizacion
-      parameters:
-        - name: idCuenta
-          in: path
-          required: true
-          schema:
-            type: string
-            description: ID de la cuenta a actualizar
       requestBody:
         required: true
         content:
@@ -289,13 +282,6 @@ paths:
       summary: Eliminación cuenta
       description: Eliminación definitiva de la cuenta del usuario
       operationId: cuentaEliminacion
-      parameters:
-        - name: idCuenta
-          in: path
-          required: true
-          schema:
-            type: string
-            description: ID de la cuenta a eliminar
       requestBody:
         required: true
         content:
@@ -327,7 +313,7 @@ paths:
               $ref: '#/components/schemas/Reporte'
       responses:
         "201":
-          description: Reporte creado exitosamente.
+          description: ReporteServiceImple creado exitosamente.
           content:
             application/json:
               schema:
@@ -335,7 +321,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Reporte creado exitosamente.
+                    example: ReporteServiceImple creado exitosamente.
 
   /reportes/{id}:
     patch:
@@ -357,7 +343,7 @@ paths:
               $ref: '#/components/schemas/Reporte'
       responses:
         "200":
-          description: Reporte actualizado.
+          description: ReporteServiceImple actualizado.
           content:
             application/json:
               schema:
@@ -365,7 +351,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Reporte actualizado.
+                    example: ReporteServiceImple actualizado.
 
     delete:
       summary: Eliminación reporte
@@ -390,7 +376,7 @@ paths:
                   description: Confirmación de eliminación del reporte
       responses:
         "200":
-          description: Reporte eliminado correctamente.
+          description: ReporteServiceImple eliminado correctamente.
           content:
             application/json:
               schema:
@@ -398,7 +384,31 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Reporte eliminado correctamente.
+                    example: ReporteServiceImple eliminado correctamente.
+
+  /reportes/{id}/prioridad:
+    patch:
+      summary: Priorización reporte
+      description: Marcado de un reporte como importante
+      operationId: reportePriorizacion
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            description: ID del reporte a priorizar
+      responses:
+        "200":
+          description: ReporteServiceImple priorizado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: ReporteServiceImple priorizado.
 
   /reportes/{id}/resolucion:
     patch:
@@ -414,7 +424,7 @@ paths:
             description: ID del reporte a resolver
       responses:
         "200":
-          description: Reporte resuelto correctamente.
+          description: ReporteServiceImple resuelto correctamente.
           content:
             application/json:
               schema:
@@ -422,41 +432,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Reporte resuelto correctamente.
-
-  /reportes/{id}/prioridad:
-    post:
-      summary: Dar prioridad a un reporte
-      description: Da prioridad a un reporte existente
-      operationId: darprioridadReporte
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-            description: ID del reporte al que se le dará prioridad
-      responses:
-        "200":
-          description: prioridad registrada correctamente.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: prioridad registrado correctamente.
-        "404":
-          description: Reporte no encontrado.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Reporte no encontrado.
+                    example: ReporteServiceImple resuelto correctamente.
 
   /comentarios:
     post:
@@ -480,13 +456,15 @@ paths:
                   message:
                     type: string
                     example: Comentario creado exitosamente.
+
+  /comentario/{id}:
     patch:
       summary: Actualización comentario
       description: Modificación de un comentario existente
       operationId: comentarioActualizacion
       parameters:
         - name: id
-          in: query
+          in: path
           required: true
           schema:
             type: string
@@ -509,15 +487,13 @@ paths:
                     type: string
                     example: Comentario actualizado.
 
-
-
     delete:
       summary: Eliminación comentario
       description: Eliminación definitiva del comentario
       operationId: comentarioEliminacion
       parameters:
         - name: id
-          in: query
+          in: path
           required: true
           schema:
             type: string
@@ -534,14 +510,14 @@ paths:
                     type: string
                     example: Comentario eliminado correctamente.
 
-  /comentarios/usuario:
+  /comentario/usuario/{usuarioId}:
     get:
       summary: Obtener comentarios por usuario
       description: Obtiene todos los comentarios realizados por un usuario específico
       operationId: obtenerComentariosPorUsuario
       parameters:
         - name: usuarioId
-          in: query
+          in: path
           required: true
           schema:
             type: string
@@ -556,7 +532,22 @@ paths:
                 items:
                   $ref: '#/components/schemas/Comentario'
 
-  /notificaciones:
+  /comentario:
+    get:
+      summary: Obtener todos los comentarios
+      description: Obtiene todos los comentarios realizados por todos los usuarios
+      operationId: obtenerTodosLosComentarios
+      responses:
+        "200":
+          description: Todos los comentarios obtenidos correctamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comentario'
+
+  /notificacion:
     post:
       summary: Enviar notificación
       description: Enviar una notificación a un usuario o admin
@@ -578,17 +569,19 @@ paths:
                   message:
                     type: string
                     example: Notificación enviada correctamente.
+
+  /notificaciones/usuario/{usuarioId}:
     get:
       summary: Obtener notificaciones por usuario
       description: Obtiene todas las notificaciones enviadas a un usuario específico
       operationId: obtenerNotificacionesPorUsuario
       parameters:
-        - name: idCuenta
-          in: query
+        - name: usuarioId
+          in: path
           required: true
           schema:
             type: string
-            description: ID de la cuenta cuyas notificaciones se desean obtener
+            description: ID del usuario cuyas notificaciones se desean obtener
       responses:
         "200":
           description: Notificaciones obtenidas correctamente.
@@ -599,8 +592,21 @@ paths:
                 items:
                   $ref: '#/components/schemas/Notificacion'
 
-
-  /suscripciones/noticias:
+  /notificaciones:
+    get:
+      summary: Obtener todas las notificaciones
+      description: Obtiene todas las notificaciones enviadas a todos los usuarios y administradores
+      operationId: obtenerTodasLasNotificaciones
+      responses:
+        "200":
+          description: Todas las notificaciones obtenidas correctamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notificacion'
+  /suscripcion/noticias:
     post:
       summary: Suscripción a noticias
       description: Permite a un usuario suscribirse proporcionando su correo electrónico.
@@ -687,7 +693,7 @@ paths:
                     example: Error al enviar el código
 
   /auth/token:
-    patch:
+    post:
       summary: Verificar código de verificación
       description: Verifica si el código ingresado es correcto y no ha expirado.
       operationId: verificarCodigo
@@ -712,3 +718,46 @@ paths:
               schema:
                 type: string
                 example: "Código incorrecto o expirado"
+
+  /auth/usuario-datos:
+    post:
+      summary: Validar token JWT y obtener datos del usuario
+      description: Recibe un token JWT en el encabezado y devuelve los datos completos del usuario asociado al token.
+      operationId: obtenerDatosUsuario
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: header
+          name: Authorization
+          description: Token JWT con prefijo "Bearer "
+          required: true
+          schema:
+            type: string
+            example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+      responses:
+        "200":
+          description: Token válido, datos de usuario obtenidos correctamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        "401":
+          description: Token inválido o expirado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Token inválido o expirado"
+        "404":
+          description: Usuario no encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Usuario no encontrado"
