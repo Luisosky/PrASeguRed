@@ -7,5 +7,7 @@ resources/application.properties
 *.bin
 *.lock
 *.gradle
+*.build
 /bin
 /build
+PrASeguRed/src/main/resources/application.properties

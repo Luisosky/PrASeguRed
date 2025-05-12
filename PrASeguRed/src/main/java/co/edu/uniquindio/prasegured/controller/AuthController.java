@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService; // Importa UserDetailsService
@@ -18,8 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import co.edu.uniquindio.prasegured.dto.AuthenticationResponse;
 import co.edu.uniquindio.prasegured.dto.CredencialesDTO;
-import co.edu.uniquindio.prasegured.dto.ReporteDTO;
-import co.edu.uniquindio.prasegured.dto.ReporteRequest;
 import co.edu.uniquindio.prasegured.dto.UsuarioDTO;
 import co.edu.uniquindio.prasegured.dto.VerificationRequest;
 import co.edu.uniquindio.prasegured.model.ESTADOSUSUARIO;
@@ -53,20 +50,34 @@ public class AuthController {
     @Autowired
     private UserDetailsService userDetailsService; // Inyecta UserDetailsService
 
-    @PostMapping("/login")
+    @PostMapping("/login")  
     public ResponseEntity<?> login(@RequestBody CredencialesDTO credenciales) {
-        Usuario usuario = usuarioRepository.findByCorreo(credenciales.correo());
-        if (usuario != null) {
+        try {
+            System.out.println("Se recibio un request de login de este correo: " + credenciales.correo());
+            
+            Usuario usuario = usuarioRepository.findByCorreo(credenciales.correo());
+            if (usuario == null) {
+                System.out.println("usuario no encontrado con el email: " + credenciales.correo());
+                return ResponseEntity.status(401).body(Map.of("error", "Credenciales inválidas"));
+            }
+            
             String rawPassword = credenciales.correo() + credenciales.contraseña();
+            System.out.println("Vreficando contraseña para el usuario");
+            
             if (bCryptPasswordEncoder.matches(rawPassword, usuario.getContraseña())) {
-                // Obtén el UserDetails desde tu UserDetailsService
+                System.out.println("La contraseña es correcta");
                 UserDetails userDetails = userDetailsService.loadUserByUsername(credenciales.correo());
-                // Genera el token JWT utilizando tu JwtService, pasando el UserDetails
                 String jwtToken = jwtService.generateToken(userDetails);
                 return ResponseEntity.ok(new AuthenticationResponse(jwtToken));
+            } else {
+                System.out.println("Contraseña invalida del usuario: " + credenciales.correo());
+                return ResponseEntity.status(401).body(Map.of("error", "Credenciales inválidas"));
             }
+        } catch (Exception e) {
+            System.err.println("Login error: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(400).body(Map.of("error", "Error en el proceso de login", "message", e.getMessage()));
         }
-        return ResponseEntity.status(401).body(Map.of("error", "Credenciales inválidas"));
     }
 
     @PostMapping("/codigo-usuario")
@@ -133,45 +144,6 @@ public class AuthController {
             }
         } catch (Exception e) {
             return ResponseEntity.status(401).body(Map.of("error", "Token inválido o expirado"));
-        }
-    }
-
-    // Endpoint para reportes
-
-    @PostMapping("/crear-reporte")
-    public ResponseEntity<?> crearReporte(@RequestHeader("Authorization") String token, @RequestBody ReporteRequest reporteRequest) {
-        try {
-            // Extraer el token sin el prefijo "Bearer "
-            String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
-
-            // Validar el token y extraer el correo electrónico del usuario
-            String correo = jwtService.extractUsername(jwtToken);
-
-            // Buscar el usuario por correo electrónico
-            Usuario usuario = usuarioRepository.findByCorreo(correo);
-
-            if (usuario != null) {
-                // Asociar el ID del usuario al reporte
-                ReporteRequest reporteConUsuario = new ReporteRequest(
-                    reporteRequest.id(),
-                    usuario.getId(), // Asignar el ID del usuario autenticado
-                    reporteRequest.creadorAnuncio(),
-                    reporteRequest.titulo(),
-                    reporteRequest.descripcion(),
-                    reporteRequest.ubicacion(),
-                    reporteRequest.categoria(),
-                    reporteRequest.locations()
-                );
-                
-                // Guardar el reporte usando el servicio 
-                ReporteDTO nuevoReporte = reporteService.save(reporteConUsuario);
-                
-                return ResponseEntity.status(HttpStatus.CREATED).body(nuevoReporte);
-            } else {
-                return ResponseEntity.status(404).body(Map.of("error", "Usuario no encontrado"));
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(401).body(Map.of("error", "Token inválido o expirado", "detalle", e.getMessage()));
         }
     }
 }

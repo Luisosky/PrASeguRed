@@ -10,4 +10,12 @@ public record CredencialesDTO(String correo, String contraseña) {
     public String contraseña() {
         return contraseña;
     }
+
+    @Override
+    public String toString() {
+        return "CredencialesDTO{" +
+                "correo='" + correo + '\'' +
+                ", contraseña='" + contraseña + '\'' +
+                '}';
+    }
 }
