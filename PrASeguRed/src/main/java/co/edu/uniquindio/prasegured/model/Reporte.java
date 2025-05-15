@@ -1,12 +1,13 @@
 package co.edu.uniquindio.prasegured.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
-import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 
 @Document(collection = "reportes")
 @Getter
@@ -16,15 +17,13 @@ public class Reporte {
     private String id;
     private String idUsuario;
     private ESTADOREPORTE estado;
-    private String creadorAnuncio;
     private String titulo;
     private Date fechaPublicacion;
     private Date fechaActualizacion;
     private String descripcion;
-    private String ubicacion;
     private int likes;
-    private int dislikes;
     private List<Categoria> categoria;
-    private List<Location> locations;
+    private Location location;
+    private List<Imagen> imagenes;
 
 }

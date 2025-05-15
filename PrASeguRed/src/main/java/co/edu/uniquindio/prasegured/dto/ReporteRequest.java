@@ -1,18 +1,18 @@
 package co.edu.uniquindio.prasegured.dto;
 
-import co.edu.uniquindio.prasegured.model.Categoria;
-import co.edu.uniquindio.prasegured.model.Location;
-
-import java.util.Date;
 import java.util.List;
+
+import co.edu.uniquindio.prasegured.model.Categoria;
+import co.edu.uniquindio.prasegured.model.Imagen;
+import co.edu.uniquindio.prasegured.model.Location;
 
 public record ReporteRequest(
         String id,
         String idUsuario,
-        String creadorAnuncio,
         String titulo,
-        String descripcion,
         String ubicacion,
         List<Categoria> categoria,
-        List<Location> locations
+        Location locations,
+        List<Imagen> imagenes
+
 ) {}
