@@ -1,5 +1,6 @@
 package co.edu.uniquindio.prasegured.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.List;
@@ -86,10 +87,21 @@ public class Usuario {
         this.telefono = telefono;
     }
 
-    public String getRol() { return rol.toString(); }
+    public String getRol() {
+        return rol != null ? rol.toString() : null;
+    }
 
+    // Con @JsonIgnore, cualquier valor enviado en el JSON para el rol será ignorado
+    // El servicio establecerá el rol mediante este método
+    @JsonIgnore
     public void setRol(String rol) {
-        this.rol = ROL.valueOf(rol);
+        if (rol != null) {
+            try {
+                this.rol = ROL.valueOf(rol);
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Valor de rol inválido: " + rol);
+            }
+        }
     }
 
     public String getCorreo() {
@@ -101,10 +113,18 @@ public class Usuario {
     }
 
     public String getEstado() {
-        return estado.toString();
+        return estado != null ? estado.toString() : null;
     }
 
-    public void setEstado(String estado) { this.estado = ESTADOSUSUARIO.valueOf(estado); }
+    public void setEstado(String estado) {
+        if (estado != null) {
+            try {
+                this.estado = ESTADOSUSUARIO.valueOf(estado);
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Valor de estado inválido: " + estado);
+            }
+        }
+    }
 
     public String getPreferencias() {
         return preferencias;
@@ -121,7 +141,6 @@ public class Usuario {
     public void setContraseña(String contraseña) {
         this.contraseña = contraseña;
     }
-
 
     public List<Location> getLocations() {
         return locations;
