@@ -2,56 +2,97 @@ openapi: 3.0.0
 info:
   title: API Gestión Usuarios y Reportes
   description: API para registro, autenticación, administración de cuentas y reportes
-  version: 1.0.0
+  version: 1.6.3
 servers:
   - url: /
   - url: https://localhost:8080
-  - url: https://api.ejemplo.com/v1
 
 components:
   schemas:
-    Usuario:
+    Location:
       type: object
       properties:
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+        name:
+          type: string
+
+    Usuario:
+      type: object
+      required:
+        - tpDocumento
+        - documento
+        - nombreCom
+        - fechaNacimiento
+        - ciudadResidencia
+        - telefono
+        - estado
+        - correo
+        - contraseña
+      properties:
+        id:
+          type: string
+          description: ID único del usuario (generado automáticamente)
         tpDocumento:
           type: string
           description: Tipo de documento del usuario
+          example: "CC"
         documento:
           type: string
           description: Número de documento del usuario
+          example: "12345678"
         nombreCom:
           type: string
           description: Nombre completo del usuario
+          example: "Juan Pérez"
         fechaNacimiento:
           type: string
           format: date
           description: Fecha de nacimiento del usuario
+          example: "2000-01-01"
         ciudadResidencia:
           type: string
           description: Ciudad de residencia del usuario
+          example: "Bogotá"
         direccion:
           type: string
           description: Dirección del usuario
+          example: "Av. Siempre Viva 123"
         telefono:
           type: string
           description: Teléfono del usuario
-        cargo:
+          example: "3123456789"
+        rol:
           type: string
-          description: Cargo del usuario
+          description: "Rol del usuario (se asigna automáticamente como USUARIO, no es necesario enviarlo)"
+          example: "USUARIO"
+          readOnly: true  # Marca el campo como solo lectura
         estado:
           type: string
-          enum: [Verificado, Rechazado, Resuelto]
-          description: Estado de verificación del usuario
+          description: Estado del usuario
+          example: "EN_ESPERA"
         correo:
           type: string
           format: email
           description: Correo electrónico del usuario
+          example: "juan.perez@example.com"
         preferencias:
           type: string
           description: Preferencias del usuario
+          example: "Notificaciones por correo"
         contraseña:
           type: string
           description: Contraseña del usuario
+          example: "password123"
+        locations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Location'
+          description: Ubicaciones asociadas al usuario
 
     Verificacion:
       type: object
@@ -175,6 +216,12 @@ components:
           type: string
           example: "123456"
 
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
 paths:
   /registro/usuario:
     post:
@@ -187,6 +234,22 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Usuario'
+            examples:
+              usuario:
+                value:
+                  tpDocumento: "CC"
+                  documento: "12345678"
+                  nombreCom: "Juan Pérez"
+                  fechaNacimiento: "2000-01-01"
+                  ciudadResidencia: "Bogotá"
+                  direccion: "Av. Siempre Viva 123"
+                  telefono: "3123456789"
+                  rol: "USUARIO"
+                  estado: "EN_ESPERA"
+                  correo: "juan.perez@example.com"
+                  preferencias: "Notificaciones por correo"
+                  contraseña: "password123"
+                  locations: []
       responses:
         "201":
           description: Registro exitoso y envío de código de verificación.
@@ -198,6 +261,16 @@ paths:
                   message:
                     type: string
                     example: Registro exitoso y envío de código de verificación.
+        "400":
+          description: Error de validación o datos incompletos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Error en los datos proporcionados
 
   /email:
     post:
@@ -606,6 +679,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Notificacion'
+
   /suscripcion/noticias:
     post:
       summary: Suscripción a noticias

@@ -10,4 +10,5 @@ resources/application.properties
 *.build
 /bin
 /build
+/.idea
 PrASeguRed/src/main/resources/application.properties
