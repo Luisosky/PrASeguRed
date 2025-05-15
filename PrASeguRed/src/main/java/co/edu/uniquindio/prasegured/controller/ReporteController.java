@@ -50,12 +50,11 @@ public class ReporteController {
                 ReporteRequest reporteConUsuario = new ReporteRequest(
                     reporteRequest.id(),
                     usuario.getId(), // Asignar el ID del usuario autenticado
-                    reporteRequest.creadorAnuncio(),
                     reporteRequest.titulo(),
                     reporteRequest.descripcion(),
-                    reporteRequest.ubicacion(),
                     reporteRequest.categoria(),
-                    reporteRequest.locations()
+                    reporteRequest.locations(),
+                    reporteRequest.imagenes()
                 );
                 
                 // Guardar el reporte usando el servicio 

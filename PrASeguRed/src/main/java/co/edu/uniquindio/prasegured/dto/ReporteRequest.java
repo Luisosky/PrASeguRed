@@ -10,7 +10,7 @@ public record ReporteRequest(
         String id,
         String idUsuario,
         String titulo,
-        String ubicacion,
+        String descripcion,
         List<Categoria> categoria,
         Location locations,
         List<Imagen> imagenes
