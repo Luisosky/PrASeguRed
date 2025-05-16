@@ -483,6 +483,118 @@ paths:
                     type: string
                     example: Token inválido o expirado
 
+  /cuenta/password:
+    post:
+      summary: Solicitud de recuperación de contraseña
+      description: Envía un código de verificación al correo electrónico del usuario para iniciar el proceso de recuperación de contraseña.
+      operationId: solicitarRecuperacionPassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                correo:
+                  type: string
+                  format: email
+                  description: Correo electrónico de la cuenta cuya contraseña se desea recuperar.
+            examples:
+              solicitudRecuperacion:
+                value:
+                  correo: "usuario@ejemplo.com"
+      responses:
+        "200":
+          description: Código de verificación enviado correctamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Se ha enviado un código de verificación a su correo electrónico.
+        "404":
+          description: Correo electrónico no asociado a ninguna cuenta.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: No existe una cuenta asociada a este correo electrónico.
+        "500":
+          description: Error al enviar el correo electrónico.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Error al enviar el código de verificación.
+
+  /cuenta/password:
+    put:
+      summary: Establecer nueva contraseña
+      description: Establece una nueva contraseña tras verificar el código de recuperación enviado al correo.
+      operationId: establecerNuevaPassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                correo:
+                  type: string
+                  format: email
+                  description: Correo electrónico de la cuenta.
+                codigo:
+                  type: string
+                  description: Código de verificación enviado al correo electrónico.
+                nuevaContraseña:
+                  type: string
+                  description: Nueva contraseña elegida por el usuario.
+            examples:
+              resetPassword:
+                value:
+                  correo: "usuario@ejemplo.com"
+                  codigo: "123456"
+                  nuevaContraseña: "NuevaPassword123!"
+      responses:
+        "200":
+          description: Contraseña actualizada correctamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Contraseña actualizada correctamente.
+        "400":
+          description: Código de verificación inválido o expirado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: El código de verificación es inválido o ha expirado.
+        "404":
+          description: Correo electrónico no asociado a ninguna cuenta.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: No existe una cuenta asociada a este correo electrónico.
+
   /reportes:
     get:
       summary: Obtener todos los reportes
