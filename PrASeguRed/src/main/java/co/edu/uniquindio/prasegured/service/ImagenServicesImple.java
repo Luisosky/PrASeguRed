@@ -9,14 +9,19 @@ import co.edu.uniquindio.prasegured.repository.ImagenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
 public class ImagenServicesImple implements ImagenService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ImagenServicesImple.class);
 
     private final ImagenRepository imagenRepository;
     private final ImagenMapper imagenMapper;
@@ -32,16 +37,17 @@ public class ImagenServicesImple implements ImagenService {
         imagen.setEstado(ESTADOREPORTE.Espera);
 
         Imagen saved = imagenRepository.save(imagen);
+        logger.info("Imagen guardada con ID: {} y tamaño: {} bytes", saved.getId(), saved.getContent().length);
         return imagenMapper.toImagenDTO(saved);
     }
 
-
     @Override
     public void deleteImagen(String id) throws IOException {
-        var StoredImagen = imagenRepository.findById(id)
+        var storedImagen = imagenRepository.findById(id)
                 .orElseThrow(() -> new ValueConflictException("No existe una imagen con el id: " + id));
-        StoredImagen.setEstado(ESTADOREPORTE.Eliminado);
-        imagenRepository.save(StoredImagen);
+        storedImagen.setEstado(ESTADOREPORTE.Eliminado);
+        imagenRepository.save(storedImagen);
+        logger.info("Imagen marcada como eliminada: {}", id);
     }
 
     @Override
@@ -50,34 +56,36 @@ public class ImagenServicesImple implements ImagenService {
                 .orElseThrow(() -> new ValueConflictException("No existe una imagen con el id: " + id));
         imagenExistente.setNombre(file.getOriginalFilename());
         imagenExistente.setContent(file.getBytes());
-        // Puedes modificar también estado si lo deseas
         Imagen actualizada = imagenRepository.save(imagenExistente);
+        logger.info("Imagen actualizada: {}", id);
         return imagenMapper.toImagenDTO(actualizada);
     }
 
-
     @Override
     public void estadoDenegado(String id) throws IOException {
-        var StoredImagen = imagenRepository.findById(id)
+        var storedImagen = imagenRepository.findById(id)
                 .orElseThrow(() -> new ValueConflictException("No existe una imagen con el id: " + id));
-        StoredImagen.setEstado(ESTADOREPORTE.Denegado);
-        imagenRepository.save(StoredImagen);
+        storedImagen.setEstado(ESTADOREPORTE.Denegado);
+        imagenRepository.save(storedImagen);
+        logger.info("Imagen marcada como denegada: {}", id);
     }
 
     @Override
     public List<ImagenDTO> findAllByReporteId(String reporteId) {
         List<Imagen> imagenes = imagenRepository.findByReporteId(reporteId);
+        logger.info("Consultadas {} imágenes para el reporte {}", imagenes.size(), reporteId);
         return imagenes.stream()
                 .map(imagenMapper::toImagenDTO)
-                .toList(); // Convierte las entidades a DTOs
+                .toList();
     }
 
     @Override
     public List<ImagenDTO> findAllByUsuarioId(String usuarioId) {
         List<Imagen> imagenes = imagenRepository.findByUsuarioId(usuarioId);
+        logger.info("Consultadas {} imágenes para el usuario {}", imagenes.size(), usuarioId);
         return imagenes.stream()
                 .map(imagenMapper::toImagenDTO)
-                .toList(); // Convierte las entidades a DTOs
+                .toList();
     }
 
     private void validarImagenId(String id) {
@@ -87,4 +95,25 @@ public class ImagenServicesImple implements ImagenService {
         }
     }
 
+    /**
+     * Método para convertir Base64 a bytes
+     */
+    public static byte[] convertBase64ToBytes(String base64) {
+        try {
+            if (base64 == null || base64.trim().isEmpty()) {
+                return null;
+            }
+
+            // Eliminar prefijo data:image si existe
+            String cleanBase64 = base64;
+            if (base64.contains(",")) {
+                cleanBase64 = base64.substring(base64.indexOf(",") + 1);
+            }
+
+            return Base64.getDecoder().decode(cleanBase64);
+        } catch (IllegalArgumentException e) {
+            LoggerFactory.getLogger(ImagenServicesImple.class).error("Error decodificando Base64: {}", e.getMessage());
+            return null;
+        }
+    }
 }

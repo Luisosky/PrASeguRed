@@ -1,10 +1,10 @@
 package co.edu.uniquindio.prasegured.dto;
+
 import java.util.Date;
 import java.util.List;
 
 import co.edu.uniquindio.prasegured.model.Categoria;
 import co.edu.uniquindio.prasegured.model.ESTADOREPORTE;
-import co.edu.uniquindio.prasegured.model.Imagen;
 import co.edu.uniquindio.prasegured.model.Location;
 
 public record ReporteDTO(
@@ -18,5 +18,5 @@ public record ReporteDTO(
         int likes,
         List<Categoria> categoria,
         Location locations,
-        List<Imagen> imagenes
+        List<ImagenMetadataDTO> imagenes  // Cambiado de List<Imagen> a List<ImagenMetadataDTO>
 ) {}

@@ -1,7 +1,8 @@
 package co.edu.uniquindio.prasegured.controller;
 
 import co.edu.uniquindio.prasegured.model.Imagen;
-import co.edu.uniquindio.prasegured.repository.ImagenRepository;
+import co.edu.uniquindio.prasegured.model.Reporte;
+import co.edu.uniquindio.prasegured.repository.ReporteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,38 +13,46 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/imagenes")
+@RequestMapping("/api/reportes-imagenes")
 @CrossOrigin("*")
 public class ImagenController {
 
     @Autowired
-    private ImagenRepository imagenRepository;
+    private ReporteRepository reporteRepository;
 
     /**
-     * Endpoint para obtener una imagen por su ID
+     * Endpoint para obtener una imagen embebida directamente del documento de reporte
      */
-    @GetMapping("/{id}")
-    public ResponseEntity<?> obtenerImagen(@PathVariable String id) {
-        Optional<Imagen> imagenOpt = imagenRepository.findById(id);
+    @GetMapping("/{reporteId}/imagen/{indice}")
+    public ResponseEntity<?> obtenerImagenEmbebida(@PathVariable String reporteId, @PathVariable int indice) {
+        // Buscar el reporte directamente
+        Optional<Reporte> reporteOpt = reporteRepository.findById(reporteId);
 
-        if (imagenOpt.isPresent()) {
-            Imagen imagen = imagenOpt.get();
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(determinarTipoContenido(imagen.getNombre()));
-
-            return new ResponseEntity<>(imagen.getContent(), headers, HttpStatus.OK);
-        } else {
+        if (reporteOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-    }
 
-    /**
-     * Endpoint para listar todas las imágenes de un reporte
-     */
-    @GetMapping("/reporte/{reporteId}")
-    public ResponseEntity<?> listarImagenesPorReporte(@PathVariable String reporteId) {
-        return ResponseEntity.ok(imagenRepository.findByReporteId(reporteId));
+        Reporte reporte = reporteOpt.get();
+
+        // Verificar si el reporte tiene imágenes y el índice es válido
+        if (reporte.getImagenes() == null || reporte.getImagenes().isEmpty() || indice >= reporte.getImagenes().size()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Obtener la imagen por índice
+        Imagen imagen = reporte.getImagenes().get(indice);
+
+        // Verificar si la imagen tiene contenido
+        if (imagen.getContent() == null || imagen.getContent().length == 0) {
+            return ResponseEntity.noContent().build();
+        }
+
+        // Configurar los headers para la respuesta
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(determinarTipoContenido(imagen.getNombre()));
+
+        // Devolver el contenido de la imagen
+        return new ResponseEntity<>(imagen.getContent(), headers, HttpStatus.OK);
     }
 
     /**
