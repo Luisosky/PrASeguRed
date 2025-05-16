@@ -483,7 +483,7 @@ paths:
                     type: string
                     example: Token inválido o expirado
 
-  /cuenta/recuperar-password:
+  /cuenta/password:
     post:
       summary: Solicitud de recuperación de contraseña
       description: Envía un código de verificación al correo electrónico del usuario para iniciar el proceso de recuperación de contraseña.
@@ -535,7 +535,7 @@ paths:
                     type: string
                     example: Error al enviar el código de verificación.
 
-  /cuenta/resetear-password:
+  /cuenta/password:
     put:
       summary: Establecer nueva contraseña
       description: Establece una nueva contraseña tras verificar el código de recuperación enviado al correo.
