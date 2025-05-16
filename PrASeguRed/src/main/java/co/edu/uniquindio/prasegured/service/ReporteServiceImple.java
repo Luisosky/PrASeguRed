@@ -31,9 +31,9 @@ public class ReporteServiceImple implements ReporteService {
         // Actualizar los campos del reporte existente
         existingReporte.setTitulo(reporte.titulo());
         existingReporte.setDescripcion(reporte.descripcion());
-        existingReporte.setUbicacion(reporte.ubicacion());
+        existingReporte.setLocation(reporte.locations());  // Corregido: ubicacion -> location
         existingReporte.setCategoria(reporte.categoria());
-        existingReporte.setLocations(reporte.locations());
+        existingReporte.setImagenes(reporte.imagenes());  // Asumiendo que también existe este método
         existingReporte.setFechaActualizacion(new Date()); // Actualizar la fecha de modificación
         // Guardar el reporte actualizado
         var savedReporte = reporteRepository.save(existingReporte);
@@ -92,15 +92,15 @@ public class ReporteServiceImple implements ReporteService {
     @Override
     public ReporteDTO save(ReporteRequest reporte) {
         var newReporte = reporteMapper.parseOf(reporte);
-        
+
         // Aseguramos que el ID del usuario no se pueda falsificar 
         // ya que viene verificado desde el controlador con el token JWT
-        
+
         // Si el ID del reporte ya existe, validamos
         if (reporte.id() != null && !reporte.id().isEmpty()) {
             validateReporteid(reporte.id());
         }
-        
+
         return reporteMapper.toReporteDTO(
                 reporteRepository.save(newReporte)
         );

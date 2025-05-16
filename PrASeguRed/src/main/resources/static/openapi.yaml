@@ -21,6 +21,32 @@ components:
         name:
           type: string
 
+    Imagen:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+        descripcion:
+          type: string
+
+    Categoria:
+      type: object
+      properties:
+        nombre:
+          type: string
+        descripcion:
+          type: string
+
+    ESTADOREPORTE:
+      type: string
+      enum:
+        - Pendiente
+        - Completado
+        - Denegado
+        - Eliminado
+      description: Estado del reporte
+
     Usuario:
       type: object
       required:
@@ -130,36 +156,81 @@ components:
           type: boolean
           description: Confirmación de eliminación de la cuenta
 
-    Reporte:
+    ReporteRequest:
       type: object
+      required:
+        - titulo
+        - descripcion
       properties:
+        id:
+          type: string
+          description: ID del reporte (opcional, generado automáticamente si no se proporciona)
         titulo:
           type: string
           description: Título del reporte
-        limiteEdad:
-          type: integer
-          description: Límite de edad para el reporte
+          example: "Alumbrado público dañado"
         descripcion:
           type: string
-          description: Descripción del reporte
-        ubicacion:
-          type: string
-          description: Ubicación del reporte
-        importante:
-          type: boolean
-          description: Indica si el reporte es importante
-        resuelto:
-          type: boolean
-          description: Indica si el reporte está resuelto
+          description: Descripción detallada del reporte
+          example: "El alumbrado de la calle principal está sin funcionar desde hace tres días"
+        categoria:
+          type: array
+          items:
+            $ref: '#/components/schemas/Categoria'
+          description: Categorías a las que pertenece el reporte
+        locations:
+          type: object
+          $ref: '#/components/schemas/Location'
+          description: Ubicación del incidente reportado
         imagenes:
           type: array
           items:
-            type: string
-            format: uri
-            description: URLs de las imágenes asociadas al reporte
-        categoria:
+            $ref: '#/components/schemas/Imagen'
+          description: Imágenes asociadas al reporte
+
+    ReporteDTO:
+      type: object
+      properties:
+        id:
           type: string
-          description: Categoría del reporte
+          description: ID único del reporte
+        idUsuario:
+          type: string
+          description: ID del usuario que creó el reporte
+        estado:
+          $ref: '#/components/schemas/ESTADOREPORTE'
+        titulo:
+          type: string
+          description: Título del reporte
+        fechaPublicacion:
+          type: string
+          format: date-time
+          description: Fecha en que se publicó el reporte
+          example: "2025-05-15T15:29:53Z"
+        fechaActualizacion:
+          type: string
+          format: date-time
+          description: Fecha de la última actualización del reporte
+          example: "2025-05-15T15:29:53Z"
+        descripcion:
+          type: string
+          description: Descripción detallada del reporte
+        likes:
+          type: integer
+          description: Número de "me gusta" que tiene el reporte
+        categoria:
+          type: array
+          items:
+            $ref: '#/components/schemas/Categoria'
+          description: Categorías a las que pertenece el reporte
+        location:
+          $ref: '#/components/schemas/Location'
+          description: Ubicación del incidente reportado
+        imagenes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Imagen'
+          description: Imágenes asociadas al reporte
 
     Comentario:
       type: object
@@ -306,6 +377,11 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Autenticacion'
+            examples:
+              credenciales:
+                value:
+                  correo: "william19dahora@example.com"
+                  contraseña: "password123"
       responses:
         "200":
           description: Inicio de sesión exitoso.
@@ -317,6 +393,7 @@ paths:
                   token:
                     type: string
                     description: Token de autenticación
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ3aWxsaWFtMTlkYWhvcmFAZXhhbXBsZS5jb20iLCJpYXQiOjE2MjU3NjkzOTMsImV4cCI6MTYyNTg1NTc5M30.example_token"
         "401":
           description: Credenciales incorrectas.
           content:
@@ -333,12 +410,19 @@ paths:
       summary: Actualización cuenta
       description: Modificación de datos personales
       operationId: cuentaActualizacion
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/ActualizacionCuenta'
+            examples:
+              actualizarCuenta:
+                value:
+                  correo: "william.new@example.com"
+                  telefono: "3001234567"
       responses:
         "200":
           description: Datos actualizados correctamente.
@@ -350,17 +434,33 @@ paths:
                   message:
                     type: string
                     example: Datos actualizados correctamente.
+        "401":
+          description: No autenticado o token inválido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Token inválido o expirado
 
     delete:
       summary: Eliminación cuenta
       description: Eliminación definitiva de la cuenta del usuario
       operationId: cuentaEliminacion
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/EliminacionCuenta'
+            examples:
+              eliminarCuenta:
+                value:
+                  confirmacion: true
       responses:
         "200":
           description: Cuenta eliminada.
@@ -372,21 +472,93 @@ paths:
                   message:
                     type: string
                     example: Cuenta eliminada.
+        "401":
+          description: No autenticado o token inválido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Token inválido o expirado
 
   /reportes:
+    get:
+      summary: Obtener todos los reportes
+      description: Recupera una lista de todos los reportes disponibles
+      operationId: obtenerTodosReportes
+      security:
+        - bearerAuth: [ ]
+      responses:
+        "200":
+          description: Lista de reportes obtenida exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReporteDTO'
+        "401":
+          description: No autenticado o token inválido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Token inválido o expirado
+
     post:
       summary: Creación reporte
       description: Creación de un nuevo reporte en el sistema
       operationId: reporteCreacion
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: Token de autenticación JWT (con prefijo 'Bearer ')
+          schema:
+            type: string
+            example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ3aWxsaWFtMTlkYWhvcmFAZXhhbXBsZS5jb20iLCJpYXQiOjE2MjU3NjkzOTMsImV4cCI6MTYyNTg1NTc5M30.example_token
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Reporte'
+              $ref: '#/components/schemas/ReporteRequest'
+            examples:
+              nuevoReporte:
+                value:
+                  titulo: "Semáforo averiado"
+                  descripcion: "El semáforo de la intersección principal no está funcionando correctamente desde ayer"
+                  categoria: [
+                    {
+                      "nombre": "Infraestructura",
+                      "descripcion": "Problemas relacionados con infraestructura urbana"
+                    }
+                  ]
+                  locations: {
+                    "latitude": 4.55001,
+                    "longitude": -75.6561,
+                    "name": "Intersección Av. Principal y Calle 25"
+                  }
+                  imagenes: [
+                    {
+                      "url": "https://example.com/images/semaforo1.jpg",
+                      "descripcion": "Vista frontal del semáforo"
+                    },
+                    {
+                      "url": "https://example.com/images/semaforo2.jpg",
+                      "descripcion": "Vista lateral"
+                    }
+                  ]
       responses:
         "201":
-          description: ReporteServiceImple creado exitosamente.
+          description: Reporte creado exitosamente.
           content:
             application/json:
               schema:
@@ -394,13 +566,78 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: ReporteServiceImple creado exitosamente.
+                    example: Reporte creado exitosamente.
+                  reporte:
+                    $ref: '#/components/schemas/ReporteDTO'
+        "401":
+          description: No autenticado o token inválido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Token inválido o expirado
+        "400":
+          description: Datos del reporte inválidos o encabezado requerido faltante
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Required header 'Authorization' is not present.
 
   /reportes/{id}:
-    patch:
+    get:
+      summary: Obtener un reporte específico
+      description: Recupera un reporte por su ID
+      operationId: obtenerReportePorId
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            description: ID del reporte a obtener
+      responses:
+        "200":
+          description: Reporte recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReporteDTO'
+        "401":
+          description: No autenticado o token inválido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Token inválido o expirado
+        "404":
+          description: Reporte no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Reporte no encontrado
+
+    put:
       summary: Actualización reporte
       description: Modificación de un reporte existente
       operationId: reporteActualizacion
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -413,10 +650,44 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Reporte'
+              $ref: '#/components/schemas/ReporteRequest'
+            examples:
+              actualizarReporte:
+                value:
+                  titulo: "Semáforo averiado - URGENTE"
+                  descripcion: "El semáforo de la intersección principal sigue sin funcionar y ya está causando accidentes"
+                  categoria: [
+                    {
+                      "nombre": "Infraestructura",
+                      "descripcion": "Problemas relacionados con infraestructura urbana"
+                    },
+                    {
+                      "nombre": "Urgente",
+                      "descripcion": "Situaciones que requieren atención inmediata"
+                    }
+                  ]
+                  locations: {
+                    "latitude": 4.55001,
+                    "longitude": -75.6561,
+                    "name": "Intersección Av. Principal y Calle 25"
+                  }
+                  imagenes: [
+                    {
+                      "url": "https://example.com/images/semaforo1.jpg",
+                      "descripcion": "Vista frontal del semáforo"
+                    },
+                    {
+                      "url": "https://example.com/images/semaforo2.jpg",
+                      "descripcion": "Vista lateral"
+                    },
+                    {
+                      "url": "https://example.com/images/accidente.jpg",
+                      "descripcion": "Accidente causado por el semáforo"
+                    }
+                  ]
       responses:
         "200":
-          description: ReporteServiceImple actualizado.
+          description: Reporte actualizado.
           content:
             application/json:
               schema:
@@ -424,12 +695,36 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: ReporteServiceImple actualizado.
+                    example: Reporte actualizado exitosamente.
+                  reporte:
+                    $ref: '#/components/schemas/ReporteDTO'
+        "401":
+          description: No autenticado o token inválido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Token inválido o expirado
+        "404":
+          description: Reporte no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Reporte no encontrado
 
     delete:
       summary: Eliminación reporte
-      description: Eliminación definitiva del reporte
+      description: Marca el reporte como eliminado (cambia su estado a Eliminado)
       operationId: reporteEliminacion
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -437,19 +732,9 @@ paths:
           schema:
             type: string
             description: ID del reporte a eliminar
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                confirmacion:
-                  type: boolean
-                  description: Confirmación de eliminación del reporte
       responses:
         "200":
-          description: ReporteServiceImple eliminado correctamente.
+          description: Reporte eliminado correctamente.
           content:
             application/json:
               schema:
@@ -457,23 +742,45 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: ReporteServiceImple eliminado correctamente.
+                    example: Reporte eliminado correctamente.
+        "401":
+          description: No autenticado o token inválido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Token inválido o expirado
+        "404":
+          description: Reporte no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Reporte no encontrado
 
-  /reportes/{id}/prioridad:
-    patch:
-      summary: Priorización reporte
-      description: Marcado de un reporte como importante
-      operationId: reportePriorizacion
+  /reportes/{id}/completar:
+    put:
+      summary: Marcar reporte como completado
+      description: Cambia el estado del reporte a Completado
+      operationId: marcarReporteComoCompletado
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
           required: true
           schema:
             type: string
-            description: ID del reporte a priorizar
+            description: ID del reporte a marcar como completado
       responses:
         "200":
-          description: ReporteServiceImple priorizado.
+          description: Reporte marcado como completado correctamente.
           content:
             application/json:
               schema:
@@ -481,23 +788,45 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: ReporteServiceImple priorizado.
+                    example: Reporte marcado como completado.
+        "401":
+          description: No autenticado o token inválido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Token inválido o expirado
+        "404":
+          description: Reporte no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Reporte no encontrado
 
-  /reportes/{id}/resolucion:
-    patch:
-      summary: Resolución reporte
-      description: Cambio de estado a resuelto en reporte
-      operationId: reporteResolucion
+  /reportes/{id}/denegar:
+    put:
+      summary: Marcar reporte como denegado
+      description: Cambia el estado del reporte a Denegado
+      operationId: marcarReporteComoDenegado
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
           required: true
           schema:
             type: string
-            description: ID del reporte a resolver
+            description: ID del reporte a marcar como denegado
       responses:
         "200":
-          description: ReporteServiceImple resuelto correctamente.
+          description: Reporte marcado como denegado correctamente.
           content:
             application/json:
               schema:
@@ -505,19 +834,46 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: ReporteServiceImple resuelto correctamente.
+                    example: Reporte marcado como denegado.
+        "401":
+          description: No autenticado o token inválido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Token inválido o expirado
+        "404":
+          description: Reporte no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Reporte no encontrado
 
   /comentarios:
     post:
       summary: Creación comentario
       description: Creación de un nuevo comentario en un reporte
       operationId: comentarioCreacion
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Comentario'
+            examples:
+              nuevoComentario:
+                value:
+                  reporteId: "60b9b42c7e6e1d001f9a4321"
+                  contenido: "Ya he notificado este problema a las autoridades también por teléfono."
       responses:
         "201":
           description: Comentario creado exitosamente.
@@ -529,12 +885,26 @@ paths:
                   message:
                     type: string
                     example: Comentario creado exitosamente.
+                  comentario:
+                    $ref: '#/components/schemas/Comentario'
+        "401":
+          description: No autenticado o token inválido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Token inválido o expirado
 
   /comentario/{id}:
     patch:
       summary: Actualización comentario
       description: Modificación de un comentario existente
       operationId: comentarioActualizacion
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -548,6 +918,10 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Comentario'
+            examples:
+              actualizarComentario:
+                value:
+                  contenido: "Ya he notificado este problema a las autoridades también por teléfono. Me informaron que enviarán un técnico mañana."
       responses:
         "200":
           description: Comentario actualizado.
@@ -559,11 +933,35 @@ paths:
                   message:
                     type: string
                     example: Comentario actualizado.
+                  comentario:
+                    $ref: '#/components/schemas/Comentario'
+        "401":
+          description: No autenticado o token inválido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Token inválido o expirado
+        "404":
+          description: Comentario no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Comentario no encontrado
 
     delete:
       summary: Eliminación comentario
       description: Eliminación definitiva del comentario
       operationId: comentarioEliminacion
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -582,12 +980,34 @@ paths:
                   message:
                     type: string
                     example: Comentario eliminado correctamente.
+        "401":
+          description: No autenticado o token inválido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Token inválido o expirado
+        "404":
+          description: Comentario no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Comentario no encontrado
 
   /comentario/usuario/{usuarioId}:
     get:
       summary: Obtener comentarios por usuario
       description: Obtiene todos los comentarios realizados por un usuario específico
       operationId: obtenerComentariosPorUsuario
+      security:
+        - bearerAuth: []
       parameters:
         - name: usuarioId
           in: path
@@ -604,12 +1024,24 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Comentario'
+        "401":
+          description: No autenticado o token inválido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Token inválido o expirado
 
   /comentario:
     get:
       summary: Obtener todos los comentarios
       description: Obtiene todos los comentarios realizados por todos los usuarios
       operationId: obtenerTodosLosComentarios
+      security:
+        - bearerAuth: []
       responses:
         "200":
           description: Todos los comentarios obtenidos correctamente.
@@ -619,18 +1051,38 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Comentario'
+        "401":
+          description: No autenticado o token inválido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Token inválido o expirado
 
   /notificacion:
     post:
       summary: Enviar notificación
       description: Enviar una notificación a un usuario o admin
       operationId: enviarNotificacion
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Notificacion'
+            examples:
+              nuevaNotificacion:
+                value:
+                  usuarioId: "60b9b42c7e6e1d001f9a4321"
+                  titulo: "Su reporte ha sido atendido"
+                  categoria: "Actualización"
+                  contenido: "El equipo técnico ya está trabajando en la reparación del semáforo que usted reportó."
+                  leido: false
       responses:
         "201":
           description: Notificación enviada correctamente.
@@ -642,12 +1094,26 @@ paths:
                   message:
                     type: string
                     example: Notificación enviada correctamente.
+                  notificacion:
+                    $ref: '#/components/schemas/Notificacion'
+        "401":
+          description: No autenticado o token inválido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Token inválido o expirado
 
   /notificaciones/usuario/{usuarioId}:
     get:
       summary: Obtener notificaciones por usuario
       description: Obtiene todas las notificaciones enviadas a un usuario específico
       operationId: obtenerNotificacionesPorUsuario
+      security:
+        - bearerAuth: []
       parameters:
         - name: usuarioId
           in: path
@@ -664,12 +1130,34 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Notificacion'
+        "401":
+          description: No autenticado o token inválido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Token inválido o expirado
+        "404":
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Usuario no encontrado
 
   /notificaciones:
     get:
       summary: Obtener todas las notificaciones
       description: Obtiene todas las notificaciones enviadas a todos los usuarios y administradores
       operationId: obtenerTodasLasNotificaciones
+      security:
+        - bearerAuth: []
       responses:
         "200":
           description: Todas las notificaciones obtenidas correctamente.
@@ -679,6 +1167,16 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Notificacion'
+        "401":
+          description: No autenticado o token inválido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Token inválido o expirado
 
   /suscripcion/noticias:
     post:
@@ -696,6 +1194,10 @@ paths:
                   type: string
                   format: email
                   description: Correo electrónico del usuario que desea suscribirse.
+            examples:
+              suscripcion:
+                value:
+                  correo: "william19dahora@example.com"
       responses:
         "200":
           description: Suscripción exitosa.
@@ -744,6 +1246,10 @@ paths:
                   type: string
                   format: email
                   example: "usuario@ejemplo.com"
+            examples:
+              enviarCodigo:
+                value:
+                  email: "william19dahora@example.com"
       responses:
         "200":
           description: Código enviado correctamente
@@ -777,6 +1283,11 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/VerificationRequest'
+            examples:
+              verificarCodigo:
+                value:
+                  email: "william19dahora@example.com"
+                  code: "123456"
       responses:
         "200":
           description: Código verificado correctamente
@@ -799,7 +1310,7 @@ paths:
       description: Recibe un token JWT en el encabezado y devuelve los datos completos del usuario asociado al token.
       operationId: obtenerDatosUsuario
       security:
-        - bearerAuth: [ ]
+        - bearerAuth: []
       parameters:
         - in: header
           name: Authorization
