@@ -11,6 +11,7 @@ import co.edu.uniquindio.prasegured.model.Imagen;
 import co.edu.uniquindio.prasegured.model.Reporte;
 import co.edu.uniquindio.prasegured.repository.ImagenRepository;
 import co.edu.uniquindio.prasegured.repository.ReporteRepository;
+import co.edu.uniquindio.prasegured.utils.ImageUtils;
 
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -32,9 +33,21 @@ public class ReporteServiceImple implements ReporteService {
     @Override
     @Transactional
     public ReporteDTO save(ReporteRequest reporte) {
-        logger.info("Guardando nuevo reporte: {}", reporte.titulo());
+        logger.info("Iniciando guardado de reporte: {}", reporte.titulo());
 
-        // Creamos una nueva instancia de Reporte en lugar de usar parseOf
+        // Verificamos estructura de la solicitud con logs detallados
+        logger.debug("Estructura de ReporteRequest: id={}, idUsuario={}, título={}, tiene imágenes={}",
+                reporte.id(), reporte.idUsuario(), reporte.titulo(),
+                reporte.imagenes() != null ? reporte.imagenes().size() : 0);
+
+        if (reporte.imagenes() != null && !reporte.imagenes().isEmpty()) {
+            // Intentamos mostrar información sobre el primer elemento para depuración
+            Object primerElemento = reporte.imagenes().get(0);
+            logger.debug("Primer elemento de imágenes es de tipo: {}",
+                    primerElemento != null ? primerElemento.getClass().getName() : "null");
+        }
+
+        // Creamos una nueva instancia de Reporte
         Reporte newReporte = crearReporteDesdeRequest(reporte);
 
         // Si el ID del reporte ya existe, validamos
@@ -53,8 +66,10 @@ public class ReporteServiceImple implements ReporteService {
 
         // Procesamos las imágenes si hay
         if (reporte.imagenes() != null && !reporte.imagenes().isEmpty()) {
-            logger.info("Procesando {} imágenes para el reporte", reporte.imagenes().size());
-            List<Imagen> imagenesGuardadas = procesarImagenesMejorado(
+            logger.info("Procesando {} imágenes para el reporte {}",
+                    reporte.imagenes().size(), savedReporte.getId());
+
+            List<Imagen> imagenesGuardadas = procesarImagenesV2(
                     reporte.imagenes(),
                     savedReporte.getId(),
                     reporte.idUsuario()
@@ -136,10 +151,13 @@ public class ReporteServiceImple implements ReporteService {
                         logger.error("Error al eliminar imagen con ID: {}", imagen.getId(), e);
                     }
                 }
+                // Limpiamos la lista de imágenes del reporte
+                existingReporte.setImagenes(null);
+                existingReporte = reporteRepository.save(existingReporte);
             }
 
-            // Procesamos y guardamos las nuevas imágenes
-            List<Imagen> imagenesGuardadas = procesarImagenesMejorado(
+            // Procesamos y guardamos las nuevas imágenes con la versión más robusta
+            List<Imagen> imagenesGuardadas = procesarImagenesV2(
                     reporte.imagenes(),
                     existingReporte.getId(),
                     reporte.idUsuario()
@@ -237,14 +255,28 @@ public class ReporteServiceImple implements ReporteService {
         }
     }
 
-    // El resto de métodos siguen igual...
     /**
-     * Versión mejorada para procesar imágenes con mejor manejo de diferentes formatos
+     * Nueva versión mejorada del procesador de imágenes, más robusta y con mejor
+     * manejo de diferentes formatos y depuración
      */
-    private List<Imagen> procesarImagenesMejorado(List<?> imagenes, String reporteId, String usuarioId) {
-        // El método permanece sin cambios
+    private List<Imagen> procesarImagenesV2(List<?> imagenes, String reporteId, String usuarioId) {
         List<Imagen> imagenesGuardadas = new ArrayList<>();
-        logger.info("Procesando lista de {} imágenes para el reporte {}", imagenes.size(), reporteId);
+        logger.info("⬇️ INICIANDO PROCESAMIENTO DE {} IMÁGENES PARA REPORTE {} ⬇️",
+                imagenes.size(), reporteId);
+
+        if (imagenes.isEmpty()) {
+            logger.warn("Lista de imágenes vacía, retornando");
+            return imagenesGuardadas;
+        }
+
+        // Mostrar información diagnóstica sobre lo que estamos recibiendo
+        logger.debug("Tipo de lista recibida: {}", imagenes.getClass().getName());
+        logger.debug("Primer elemento tipo: {}",
+                imagenes.get(0) != null ? imagenes.get(0).getClass().getName() : "null");
+
+        // Intentar identificar el formato común en la lista
+        String formatoDetectado = detectarFormatoImagenes(imagenes);
+        logger.info("Formato detectado para las imágenes: {}", formatoDetectado);
 
         for (int i = 0; i < imagenes.size(); i++) {
             try {
@@ -265,95 +297,46 @@ public class ReporteServiceImple implements ReporteService {
                 imagen.setEstado(ESTADOREPORTE.Espera);
                 imagen.setNombre("imagen_" + (i+1) + "_" + System.currentTimeMillis() + ".jpg");
 
-                // Extraer contenido según el tipo de objeto
+                // Extraer contenido según el tipo de objeto y formato detectado
                 byte[] contenido = null;
 
-                if (imagenInput instanceof String) {
-                    // Asumimos que es una cadena Base64
-                    String base64 = (String) imagenInput;
-                    contenido = convertirBase64ABytes(base64);
-                    logger.debug("Procesando imagen como String (posible Base64)");
-                }
-                else if (imagenInput instanceof Imagen) {
-                    // Es un objeto Imagen
-                    Imagen imgObj = (Imagen) imagenInput;
-                    if (imgObj.getNombre() != null) {
-                        imagen.setNombre(imgObj.getNombre());
-                    }
-                    contenido = imgObj.getContent();
-                    logger.debug("Procesando imagen como objeto Imagen");
-                }
-                else if (imagenInput instanceof Map) {
-                    // Es un mapa con datos de imagen
-                    Map<String, Object> imgMap = (Map<String, Object>) imagenInput;
-
-                    // Extraer nombre si existe
-                    if (imgMap.containsKey("nombre")) {
-                        imagen.setNombre(String.valueOf(imgMap.get("nombre")));
-                    }
-
-                    // Extraer contenido - intentar varias claves comunes
-                    if (imgMap.containsKey("base64")) {
-                        contenido = convertirBase64ABytes(String.valueOf(imgMap.get("base64")));
-                        logger.debug("Extrayendo contenido de clave 'base64'");
-                    }
-                    else if (imgMap.containsKey("url")) {
-                        contenido = convertirBase64ABytes(String.valueOf(imgMap.get("url")));
-                        logger.debug("Extrayendo contenido de clave 'url'");
-                    }
-                    else if (imgMap.containsKey("content") && imgMap.get("content") instanceof byte[]) {
-                        contenido = (byte[]) imgMap.get("content");
-                        logger.debug("Extrayendo contenido de clave 'content' (byte[])");
-                    }
-                    else if (imgMap.containsKey("data")) {
-                        contenido = convertirBase64ABytes(String.valueOf(imgMap.get("data")));
-                        logger.debug("Extrayendo contenido de clave 'data'");
-                    }
-                    else {
-                        // Buscar cualquier clave que pueda contener Base64
-                        for (String key : imgMap.keySet()) {
-                            Object value = imgMap.get(key);
-                            if (value instanceof String) {
-                                String str = (String) value;
-                                if (str.length() > 100 && (str.contains("base64") || str.contains("data:"))) {
-                                    contenido = convertirBase64ABytes(str);
-                                    logger.debug("Extrayendo contenido de clave '{}'", key);
-                                    break;
-                                }
-                            }
+                // Basado en el formato detectado, aplicamos estrategias diferentes
+                switch (formatoDetectado) {
+                    case "STRING_BASE64":
+                        if (imagenInput instanceof String) {
+                            contenido = procesarStringBase64((String) imagenInput);
                         }
-                    }
+                        break;
+                    case "MAP_CON_BASE64":
+                        if (imagenInput instanceof Map) {
+                            contenido = procesarMapConBase64((Map<String, Object>) imagenInput, imagen);
+                        }
+                        break;
+                    case "OBJETO_IMAGEN":
+                        if (imagenInput instanceof Imagen) {
+                            contenido = procesarObjetoImagen((Imagen) imagenInput, imagen);
+                        }
+                        break;
+                    case "IMAGEN_DTO":
+                        if (imagenInput instanceof ImagenDTO) {
+                            contenido = procesarImagenDTO((ImagenDTO) imagenInput, imagen);
+                        }
+                        break;
+                    default:
+                        // Si no se detectó un formato común, intentamos todos los métodos
+                        contenido = procesarCualquierFormato(imagenInput, imagen);
                 }
-                else if (imagenInput instanceof ImagenDTO) {
-                    // Es un ImagenDTO
-                    ImagenDTO dto = (ImagenDTO) imagenInput;
-                    if (dto.nombre() != null) {
-                        imagen.setNombre(dto.nombre());
-                    }
-                    contenido = dto.content();
-                    logger.debug("Procesando imagen como ImagenDTO");
-                }
-                else {
-                    logger.warn("⚠️ Tipo de imagen no soportado: {}", imagenInput.getClass().getName());
-                    continue;
+
+                // Si no se obtuvo contenido con el método específico, intenta el genérico
+                if (contenido == null || contenido.length == 0) {
+                    logger.warn("No se pudo extraer contenido con método específico, intentando método genérico");
+                    contenido = procesarCualquierFormato(imagenInput, imagen);
                 }
 
                 // VERIFICACIÓN CRÍTICA: asegurarse de que hay contenido antes de guardar
                 if (contenido == null || contenido.length == 0) {
-                    logger.warn("⚠️ Imagen #{} NO tiene contenido, intentando procesar como Base64 genérico", i+1);
-
-                    // Último intento: convertir cualquier objeto a string y ver si es Base64
-                    if (imagenInput != null) {
-                        String strValue = String.valueOf(imagenInput);
-                        if (strValue.length() > 100) {  // Los Base64 suelen ser largos
-                            contenido = convertirBase64ABytes(strValue);
-                        }
-                    }
-
-                    if (contenido == null || contenido.length == 0) {
-                        logger.warn("⚠️ Definitivamente Imagen #{} sin contenido válido, no se guardará", i+1);
-                        continue;
-                    }
+                    logger.warn("⚠️ Imagen #{} NO tiene contenido después de todos los intentos, no se guardará", i+1);
+                    continue;
                 }
 
                 // Ahora que tenemos contenido, lo asignamos
@@ -370,55 +353,237 @@ public class ReporteServiceImple implements ReporteService {
             }
         }
 
-        logger.info("Proceso finalizado: {} imágenes guardadas de {} recibidas",
+        logger.info("⬆️ PROCESO FINALIZADO: {} IMÁGENES GUARDADAS DE {} RECIBIDAS ⬆️",
                 imagenesGuardadas.size(), imagenes.size());
         return imagenesGuardadas;
     }
 
     /**
+     * Detecta el formato predominante de las imágenes en la lista
+     */
+    private String detectarFormatoImagenes(List<?> imagenes) {
+        if (imagenes.isEmpty()) return "DESCONOCIDO";
+
+        // Tomar una muestra para análisis
+        Object muestra = imagenes.get(0);
+
+        if (muestra instanceof String) {
+            String str = (String) muestra;
+            if (str.length() > 100 && (str.contains("base64") || str.contains("data:"))) {
+                return "STRING_BASE64";
+            }
+            return "STRING_OTRO";
+        } else if (muestra instanceof Map) {
+            Map<?, ?> map = (Map<?, ?>) muestra;
+            if (map.containsKey("base64") || map.containsKey("url") || map.containsKey("data")) {
+                return "MAP_CON_BASE64";
+            }
+            return "MAP_OTRO";
+        } else if (muestra instanceof Imagen) {
+            return "OBJETO_IMAGEN";
+        } else if (muestra instanceof ImagenDTO) {
+            return "IMAGEN_DTO";
+        }
+
+        return "DESCONOCIDO";
+    }
+
+    /**
+     * Procesa una cadena Base64
+     */
+    private byte[] procesarStringBase64(String base64) {
+        if (base64 == null || base64.length() < 100) {
+            logger.warn("Cadena recibida es demasiado corta para ser Base64 válido");
+            return null;
+        }
+
+        logger.debug("Procesando String como Base64 (longitud: {} caracteres)", base64.length());
+        return convertirBase64ABytes(base64);
+    }
+
+    /**
+     * Procesa un Map que puede contener Base64
+     */
+    private byte[] procesarMapConBase64(Map<String, Object> map, Imagen imagen) {
+        logger.debug("Procesando Map con claves: {}", map.keySet());
+
+        // Si hay un nombre, lo asignamos
+        if (map.containsKey("nombre") && map.get("nombre") != null) {
+            imagen.setNombre(String.valueOf(map.get("nombre")));
+        }
+
+        // Buscamos el contenido en orden de prioridad
+        if (map.containsKey("base64")) {
+            return convertirBase64ABytes(String.valueOf(map.get("base64")));
+        } else if (map.containsKey("url")) {
+            return convertirBase64ABytes(String.valueOf(map.get("url")));
+        } else if (map.containsKey("data")) {
+            return convertirBase64ABytes(String.valueOf(map.get("data")));
+        } else if (map.containsKey("content")) {
+            if (map.get("content") instanceof byte[]) {
+                return (byte[]) map.get("content");
+            } else {
+                return convertirBase64ABytes(String.valueOf(map.get("content")));
+            }
+        }
+
+        // Buscar en cualquier campo que pueda contener Base64
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            if (entry.getValue() instanceof String) {
+                String value = (String) entry.getValue();
+                if (value.length() > 100 && (value.contains("base64") || value.contains("data:"))) {
+                    logger.debug("Encontrado posible Base64 en campo '{}'", entry.getKey());
+                    byte[] contenido = convertirBase64ABytes(value);
+                    if (contenido != null && contenido.length > 0) {
+                        return contenido;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Procesa un objeto Imagen
+     */
+    private byte[] procesarObjetoImagen(Imagen imagenObj, Imagen imagenDestino) {
+        if (imagenObj.getNombre() != null) {
+            imagenDestino.setNombre(imagenObj.getNombre());
+        }
+        return imagenObj.getContent();
+    }
+
+    /**
+     * Procesa un objeto ImagenDTO
+     */
+    private byte[] procesarImagenDTO(ImagenDTO dto, Imagen imagen) {
+        if (dto.nombre() != null) {
+            imagen.setNombre(dto.nombre());
+        }
+        return dto.content();
+    }
+
+    /**
+     * Intenta procesar cualquier formato de entrada para extraer contenido de imagen
+     */
+    private byte[] procesarCualquierFormato(Object imagenInput, Imagen imagen) {
+        // Si es String, asumimos que es Base64
+        if (imagenInput instanceof String) {
+            return convertirBase64ABytes((String) imagenInput);
+        }
+        // Si es Map, buscamos campos conocidos
+        else if (imagenInput instanceof Map) {
+            return procesarMapConBase64((Map<String, Object>) imagenInput, imagen);
+        }
+        // Si es Imagen, tomamos su contenido directamente
+        else if (imagenInput instanceof Imagen) {
+            Imagen imgObj = (Imagen) imagenInput;
+            if (imgObj.getNombre() != null) {
+                imagen.setNombre(imgObj.getNombre());
+            }
+            return imgObj.getContent();
+        }
+        // Si es ImagenDTO, tomamos su contenido
+        else if (imagenInput instanceof ImagenDTO) {
+            ImagenDTO dto = (ImagenDTO) imagenInput;
+            if (dto.nombre() != null) {
+                imagen.setNombre(dto.nombre());
+            }
+            return dto.content();
+        }
+        // Último intento: convertir a String y ver si es Base64
+        else {
+            String strValue = String.valueOf(imagenInput);
+            if (strValue.length() > 100) { // Los Base64 suelen ser largos
+                return convertirBase64ABytes(strValue);
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Versión mejorada del método para convertir Base64 a bytes
+     * con mejor manejo de errores y depuración
      */
     private byte[] convertirBase64ABytes(String base64) {
-        // El método permanece sin cambios
-        try {
-            if (base64 == null || base64.isEmpty()) {
-                logger.debug("Base64 nulo o vacío");
-                return null;
-            }
+        if (base64 == null || base64.isEmpty()) {
+            logger.debug("Base64 nulo o vacío");
+            return null;
+        }
 
-            // Eliminar el prefijo "data:image/tipo;base64," si existe
+        try {
+            // Mostrar información diagnóstica
+            logger.debug("Procesando Base64 (longitud: {})", base64.length());
+
+            // Preprocesamiento
             String contenidoBase64 = base64;
+
+            // 1. Eliminar prefijo data:image si existe
             if (base64.contains(",")) {
                 contenidoBase64 = base64.substring(base64.indexOf(",") + 1);
+                logger.debug("Prefijo data:image eliminado");
             }
 
-            // Eliminar espacios, saltos de línea y otros caracteres no válidos
+            // 2. Eliminar espacios y caracteres no válidos
             contenidoBase64 = contenidoBase64.replaceAll("\\s", "");
 
+            // 3. Intentar decodificar
             try {
                 byte[] bytes = Base64.getDecoder().decode(contenidoBase64);
                 if (bytes.length > 0) {
-                    logger.debug("Base64 decodificado correctamente, tamaño: {} bytes", bytes.length);
+                    logger.debug("Base64 decodificado correctamente: {} bytes", bytes.length);
                     return bytes;
                 } else {
-                    logger.warn("Base64 decodificado pero resultado vacío");
+                    logger.warn("La decodificación Base64 produjo un array vacío");
                     return null;
                 }
             } catch (IllegalArgumentException e) {
-                logger.warn("Error al decodificar Base64: {}", e.getMessage());
+                logger.warn("Error al decodificar Base64 estándar: {}", e.getMessage());
 
-                // Intento de recuperación para Base64 mal formados
+                // Intento de recuperación #1: Limpiar caracteres no válidos
                 try {
+                    logger.debug("Intentando limpiar Base64...");
                     String cleanBase64 = contenidoBase64.replaceAll("[^A-Za-z0-9+/=]", "");
-                    return Base64.getDecoder().decode(cleanBase64);
+                    byte[] bytes = Base64.getDecoder().decode(cleanBase64);
+                    if (bytes.length > 0) {
+                        logger.debug("Base64 recuperado y decodificado: {} bytes", bytes.length);
+                        return bytes;
+                    }
                 } catch (Exception ex) {
-                    logger.error("Error incluso después de limpiar Base64", ex);
-                    return null;
+                    logger.debug("Error en intento de recuperación #1: {}", ex.getMessage());
+                }
+
+                // Intento de recuperación #2: Ajustar padding
+                try {
+                    logger.debug("Intentando ajustar padding...");
+                    String paddedBase64 = contenidoBase64;
+                    while (paddedBase64.length() % 4 != 0) {
+                        paddedBase64 += "=";
+                    }
+                    byte[] bytes = Base64.getDecoder().decode(paddedBase64);
+                    if (bytes.length > 0) {
+                        logger.debug("Base64 con padding ajustado decodificado: {} bytes", bytes.length);
+                        return bytes;
+                    }
+                } catch (Exception ex) {
+                    logger.debug("Error en intento de recuperación #2: {}", ex.getMessage());
                 }
             }
         } catch (Exception e) {
             logger.error("Error general al procesar Base64: {}", e.getMessage());
-            return null;
         }
+
+        logger.warn("Todos los intentos de decodificación Base64 fallaron");
+        return null;
+    }
+
+    /**
+     * Este método se mantiene para compatibilidad con código existente
+     * pero ahora llama a la versión V2 mejorada
+     */
+    private List<Imagen> procesarImagenesMejorado(List<?> imagenes, String reporteId, String usuarioId) {
+        return procesarImagenesV2(imagenes, reporteId, usuarioId);
     }
 }
