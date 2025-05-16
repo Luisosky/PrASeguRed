@@ -1147,7 +1147,7 @@ paths:
                     type: string
                     example: Token inválido o expirado
 
-  /comentario:
+  /comentarios:
     get:
       summary: Obtener todos los comentarios
       description: Obtiene todos los comentarios realizados por todos los usuarios
