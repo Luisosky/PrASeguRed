@@ -1,5 +1,6 @@
 package co.edu.uniquindio.prasegured.service;
 
+import co.edu.uniquindio.prasegured.dto.ActualizacionCuentaDTO;
 import co.edu.uniquindio.prasegured.model.ESTADOSUSUARIO;
 import co.edu.uniquindio.prasegured.model.ROL;
 import co.edu.uniquindio.prasegured.model.Usuario;
@@ -25,6 +26,48 @@ public class UsuarioService {
         usuario.setEstado(ESTADOSUSUARIO.EN_ESPERA.toString());
         return usuarioRepository.save(usuario);
     }
+
+    public Usuario actualizarDatosUsuario(String userId, ActualizacionCuentaDTO datosActualizados) {
+        Usuario usuario = usuarioRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        
+        // Verificar que el usuario esté activo
+        if (!usuario.getEstado().equals(ESTADOSUSUARIO.ACTIVO.toString())) {
+            throw new RuntimeException("El usuario no está activo");
+        }
+        
+        // Actualizar solo los campos que no sean nulos
+        if (datosActualizados.getNombreCom() != null) {
+            usuario.setNombreCom(datosActualizados.getNombreCom());
+        }
+        
+        if (datosActualizados.getCiudadResidencia() != null) {
+            usuario.setCiudadResidencia(datosActualizados.getCiudadResidencia());
+        }
+        
+        if (datosActualizados.getDireccion() != null) {
+            usuario.setDireccion(datosActualizados.getDireccion());
+        }
+        
+        if (datosActualizados.getTelefono() != null) {
+            usuario.setTelefono(datosActualizados.getTelefono());
+        }
+        
+        if (datosActualizados.getCorreo() != null) {
+            // Verificar que el correo no esté siendo usado por otro usuario
+            Usuario usuarioExistente = usuarioRepository.findByCorreo(datosActualizados.getCorreo());
+            if (usuarioExistente != null && !usuarioExistente.getId().equals(userId)) {
+                throw new RuntimeException("El correo ya está siendo utilizado por otro usuario");
+            }
+            usuario.setCorreo(datosActualizados.getCorreo());
+        }
+        
+        if (datosActualizados.getPreferencias() != null) {
+            usuario.setPreferencias(datosActualizados.getPreferencias());
+        }
+        
+        return usuarioRepository.save(usuario);
+}
 
     public void deleteUsuarioByCorreo(String correo) {
         var usuario = usuarioRepository.findByCorreo(correo);

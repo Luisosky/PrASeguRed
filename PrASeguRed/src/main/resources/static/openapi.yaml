@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.1.0
 info:
   title: API Gestión Usuarios y Reportes
   description: API para registro, autenticación, administración de cuentas y reportes
@@ -141,13 +141,25 @@ components:
     ActualizacionCuenta:
       type: object
       properties:
+        nombreCom:
+          type: string
+          description: Nuevo nombre completo del usuario
+        ciudadResidencia:
+          type: string
+          description: Nueva ciudad de residencia del usuario
+        direccion:
+          type: string
+          description: Nueva dirección del usuario
+        telefono:
+          type: string
+          description: Nuevo teléfono del usuario
         correo:
           type: string
           format: email
           description: Nuevo correo electrónico del usuario
-        telefono:
+        preferencias:
           type: string
-          description: Nuevo teléfono del usuario
+          description: Nuevas preferencias del usuario
 
     EliminacionCuenta:
       type: object
@@ -421,8 +433,12 @@ paths:
             examples:
               actualizarCuenta:
                 value:
-                  correo: "william.new@example.com"
+                  nombreCom: "William Martínez"
+                  ciudadResidencia: "Medellín"
+                  direccion: "Calle 123 #45-67"
                   telefono: "3001234567"
+                  correo: "william.new@example.com"
+                  preferencias: "Notificaciones solo por correo"
       responses:
         "200":
           description: Datos actualizados correctamente.
@@ -535,7 +551,7 @@ paths:
                     type: string
                     example: Error al enviar el código de verificación.
 
-  /cuenta/password:
+  /cuenta/nueva-password:
     put:
       summary: Establecer nueva contraseña
       description: Establece una nueva contraseña tras verificar el código de recuperación enviado al correo.

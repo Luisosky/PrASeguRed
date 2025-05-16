@@ -57,7 +57,7 @@ public class PasswordController {
         }
     }
     
-    @PutMapping("/password")
+    @PutMapping("/nueva-password")
     public ResponseEntity<Map<String, String>> establecerNuevaPassword(@RequestBody PasswordResetRequest request) {
         Map<String, String> response = new HashMap<>();
         
