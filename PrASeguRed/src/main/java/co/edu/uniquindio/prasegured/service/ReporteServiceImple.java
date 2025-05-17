@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -585,5 +586,14 @@ public class ReporteServiceImple implements ReporteService {
      */
     private List<Imagen> procesarImagenesMejorado(List<?> imagenes, String reporteId, String usuarioId) {
         return procesarImagenesV2(imagenes, reporteId, usuarioId);
+    }
+
+    @Override
+    public List<ReporteDTO> findByUserId(String userId) {
+        List<Reporte> reportes = reporteRepository.findByIdUsuario(userId);
+
+        return reportes.stream()
+                .map(reporteMapper::toReporteDTO)  // Usar reporteMapper en lugar de this::convertToDTO
+                .collect(Collectors.toList());
     }
 }

@@ -15,4 +15,10 @@ public interface ReporteService {
     void deleteById(String id);
     void reporteCompleto(String id);
     void estadoDenegado(String id);
+    /**
+     * Busca todos los reportes asociados a un usuario por su ID
+     * @param userId ID del usuario
+     * @return Lista de reportes del usuario
+     */
+    List<ReporteDTO> findByUserId(String userId);
 }

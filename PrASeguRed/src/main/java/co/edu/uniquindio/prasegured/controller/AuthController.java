@@ -126,8 +126,9 @@ public class AuthController {
             Usuario usuario = usuarioRepository.findByCorreo(correo);
 
             if (usuario != null) {
-                // Crear el DTO con los datos necesarios
+                // Crear el DTO CON el ID como primer parámetro
                 UsuarioDTO usuarioDTO = new UsuarioDTO(
+                        usuario.getId(),         // ¡AÑADIR EL ID!
                         usuario.getNombreCom(),
                         usuario.getTelefono(),
                         usuario.getCiudadResidencia(),

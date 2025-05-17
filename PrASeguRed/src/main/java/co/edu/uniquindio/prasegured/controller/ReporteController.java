@@ -167,6 +167,39 @@ public class ReporteController {
         }
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> getReportesByUserId(@PathVariable String userId,
+                                                 @RequestHeader(value = "Authorization", required = false) String token) {
+        try {
+            // Verificación opcional del token (puedes hacer que esta validación sea obligatoria si lo deseas)
+            if (token != null && !token.isEmpty()) {
+                String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
+                String correo = jwtService.extractUsername(jwtToken);
+                Usuario usuario = usuarioRepository.findByCorreo(correo);
+
+                // Verificación adicional opcional: comprobar si el usuario solicitado coincide con el token
+                // o si el usuario tiene permisos de administrador
+                // if (!userId.equals(usuario.getId()) && !usuario.hasRole("ADMIN")) {
+                //    return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                //            .body(Map.of("error", "No tienes permiso para acceder a estos reportes"));
+                // }
+            }
+
+            // Obtener los reportes del usuario
+            List<ReporteDTO> reportes = reporteService.findByUserId(userId);
+
+            if (reportes.isEmpty()) {
+                return ResponseEntity.ok(List.of()); // Retornar lista vacía en lugar de error
+            }
+
+            return ResponseEntity.ok(reportes);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Error al obtener reportes del usuario",
+                            "detalle", e.getMessage()));
+        }
+    }
+
     @PutMapping("/{id}/denegar")
     public ResponseEntity<?> denegarReporte(
             @PathVariable String id,

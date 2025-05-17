@@ -1,26 +1,38 @@
 package co.edu.uniquindio.prasegured.dto;
 
 public class UsuarioDTO {
+    private String id;
     private String nombreCom;
     private String telefono;
     private String ciudadResidencia;
     private String direccion;
     private String documento;
     private String fechaNacimiento;
-    private String correo; // Nuevo atributo
+    private String correo;
 
-    // Constructor
-    public UsuarioDTO(String nombreCom, String telefono, String ciudadResidencia, String direccion, String documento, String fechaNacimiento, String correo) {
+    // Constructor actualizado para incluir el ID
+    public UsuarioDTO(String id, String nombreCom, String telefono, String ciudadResidencia,
+                      String direccion, String documento, String fechaNacimiento, String correo) {
+        this.id = id;
         this.nombreCom = nombreCom;
         this.telefono = telefono;
         this.ciudadResidencia = ciudadResidencia;
         this.direccion = direccion;
         this.documento = documento;
         this.fechaNacimiento = fechaNacimiento;
-        this.correo = correo; // Inicializar el nuevo atributo
+        this.correo = correo;
     }
 
-    // Getters and Setters
+    // Getter y setter para el ID
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    // Resto de getters y setters existentes
     public String getNombreCom() {
         return nombreCom;
     }
@@ -69,11 +81,11 @@ public class UsuarioDTO {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public String getCorreo() { // Nuevo getter
+    public String getCorreo() {
         return correo;
     }
 
-    public void setCorreo(String correo) { // Nuevo setter
+    public void setCorreo(String correo) {
         this.correo = correo;
     }
 }

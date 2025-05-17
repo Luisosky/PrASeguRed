@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface ReporteRepository extends MongoRepository<Reporte, String> {
     Optional<Reporte> findById(String id);
     List<Reporte> findByIdUsuario(String idUsuario);
+    // Asumiendo que estás usando Spring Data MongoDB o JPA
 }
