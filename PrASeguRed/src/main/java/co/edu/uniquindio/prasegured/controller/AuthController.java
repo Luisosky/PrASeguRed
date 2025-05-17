@@ -1,8 +1,11 @@
 package co.edu.uniquindio.prasegured.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import co.edu.uniquindio.prasegured.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,10 +18,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import co.edu.uniquindio.prasegured.dto.AuthenticationResponse;
-import co.edu.uniquindio.prasegured.dto.CredencialesDTO;
-import co.edu.uniquindio.prasegured.dto.UsuarioDTO;
-import co.edu.uniquindio.prasegured.dto.VerificationRequest;
 import co.edu.uniquindio.prasegured.model.ESTADOSUSUARIO;
 import co.edu.uniquindio.prasegured.model.Usuario;
 import co.edu.uniquindio.prasegured.repository.UsuarioRepository;
@@ -126,16 +125,28 @@ public class AuthController {
             Usuario usuario = usuarioRepository.findByCorreo(correo);
 
             if (usuario != null) {
-                // Crear el DTO CON el ID como primer parámetro
+                // Convertir las locations a DTOs
+                List<LocationDTO> locationDTOs = null;
+                if (usuario.getLocations() != null) {
+                    locationDTOs = usuario.getLocations().stream()
+                            .map(loc -> new LocationDTO(
+                                    loc.getLat(),
+                                    loc.getLng()))
+                            .collect(Collectors.toList());
+                }
+
+                // Crear el DTO con todos los campos incluidos rol y ubicaciones
                 UsuarioDTO usuarioDTO = new UsuarioDTO(
-                        usuario.getId(),         // ¡AÑADIR EL ID!
+                        usuario.getId(),
                         usuario.getNombreCom(),
                         usuario.getTelefono(),
                         usuario.getCiudadResidencia(),
                         usuario.getDireccion(),
                         usuario.getDocumento(),
                         usuario.getFechaNacimiento(),
-                        usuario.getCorreo()
+                        usuario.getCorreo(),
+                        usuario.getRol(),            // Campo de rol
+                        locationDTOs                 // Campo de ubicaciones
                 );
 
                 // Retornar el DTO
@@ -144,6 +155,8 @@ public class AuthController {
                 return ResponseEntity.status(404).body(Map.of("error", "Usuario no encontrado"));
             }
         } catch (Exception e) {
+            // Log del error para debugging
+            e.printStackTrace();
             return ResponseEntity.status(401).body(Map.of("error", "Token inválido o expirado"));
         }
     }

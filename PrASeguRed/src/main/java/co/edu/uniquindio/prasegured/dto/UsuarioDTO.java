@@ -1,5 +1,7 @@
 package co.edu.uniquindio.prasegured.dto;
 
+import java.util.List;
+
 public class UsuarioDTO {
     private String id;
     private String nombreCom;
@@ -9,10 +11,13 @@ public class UsuarioDTO {
     private String documento;
     private String fechaNacimiento;
     private String correo;
+    private String rol; // Campo añadido para el rol
+    private List<LocationDTO> locations; // Campo añadido para las ubicaciones
 
-    // Constructor actualizado para incluir el ID
+    // Constructor actualizado para incluir todos los campos
     public UsuarioDTO(String id, String nombreCom, String telefono, String ciudadResidencia,
-                      String direccion, String documento, String fechaNacimiento, String correo) {
+                      String direccion, String documento, String fechaNacimiento, String correo,
+                      String rol, List<LocationDTO> locations) {
         this.id = id;
         this.nombreCom = nombreCom;
         this.telefono = telefono;
@@ -21,9 +26,29 @@ public class UsuarioDTO {
         this.documento = documento;
         this.fechaNacimiento = fechaNacimiento;
         this.correo = correo;
+        this.rol = rol;
+        this.locations = locations;
     }
 
-    // Getter y setter para el ID
+    // Getters y setters para rol
+    public String getRol() {
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
+    }
+
+    // Getters y setters para locations
+    public List<LocationDTO> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(List<LocationDTO> locations) {
+        this.locations = locations;
+    }
+
+    // Resto de getters y setters existentes
     public String getId() {
         return id;
     }
@@ -32,7 +57,6 @@ public class UsuarioDTO {
         this.id = id;
     }
 
-    // Resto de getters y setters existentes
     public String getNombreCom() {
         return nombreCom;
     }
