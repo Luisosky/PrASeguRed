@@ -17,6 +17,8 @@ import java.util.List;
 public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
+    @Autowired
+    private AuditLogService auditLogService;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public Usuario registrarUsuario(Usuario usuario){
@@ -94,17 +96,37 @@ public class UsuarioService {
     }
 
     public void deleteUsuarioByCorreo(String correo) {
-        var usuario = usuarioRepository.findByCorreo(correo);
-        if (usuario != null) {
-            usuario.setEstado(ESTADOSUSUARIO.INACTIVO.toString());
+        var user = usuarioRepository.findByCorreo(correo);
+        if (user != null) {
+            String estadoAnterior = user.getEstado();
+            user.setEstado(ESTADOSUSUARIO.INACTIVO.toString());
+            usuarioRepository.save(user);
+            auditLogService.registrarCambio(
+                    "Usuario",
+                    Long.valueOf(user.getDocumento()),
+                    "ELIMINAR",
+                    estadoAnterior,
+                    user.getEstado(),
+                    "admin" // Cambia por el usuario autenticado si lo tienes
+            );
         }
-        usuarioRepository.save(usuario);
+        usuarioRepository.save(user);
     }
 
     public void deleteUsuarioById(String id) {
         var user = usuarioRepository.getUsuarioById(id);
         if (user != null) {
+            String estadoAnterior = user.getEstado();
             user.setEstado(ESTADOSUSUARIO.INACTIVO.toString());
+            usuarioRepository.save(user);
+            auditLogService.registrarCambio(
+                    "Usuario",
+                    Long.valueOf(user.getDocumento()),
+                    "ELIMINAR",
+                    estadoAnterior,
+                    user.getEstado(),
+                    "admin" // Cambia por el usuario autenticado si lo tienes
+            );
         }
         usuarioRepository.save(user);
     }
