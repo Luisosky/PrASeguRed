@@ -4,12 +4,13 @@ import co.edu.uniquindio.prasegured.dto.ActualizacionCuentaDTO;
 import co.edu.uniquindio.prasegured.model.ESTADOSUSUARIO;
 import co.edu.uniquindio.prasegured.model.ROL;
 import co.edu.uniquindio.prasegured.model.Usuario;
+import co.edu.uniquindio.prasegured.model.Location;
 import co.edu.uniquindio.prasegured.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,46 +29,69 @@ public class UsuarioService {
     }
 
     public Usuario actualizarDatosUsuario(String userId, ActualizacionCuentaDTO datosActualizados) {
-        Usuario usuario = usuarioRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        
-        // Verificar que el usuario esté activo
-        if (!usuario.getEstado().equals(ESTADOSUSUARIO.ACTIVO.toString())) {
-            throw new RuntimeException("El usuario no está activo");
-        }
-        
-        // Actualizar solo los campos que no sean nulos
-        if (datosActualizados.getNombreCom() != null) {
-            usuario.setNombreCom(datosActualizados.getNombreCom());
-        }
-        
-        if (datosActualizados.getCiudadResidencia() != null) {
-            usuario.setCiudadResidencia(datosActualizados.getCiudadResidencia());
-        }
-        
-        if (datosActualizados.getDireccion() != null) {
-            usuario.setDireccion(datosActualizados.getDireccion());
-        }
-        
-        if (datosActualizados.getTelefono() != null) {
-            usuario.setTelefono(datosActualizados.getTelefono());
-        }
-        
-        if (datosActualizados.getCorreo() != null) {
-            // Verificar que el correo no esté siendo usado por otro usuario
-            Usuario usuarioExistente = usuarioRepository.findByCorreo(datosActualizados.getCorreo());
-            if (usuarioExistente != null && !usuarioExistente.getId().equals(userId)) {
-                throw new RuntimeException("El correo ya está siendo utilizado por otro usuario");
+            Usuario usuario = usuarioRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+            
+            // Verificar que el usuario esté activo
+            if (!usuario.getEstado().equals(ESTADOSUSUARIO.ACTIVO.toString())) {
+                throw new RuntimeException("El usuario no está activo");
             }
-            usuario.setCorreo(datosActualizados.getCorreo());
+            
+            // Actualizar solo los campos que no sean nulos
+            if (datosActualizados.getNombreCom() != null) {
+                usuario.setNombreCom(datosActualizados.getNombreCom());
+            }
+            
+            if (datosActualizados.getCiudadResidencia() != null) {
+                usuario.setCiudadResidencia(datosActualizados.getCiudadResidencia());
+            }
+            
+            if (datosActualizados.getDireccion() != null) {
+                usuario.setDireccion(datosActualizados.getDireccion());
+                // Si se actualiza la dirección pero no se proporciona la ubicación,
+                // podríamos lanzar una advertencia o excepción
+                if (datosActualizados.getLocation() == null) {
+                    // Lanzar una excepción o advertencia
+                throw new RuntimeException("Al actualizar la dirección debe proporcionar la ubicación (latitud/longitud)");
+
+                }
+            }
+            
+            // Actualizar la ubicación si se proporciona
+            if (datosActualizados.getLocation() != null) {
+                // Crear un objeto Location a partir de LocationDTO
+                Location nuevaLocation = new Location();
+                nuevaLocation.setLat(datosActualizados.getLocation().getLat());
+                nuevaLocation.setLng(datosActualizados.getLocation().getLng());
+        
+        // Inicializar la lista si es null
+        if (usuario.getLocations() == null) {
+            usuario.setLocations(new ArrayList<>());
         }
         
-        if (datosActualizados.getPreferencias() != null) {
-            usuario.setPreferencias(datosActualizados.getPreferencias());
-        }
-        
-        return usuarioRepository.save(usuario);
-}
+        // Agregar la nueva ubicación a la lista
+        usuario.getLocations().add(nuevaLocation);
+    }
+            
+            if (datosActualizados.getTelefono() != null) {
+                usuario.setTelefono(datosActualizados.getTelefono());
+            }
+            
+            if (datosActualizados.getCorreo() != null) {
+                // Verificar que el correo no esté siendo usado por otro usuario
+                Usuario usuarioExistente = usuarioRepository.findByCorreo(datosActualizados.getCorreo());
+                if (usuarioExistente != null && !usuarioExistente.getId().equals(userId)) {
+                    throw new RuntimeException("El correo ya está siendo utilizado por otro usuario");
+                }
+                usuario.setCorreo(datosActualizados.getCorreo());
+            }
+            
+            if (datosActualizados.getPreferencias() != null) {
+                usuario.setPreferencias(datosActualizados.getPreferencias());
+            }
+            
+            return usuarioRepository.save(usuario);
+    }
 
     public void deleteUsuarioByCorreo(String correo) {
         var usuario = usuarioRepository.findByCorreo(correo);

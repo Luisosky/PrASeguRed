@@ -7,6 +7,8 @@ public class ActualizacionCuentaDTO {
     private String telefono;
     private String correo;
     private String preferencias;
+    private LocationDTO location;
+
 
     // Constructor
     public ActualizacionCuentaDTO() {
@@ -59,5 +61,13 @@ public class ActualizacionCuentaDTO {
 
     public void setPreferencias(String preferencias) {
         this.preferencias = preferencias;
+    }
+    
+    public LocationDTO getLocation() {
+        return location;
+    }
+    
+    public void setLocation(LocationDTO location) {
+        this.location = location;
     }
 }

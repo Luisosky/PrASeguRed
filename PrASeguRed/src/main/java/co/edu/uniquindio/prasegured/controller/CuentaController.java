@@ -28,6 +28,18 @@ public class CuentaController {
     @Autowired
     private JwtService jwtService;
     
+    /**
+     * Actualiza los datos de la cuenta de usuario.
+     * @param authHeader Encabezado de autorización con el token Bearer
+     * @param datosActualizados Objeto con los datos a actualizar, que puede incluir:
+     *                         - nombreCom: nombre completo
+     *                         - ciudadResidencia: ciudad de residencia
+     *                         - direccion: dirección física
+     *                         - location: objeto con lat y lng para la ubicación geográfica de la dirección
+     *                         - telefono: número de teléfono
+     *                         - preferencias: preferencias del usuario
+     * @return Mensaje de confirmación o error
+     */
     @PatchMapping
     public ResponseEntity<?> actualizarCuenta(
             @RequestHeader("Authorization") String authHeader,
