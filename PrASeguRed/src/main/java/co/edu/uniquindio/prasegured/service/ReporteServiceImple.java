@@ -16,6 +16,7 @@ import co.edu.uniquindio.prasegured.utils.ImageUtils;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,8 +26,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class ReporteServiceImple implements ReporteService {
+    @Autowired
+    private AuditLogService auditLogService;
     private static final Logger logger = LoggerFactory.getLogger(ReporteServiceImple.class);
-
     private final ReporteRepository reporteRepository;
     private final ImagenRepository imagenRepository;
     private final ReporteMapper reporteMapper;
@@ -64,7 +66,15 @@ public class ReporteServiceImple implements ReporteService {
         // Primero guardamos el reporte para obtener su ID
         Reporte savedReporte = reporteRepository.save(newReporte);
         logger.info("Reporte guardado con ID: {}", savedReporte.getId());
-
+        //guardar el long
+        auditLogService.registrarCambio(
+                "Reporte",
+                Long.valueOf(newReporte.getId()),
+                "Crear",
+                ""+newReporte.getEstado(),
+                ""+newReporte.getEstado(),
+                newReporte.getIdUsuario() // Cambia por el usuario autenticado si lo tienes
+        );
         // Procesamos las imágenes si hay
         if (reporte.imagenes() != null && !reporte.imagenes().isEmpty()) {
             logger.info("Procesando {} imágenes para el reporte {}",
@@ -210,6 +220,7 @@ public class ReporteServiceImple implements ReporteService {
                 .orElseThrow(() -> new ResourceNotFoundException());
 
         // Marcamos el reporte como eliminado
+        String estadoAnterior = ""+storedReporte.getEstado();
         storedReporte.setEstado(ESTADOREPORTE.Eliminado);
         storedReporte.setFechaActualizacion(new Date());
         reporteRepository.save(storedReporte);
@@ -222,7 +233,14 @@ public class ReporteServiceImple implements ReporteService {
                 imagenRepository.save(imagen);
             }
         }
-
+        auditLogService.registrarCambio(
+                "Reporte",
+                Long.valueOf(storedReporte.getId()),
+                "Eliminar",
+                ""+estadoAnterior,
+                ""+storedReporte.getEstado(),
+                storedReporte.getIdUsuario() // Cambia por el usuario autenticado si lo tienes
+        );
         logger.info("Reporte y sus imágenes marcados como eliminados correctamente");
     }
 
@@ -232,9 +250,18 @@ public class ReporteServiceImple implements ReporteService {
         var storedReporte = reporteRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException());
         storedReporte.setEstado(ESTADOREPORTE.Completado);
+        String estadoAnterior = ""+storedReporte.getEstado();
         storedReporte.setFechaActualizacion(new Date());
         reporteRepository.save(storedReporte);
         logger.info("Reporte marcado como completado correctamente");
+        auditLogService.registrarCambio(
+                "Reporte",
+                Long.valueOf(storedReporte.getId()),
+                "Completar",
+                ""+estadoAnterior,
+                ""+storedReporte.getEstado(),
+                storedReporte.getIdUsuario() // Cambia por el usuario autenticado si lo tienes
+        );
     }
 
     @Override
@@ -242,10 +269,19 @@ public class ReporteServiceImple implements ReporteService {
         logger.info("Marcando reporte como denegado: {}", id);
         var storedReporte = reporteRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException());
+        String estadoAnterior = ""+storedReporte.getEstado();
         storedReporte.setEstado(ESTADOREPORTE.Denegado);
         storedReporte.setFechaActualizacion(new Date());
         reporteRepository.save(storedReporte);
         logger.info("Reporte marcado como denegado correctamente");
+        auditLogService.registrarCambio(
+                "Reporte",
+                Long.valueOf(storedReporte.getId()),
+                "Deneger",
+                ""+estadoAnterior,
+                ""+storedReporte.getEstado(),
+                storedReporte.getIdUsuario() // Cambia por el usuario autenticado si lo tienes
+        );
     }
 
     private void validateReporteid(String id) {

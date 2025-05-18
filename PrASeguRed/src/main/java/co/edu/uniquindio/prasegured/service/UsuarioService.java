@@ -27,6 +27,14 @@ public class UsuarioService {
         usuario.setContraseña(encodedPassword);
         usuario.setRol(ROL.USUARIO.toString());
         usuario.setEstado(ESTADOSUSUARIO.EN_ESPERA.toString());
+        auditLogService.registrarCambio(
+                "Usuario",
+                Long.valueOf(usuario.getDocumento()),
+                "Crear",
+                usuario.getEstado(),
+                usuario.getEstado(),
+                usuario.getNombreCom() // Cambia por el usuario autenticado si lo tienes
+        );
         return usuarioRepository.save(usuario);
     }
 
@@ -107,7 +115,7 @@ public class UsuarioService {
                     "ELIMINAR",
                     estadoAnterior,
                     user.getEstado(),
-                    "admin" // Cambia por el usuario autenticado si lo tienes
+                    user.getNombreCom() // Cambia por el usuario autenticado si lo tienes
             );
         }
         usuarioRepository.save(user);
