@@ -21,8 +21,8 @@ import co.edu.uniquindio.prasegured.dto.ReporteDTO;
 import co.edu.uniquindio.prasegured.dto.ReporteRequest;
 import co.edu.uniquindio.prasegured.model.Usuario;
 import co.edu.uniquindio.prasegured.repository.UsuarioRepository;
-import co.edu.uniquindio.prasegured.security.JwtService;
 import co.edu.uniquindio.prasegured.service.ReporteService;
+import co.edu.uniquindio.prasegured.service.TokenVerificationService;
 
 @RestController
 @RequestMapping("/reportes")
@@ -33,7 +33,7 @@ public class ReporteController {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
-    private JwtService jwtService;
+    private TokenVerificationService tokenVerificationService;
 
     @Autowired
     private ReporteService reporteService;
@@ -41,38 +41,36 @@ public class ReporteController {
     @PostMapping
     public ResponseEntity<?> reporteCreacion(@RequestHeader("Authorization") String token, @RequestBody ReporteRequest reporteRequest) {
         try {
-            // Extraer el token sin el prefijo "Bearer "
-            String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
-
-            // Validar el token y extraer el correo electrónico del usuario
-            String correo = jwtService.extractUsername(jwtToken);
-
-            // Buscar el usuario por correo electrónico
-            Usuario usuario = usuarioRepository.findByCorreo(correo);
-
-            if (usuario != null) {
-                // Asociar el ID del usuario al reporte
-                ReporteRequest reporteConUsuario = new ReporteRequest(
-                        reporteRequest.id(),
-                        usuario.getId(), // Asignar el ID del usuario autenticado
-                        reporteRequest.titulo(),
-                        reporteRequest.descripcion(),
-                        reporteRequest.categoria(),
-                        reporteRequest.locations(),
-                        reporteRequest.imagenes()
-                );
-
-                // Guardar el reporte usando el servicio
-                ReporteDTO nuevoReporte = reporteService.save(reporteConUsuario);
-
-                return ResponseEntity.status(HttpStatus.CREATED).body(
-                        Map.of("message", "Reporte creado exitosamente.", "reporte", nuevoReporte)
-                );
-            } else {
-                return ResponseEntity.status(404).body(Map.of("error", "Usuario no encontrado"));
+            // Validar token usando TokenVerificationService
+            ResponseEntity<?> tokenValidationResponse = tokenVerificationService.validateTokenAndGetUser(token);
+            if (tokenValidationResponse != null) {
+                return tokenValidationResponse;
             }
+            
+            // Obtener el usuario desde el token
+            Usuario usuario = tokenVerificationService.getActiveUserFromToken(token);
+            
+            // Asociar el ID del usuario al reporte
+            ReporteRequest reporteConUsuario = new ReporteRequest(
+                    reporteRequest.id(),
+                    usuario.getId(), // Asignar el ID del usuario autenticado
+                    reporteRequest.titulo(),
+                    reporteRequest.descripcion(),
+                    reporteRequest.categoria(),
+                    reporteRequest.locations(),
+                    reporteRequest.imagenes()
+            );
+
+            // Guardar el reporte usando el servicio
+            ReporteDTO nuevoReporte = reporteService.save(reporteConUsuario);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(
+                    Map.of("message", "Reporte creado exitosamente.", "reporte", nuevoReporte)
+            );
         } catch (Exception e) {
-            return ResponseEntity.status(401).body(Map.of("error", "Token inválido o expirado", "detalle", e.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    Map.of("error", "Error al crear el reporte", "detalle", e.getMessage())
+            );
         }
     }
 
@@ -99,14 +97,10 @@ public class ReporteController {
             @RequestHeader("Authorization") String token,
             @RequestBody ReporteRequest reporteRequest) {
         try {
-            // Verificar el token y autorización
-            String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
-            String correo = jwtService.extractUsername(jwtToken);
-            Usuario usuario = usuarioRepository.findByCorreo(correo);
-
-            if (usuario == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Map.of("error", "Usuario no encontrado"));
+            // Validar token usando TokenVerificationService
+            ResponseEntity<?> tokenValidationResponse = tokenVerificationService.validateTokenAndGetUser(token);
+            if (tokenValidationResponse != null) {
+                return tokenValidationResponse;
             }
 
             // Actualizar el reporte
@@ -126,14 +120,10 @@ public class ReporteController {
             @PathVariable String id,
             @RequestHeader("Authorization") String token) {
         try {
-            // Verificar el token y autorización
-            String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
-            String correo = jwtService.extractUsername(jwtToken);
-            Usuario usuario = usuarioRepository.findByCorreo(correo);
-
-            if (usuario == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Map.of("error", "Usuario no encontrado"));
+            // Validar token usando TokenVerificationService
+            ResponseEntity<?> tokenValidationResponse = tokenVerificationService.validateTokenAndGetUser(token);
+            if (tokenValidationResponse != null) {
+                return tokenValidationResponse;
             }
 
             reporteService.deleteById(id);
@@ -149,14 +139,10 @@ public class ReporteController {
             @PathVariable String id,
             @RequestHeader("Authorization") String token) {
         try {
-            // Verificar el token y autorización
-            String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
-            String correo = jwtService.extractUsername(jwtToken);
-            Usuario usuario = usuarioRepository.findByCorreo(correo);
-
-            if (usuario == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Map.of("error", "Usuario no encontrado"));
+            // Validar token usando TokenVerificationService
+            ResponseEntity<?> tokenValidationResponse = tokenVerificationService.validateTokenAndGetUser(token);
+            if (tokenValidationResponse != null) {
+                return tokenValidationResponse;
             }
 
             reporteService.reporteCompleto(id);
@@ -171,16 +157,17 @@ public class ReporteController {
     public ResponseEntity<?> getReportesByUserId(@PathVariable String userId,
                                                  @RequestHeader(value = "Authorization", required = false) String token) {
         try {
-            // Verificación opcional del token (puedes hacer que esta validación sea obligatoria si lo deseas)
+            // Verificación opcional del token
             if (token != null && !token.isEmpty()) {
-                String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
-                String correo = jwtService.extractUsername(jwtToken);
-                Usuario usuario = usuarioRepository.findByCorreo(correo);
-
-                // Verificación adicional opcional: comprobar si el usuario solicitado coincide con el token
-                // o si el usuario tiene permisos de administrador
+                ResponseEntity<?> tokenValidationResponse = tokenVerificationService.validateTokenAndGetUser(token);
+                if (tokenValidationResponse != null) {
+                    return tokenValidationResponse;
+                }
+                
+                // Aquí podrías agregar verificación adicional de permisos si lo deseas
+                // Usuario usuario = tokenVerificationService.getActiveUserFromToken(token);
                 // if (!userId.equals(usuario.getId()) && !usuario.hasRole("ADMIN")) {
-                //    return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                //     return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 //            .body(Map.of("error", "No tienes permiso para acceder a estos reportes"));
                 // }
             }
@@ -205,14 +192,10 @@ public class ReporteController {
             @PathVariable String id,
             @RequestHeader("Authorization") String token) {
         try {
-            // Verificar el token y autorización
-            String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
-            String correo = jwtService.extractUsername(jwtToken);
-            Usuario usuario = usuarioRepository.findByCorreo(correo);
-
-            if (usuario == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Map.of("error", "Usuario no encontrado"));
+            // Validar token usando TokenVerificationService
+            ResponseEntity<?> tokenValidationResponse = tokenVerificationService.validateTokenAndGetUser(token);
+            if (tokenValidationResponse != null) {
+                return tokenValidationResponse;
             }
 
             reporteService.estadoDenegado(id);

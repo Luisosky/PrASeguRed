@@ -1,8 +1,9 @@
-package co.edu.uniquindio.prasegured.security; // Ejemplo de paquete
+package co.edu.uniquindio.prasegured.security; 
 
 import co.edu.uniquindio.prasegured.model.Usuario;
 import co.edu.uniquindio.prasegured.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,8 +24,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (usuario == null) {
             throw new UsernameNotFoundException("Usuario no encontrado con el correo: " + correo);
         }
-        // Aquí debes construir y retornar un objeto UserDetails a partir de tu entidad Usuario
-        // Ten en cuenta cómo manejas la contraseña (si está concatenada o no)
-        return new User(usuario.getCorreo(), usuario.getCorreo() + usuario.getContraseña(), Collections.emptyList());
+        
+        // Usamos el método User.withUsername para construir correctamente el UserDetails
+        return User.withUsername(usuario.getCorreo())
+                .password(usuario.getCorreo() + usuario.getContraseña())
+                // Añadimos una autoridad que indica si el usuario está activo o no
+                .authorities(usuario.isActivo() ? 
+                    Collections.singletonList(new SimpleGrantedAuthority("ACTIVE_USER")) :
+                    Collections.singletonList(new SimpleGrantedAuthority("INACTIVE_USER")))
+                .build();
     }
 }

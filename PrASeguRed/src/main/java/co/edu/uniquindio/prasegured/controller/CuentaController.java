@@ -3,6 +3,7 @@ package co.edu.uniquindio.prasegured.controller;
 import co.edu.uniquindio.prasegured.dto.ActualizacionCuentaDTO;
 import co.edu.uniquindio.prasegured.model.Usuario;
 import co.edu.uniquindio.prasegured.service.UsuarioService;
+import co.edu.uniquindio.prasegured.service.TokenVerificationService;
 import co.edu.uniquindio.prasegured.auth.JwtTokenValidator;
 import co.edu.uniquindio.prasegured.security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +24,7 @@ public class CuentaController {
     private UsuarioService usuarioService;
     
     @Autowired
-    private JwtTokenValidator jwtTokenValidator;
-    
-    @Autowired
-    private JwtService jwtService;
+    private TokenVerificationService tokenVerificationService;
     
     /**
      * Actualiza los datos de la cuenta de usuario.
@@ -46,23 +44,14 @@ public class CuentaController {
             @RequestBody ActualizacionCuentaDTO datosActualizados) {
         
         try {
-            // Extraer el token del encabezado (eliminar el prefijo "Bearer ")
-            String token = authHeader.replace("Bearer ", "");
-            
-            // Obtener el correo del usuario del token
-            String userEmail = jwtTokenValidator.extractUsername(token);
-            
-            // Verificar que el token sea válido
-            if (userEmail == null || !jwtTokenValidator.isTokenValid(token)) {
-                return ResponseEntity.status(401).body(Map.of("error", "Token inválido o expirado"));
+            // Validar token y verificar usuario activo
+            ResponseEntity<?> errorResponse = tokenVerificationService.validateTokenAndGetUser(authHeader);
+            if (errorResponse != null) {
+                return errorResponse;
             }
             
-            // Obtener el usuario por su correo
-            Usuario usuario = usuarioService.getUsuarioActivoByCorreo(userEmail);
-            
-            if (usuario == null) {
-                return ResponseEntity.status(404).body(Map.of("error", "Usuario no encontrado"));
-            }
+            // Obtener el usuario activo desde el token
+            Usuario usuario = tokenVerificationService.getActiveUserFromToken(authHeader);
             
             // Actualizar los datos del usuario
             Usuario usuarioActualizado = usuarioService.actualizarDatosUsuario(usuario.getId(), datosActualizados);

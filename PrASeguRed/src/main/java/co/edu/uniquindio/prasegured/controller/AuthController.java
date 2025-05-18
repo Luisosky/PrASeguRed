@@ -59,6 +59,13 @@ public class AuthController {
                 System.out.println("usuario no encontrado con el email: " + credenciales.correo());
                 return ResponseEntity.status(401).body(Map.of("error", "Credenciales inválidas"));
             }
+
+            // Verificar si el usuario está activo
+            if (!usuario.isActivo()) {
+                System.out.println("Intento de login de usuario inactivo: " + credenciales.correo());
+                return ResponseEntity.status(403).body(Map.of("error", "Cuenta desactivada. Contacte al administrador."));
+            }
+            
             
             String rawPassword = credenciales.correo() + credenciales.contraseña();
             System.out.println("Vreficando contraseña para el usuario");

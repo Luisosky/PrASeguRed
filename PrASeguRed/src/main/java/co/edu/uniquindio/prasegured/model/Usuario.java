@@ -149,4 +149,8 @@ public class Usuario {
     public void setLocations(List<Location> locations) {
         this.locations = locations;
     }
+
+    public Boolean isActivo() {
+        return estado == ESTADOSUSUARIO.ACTIVO;
+    }
 }
