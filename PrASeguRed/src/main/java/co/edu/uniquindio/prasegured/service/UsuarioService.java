@@ -81,7 +81,9 @@ public class UsuarioService {
         
         // Agregar la nueva ubicación a la lista
         usuario.getLocations().add(nuevaLocation);
-    }
+
+
+        }
             
             if (datosActualizados.getTelefono() != null) {
                 usuario.setTelefono(datosActualizados.getTelefono());
@@ -99,7 +101,15 @@ public class UsuarioService {
             if (datosActualizados.getPreferencias() != null) {
                 usuario.setPreferencias(datosActualizados.getPreferencias());
             }
-            
+        //logs
+        auditLogService.registrarCambio(
+                "Usuario",
+                Long.valueOf(usuario.getId()),
+                "Actualizar",
+                ""+usuario.getEstado(),
+                ""+usuario.getEstado(),
+                usuario.getDocumento() // Cambia por el usuario autenticado si lo tienes
+        );
             return usuarioRepository.save(usuario);
     }
 

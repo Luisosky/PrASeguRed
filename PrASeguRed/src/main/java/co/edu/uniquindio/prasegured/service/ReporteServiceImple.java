@@ -187,7 +187,15 @@ public class ReporteServiceImple implements ReporteService {
         // Guardar el reporte actualizado
         var savedReporte = reporteRepository.save(existingReporte);
         logger.info("Reporte actualizado correctamente");
-
+        //logs
+        auditLogService.registrarCambio(
+                "Reporte",
+                Long.valueOf(existingReporte.getId()),
+                "Actualizar",
+                ""+existingReporte.getEstado(),
+                ""+existingReporte.getEstado(),
+                existingReporte.getIdUsuario() // Cambia por el usuario autenticado si lo tienes
+        );
         // Convertir a DTO y devolver
         return reporteMapper.toReporteDTO(savedReporte);
     }
