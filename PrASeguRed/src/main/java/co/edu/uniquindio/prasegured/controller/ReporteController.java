@@ -23,6 +23,8 @@ import co.edu.uniquindio.prasegured.model.Usuario;
 import co.edu.uniquindio.prasegured.repository.UsuarioRepository;
 import co.edu.uniquindio.prasegured.security.JwtService;
 import co.edu.uniquindio.prasegured.service.ReporteService;
+import co.edu.uniquindio.prasegured.service.NotificacionService;
+import co.edu.uniquindio.prasegured.model.ESTADOREPORTE;
 
 @RestController
 @RequestMapping("/reportes")
@@ -37,6 +39,9 @@ public class ReporteController {
 
     @Autowired
     private ReporteService reporteService;
+
+    @Autowired
+    private NotificacionService notificacionService;
 
     @PostMapping
     public ResponseEntity<?> reporteCreacion(@RequestHeader("Authorization") String token, @RequestBody ReporteRequest reporteRequest) {
@@ -160,6 +165,10 @@ public class ReporteController {
             }
 
             reporteService.reporteCompleto(id);
+            
+            // Notificar al creador del reporte sobre el cambio de estado
+            notificacionService.notificarCambioEstadoReporte(id, ESTADOREPORTE.Completado);
+            
             return ResponseEntity.ok(Map.of("message", "Reporte marcado como completado"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -216,10 +225,61 @@ public class ReporteController {
             }
 
             reporteService.estadoDenegado(id);
+            
+            // Notificar al creador del reporte sobre el cambio de estado
+            notificacionService.notificarCambioEstadoReporte(id, ESTADOREPORTE.Denegado);
+            
             return ResponseEntity.ok(Map.of("message", "Reporte marcado como denegado"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("error", "Error al denegar reporte", "detalle", e.getMessage()));
+        }
+    }
+
+    @PutMapping("/{id}/publicar")
+    public ResponseEntity<?> publicarReporte(
+            @PathVariable String id,
+            @RequestHeader("Authorization") String token) {
+        try {
+            // Verificar el token y autorización
+            String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
+            String correo = jwtService.extractUsername(jwtToken);
+            Usuario usuario = usuarioRepository.findByCorreo(correo);
+
+            if (usuario == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("error", "Usuario no encontrado"));
+            }
+
+            // Verificar si el usuario es admin o moderador
+            if (!usuario.getRol().equals("ADMIN") && !usuario.getRol().equals("MODERADOR")) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(Map.of("error", "No tienes permisos para publicar reportes"));
+            }
+            
+            // Buscar el reporte
+            ReporteDTO reporte = reporteService.findById(id);
+            
+            // Usar el servicio para actualizar el reporte a estado Publicado
+            reporteService.publicarReporte(id);
+            
+            // Notificar al creador del reporte
+            notificacionService.notificarCambioEstadoReporte(id, ESTADOREPORTE.Publicado);
+            
+            // Notificar a usuarios cercanos si el reporte tiene ubicación
+            if (reporte.locations() != null) {
+                notificacionService.notificarReporteCercano(
+                    id,
+                    reporte.locations().getLat(),
+                    reporte.locations().getLng(),
+                    5.0 // Radio de 5 km por defecto
+                );
+            }
+            
+            return ResponseEntity.ok(Map.of("message", "Reporte publicado exitosamente"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", "Error al publicar reporte", "detalle", e.getMessage()));
         }
     }
 }

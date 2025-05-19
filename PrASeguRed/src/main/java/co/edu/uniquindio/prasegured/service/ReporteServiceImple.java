@@ -248,6 +248,28 @@ public class ReporteServiceImple implements ReporteService {
         logger.info("Reporte marcado como denegado correctamente");
     }
 
+    @Override
+    @Transactional
+    public ReporteDTO publicarReporte(String id) {
+        logger.info("Publicando reporte con ID: {}", id);
+        
+        // Buscar el reporte existente
+        Reporte reporte = reporteRepository.findById(id)
+                .orElseThrow(() -> {
+                    logger.error("Reporte no encontrado con ID: {}", id);
+                    return new ResourceNotFoundException();
+                });
+        
+        // Actualizar el estado a Publicado
+        reporte.setEstado(ESTADOREPORTE.Publicado);
+        reporte.setFechaActualizacion(new Date());
+        
+        // Guardar el reporte actualizado
+        reporte = reporteRepository.save(reporte);
+        
+        return reporteMapper.toReporteDTO(reporte);
+    }
+
     private void validateReporteid(String id) {
         logger.debug("Validando si existe reporte con ID: {}", id);
         if (reporteRepository.findById(id).isPresent()) {

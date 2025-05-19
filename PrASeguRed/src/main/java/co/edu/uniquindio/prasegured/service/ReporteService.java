@@ -21,4 +21,11 @@ public interface ReporteService {
      * @return Lista de reportes del usuario
      */
     List<ReporteDTO> findByUserId(String userId);
+
+    /**
+     * Marca un reporte como publicado y visible para todos los usuarios
+     * @param id ID del reporte a publicar
+     * @return El reporte actualizado
+     */
+    ReporteDTO publicarReporte(String id);
 }

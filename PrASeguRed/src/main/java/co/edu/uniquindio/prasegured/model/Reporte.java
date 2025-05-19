@@ -26,4 +26,5 @@ public class Reporte {
     private Location location;
     private List<Imagen> imagenes;
 
+
 }

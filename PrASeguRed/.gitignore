@@ -8,7 +8,10 @@ resources/application.properties
 *.lock
 *.gradle
 *.build
+*.vscode
 /bin
 /build
 /.idea
+/.vscode
+PrASeguRed\.vscode\settings.json
 PrASeguRed/src/main/resources/application.properties

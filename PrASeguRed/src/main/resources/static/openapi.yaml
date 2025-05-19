@@ -384,6 +384,81 @@ components:
           format: date-time
           description: Fecha de creación de la notificación
           example: "2025-05-16T14:30:00.000Z"
+    
+
+    NotificacionRequest:
+      type: object
+      required:
+        - usuarioId
+        - titulo
+        - mensaje
+        - tipo
+      properties:
+        usuarioId:
+          type: string
+          description: ID del usuario que recibirá la notificación
+          example: "60d85c3e7b4a9d001ff2a123"
+        titulo:
+          type: string
+          description: Título de la notificación
+          example: "Su reporte ha sido asignado"
+        mensaje:
+          type: string
+          description: Contenido de la notificación
+          example: "Su reporte sobre el hueco en la Av. Bolívar ha sido asignado a la Secretaría de Infraestructura"
+        tipo:
+          type: string
+          description: Tipo de notificación
+          enum: ["INFORMACION", "ALERTA", "ACTUALIZACION", "SISTEMA"]
+          example: "ACTUALIZACION"
+        datos:
+          type: object
+          description: Datos adicionales asociados a la notificación
+          example: {
+            "reporteId": "60d85c3e7b4a9d001ff2a456",
+            "ubicacion": "Av. Bolívar frente al Portal del Quindío"
+          }
+    
+    NotificacionDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID único de la notificación
+          example: "60d85c3e7b4a9d001ff2c234"
+        usuarioId:
+          type: string
+          description: ID del usuario que recibe la notificación
+          example: "60d85c3e7b4a9d001ff2a123"
+        titulo:
+          type: string
+          description: Título de la notificación
+          example: "Su reporte ha sido asignado"
+        mensaje:
+          type: string
+          description: Contenido de la notificación
+          example: "Su reporte sobre el hueco en la Av. Bolívar ha sido asignado a la Secretaría de Infraestructura"
+        tipo:
+          type: string
+          description: Tipo de notificación
+          enum: ["INFORMACION", "ALERTA", "ACTUALIZACION", "SISTEMA"]
+          example: "ACTUALIZACION"
+        leido:
+          type: boolean
+          description: Indica si la notificación ha sido leída
+          example: false
+        fechaCreacion:
+          type: string
+          format: date-time
+          description: Fecha de creación de la notificación
+          example: "2025-05-16T14:30:00.000Z"
+        datos:
+          type: object
+          description: Datos adicionales asociados a la notificación
+          example: {
+            "reporteId": "60d85c3e7b4a9d001ff2a456",
+            "ubicacion": "Av. Bolívar frente al Portal del Quindío"
+          }
 
     VerificationRequest:
       type: object
@@ -1337,9 +1412,9 @@ paths:
 
   /notificacion:
     post:
-      summary: Enviar notificación
-      description: Enviar una notificación a un usuario o admin
-      operationId: enviarNotificacion
+      summary: Crear notificación
+      description: Enviar una notificación a un usuario (solo admins y moderadores pueden crear notificaciones)
+      operationId: crearNotificacion
       security:
         - bearerAuth: []
       requestBody:
@@ -1347,18 +1422,21 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Notificacion'
+              $ref: '#/components/schemas/NotificacionRequest'
             examples:
               nuevaNotificacion:
                 value:
                   usuarioId: "60d85c3e7b4a9d001ff2a123"
                   titulo: "Su reporte ha sido asignado"
-                  categoria: "Actualización"
-                  contenido: "Su reporte sobre el hueco en la Av. Bolívar ha sido asignado a la Secretaría de Infraestructura. Se estima una solución en 72 horas."
-                  leido: false
+                  mensaje: "Su reporte sobre el hueco en la Av. Bolívar ha sido asignado a la Secretaría de Infraestructura. Se estima una solución en 72 horas."
+                  tipo: "ACTUALIZACION"
+                  datos: {
+                    "reporteId": "60d85c3e7b4a9d001ff2a456",
+                    "ubicacion": "Av. Bolívar frente al Portal del Quindío"
+                  }
       responses:
         "201":
-          description: Notificación enviada correctamente.
+          description: Notificación creada correctamente.
           content:
             application/json:
               schema:
@@ -1368,7 +1446,7 @@ paths:
                     type: string
                     example: "Notificación enviada correctamente."
                   notificacion:
-                    $ref: '#/components/schemas/Notificacion'
+                    $ref: '#/components/schemas/NotificacionDTO'
         "401":
           description: No autenticado o token inválido
           content:
@@ -1378,12 +1456,22 @@ paths:
                 properties:
                   error:
                     type: string
-                    example: "Token inválido o expirado."
+                    example: "Usuario no autenticado"
+        "403":
+          description: No autorizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No tienes permisos para crear notificaciones"
 
-  /notificaciones/usuario/{usuarioId}:
+  /notificacion/usuario/{usuarioId}:
     get:
       summary: Obtener notificaciones por usuario
-      description: Obtiene todas las notificaciones enviadas a un usuario específico
+      description: Obtiene las notificaciones de un usuario específico (paginadas y ordenadas por fecha)
       operationId: obtenerNotificacionesPorUsuario
       security:
         - bearerAuth: []
@@ -1411,3 +1499,159 @@ paths:
         - name: size
           in: query
           description: Tamaño de página para paginación
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: Lista de notificaciones obtenida exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/NotificacionDTO'
+                  totalPages:
+                    type: integer
+                    example: 3
+                  totalElements:
+                    type: integer
+                    example: 25
+                  last:
+                    type: boolean
+                    example: false
+                  size:
+                    type: integer
+                    example: 10
+        "401":
+          description: No autenticado o token inválido
+        "403":
+          description: No autorizado para ver estas notificaciones
+
+  /notificacion/{notificacionId}/leer:
+    patch:
+      summary: Marcar notificación como leída
+      description: Marca una notificación específica como leída
+      operationId: marcarNotificacionComoLeida
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: notificacionId
+          in: path
+          required: true
+          schema:
+            type: string
+            description: ID de la notificación a marcar como leída
+            example: "60d85c3e7b4a9d001ff2c234"
+      responses:
+        "200":
+          description: Notificación marcada como leída exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Notificación marcada como leída"
+                  notificacion:
+                    $ref: '#/components/schemas/NotificacionDTO'
+        "401":
+          description: No autenticado o token inválido
+        "403":
+          description: No autorizado para modificar esta notificación
+        "404":
+          description: Notificación no encontrada
+
+  /notificacion/usuario/{usuarioId}/leer-todas:
+    patch:
+      summary: Marcar todas las notificaciones de un usuario como leídas
+      description: Marca todas las notificaciones no leídas de un usuario como leídas
+      operationId: marcarTodasComoLeidas
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: usuarioId
+          in: path
+          required: true
+          schema:
+            type: string
+            description: ID del usuario cuyas notificaciones se marcarán como leídas
+            example: "60d85c3e7b4a9d001ff2a123"
+      responses:
+        "200":
+          description: Notificaciones marcadas como leídas exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Todas las notificaciones marcadas como leídas"
+        "401":
+          description: No autenticado o token inválido
+        "403":
+          description: No autorizado para modificar estas notificaciones
+
+  /notificacion/reportes-cercanos:
+    post:
+      summary: Notificar a usuarios cercanos sobre un reporte
+      description: Envía notificaciones a usuarios que se encuentran cerca de la ubicación de un reporte (solo para administradores)
+      operationId: notificarReportesCercanos
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - reporteId
+                - latitud
+                - longitud
+              properties:
+                reporteId:
+                  type: string
+                  example: "60d85c3e7b4a9d001ff2a456"
+                latitud:
+                  type: number
+                  format: double
+                  example: 4.550923
+                longitud:
+                  type: number
+                  format: double
+                  example: -75.656080
+                distanciaMaximaKm:
+                  type: number
+                  format: double
+                  example: 3.0
+            examples:
+              notificarCercanos:
+                value:
+                  reporteId: "60d85c3e7b4a9d001ff2a456"
+                  latitud: 4.550923
+                  longitud: -75.656080
+                  distanciaMaximaKm: 3.0
+      responses:
+        "200":
+          description: Notificaciones enviadas exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Notificaciones enviadas a usuarios cercanos"
+        "401":
+          description: No autenticado o token inválido
+        "403":
+          description: No autorizado (solo administradores)
+        "404":
+          description: Reporte no encontrado
